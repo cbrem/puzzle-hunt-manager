@@ -3,10 +3,18 @@ var app = express();        // create a new instance of express
 
 // imports the fs module (reading and writing to a text file)
 var fs = require("fs");
+var path = require('path');
 
 // the bodyParser middleware allows us to parse the
 // body of a request
 app.use(express.bodyParser());
+
+/** allows us to serve all files from the static directory
+ * in other words, we can access our server at http://localhost:8889/index.html
+ * instead of http://localhost:8889/static/index.html
+ * See here for more details: https://piazza.com/class#spring2013/15237/168
+**/
+app.use(express.static(path.join(__dirname, 'static')));
 
 // The global datastore for this example
 var listings;
@@ -36,10 +44,8 @@ function writeFile(filename, data, callbackFn) {
   });
 }
 
-// This is for serving files in the static directory
-app.get("/static/:staticFilename", function (request, response) {
-    response.sendfile("static/" + request.params.staticFilename);
-});
+
+
 
 function initServer() {
   // When we start the server, we must load the stored data
