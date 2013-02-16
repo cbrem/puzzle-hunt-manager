@@ -1,0 +1,16 @@
+<huntname>.txt
+--------------
+<url/name>: {
+    "users":{
+        <name>: {
+           "key": "<keycode>",
+           "progress": ???
+        }
+    },
+    "clues": [
+       {
+        "desc": "....",
+        "ans": ".....",
+       } 
+    ]
+}

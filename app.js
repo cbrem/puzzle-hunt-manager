@@ -44,6 +44,10 @@ function writeFile(filename, data, callbackFn) {
   });
 }
 
+app.get("/foo", function(request, response){
+    response.sendfile("static/index.html");
+});
+
 function initServer() {
   // When we start the server, we must load the stored data
   var defaultList = "[]";
