@@ -16,8 +16,8 @@ app.use(express.bodyParser());
 **/
 app.use(express.static(path.join(__dirname, 'static')));
 
-// The global datastore for this example
-var listings;
+// The global datastore of hunt information
+var globalHuntData;
 
 // Asynchronously read file contents, then call callbackFn
 function readFile(filename, defaultData, callbackFn) {
@@ -50,14 +50,17 @@ app.get("/foo", function(request, response){
 });
 
 function initServer() {
-  // When we start the server, we must load the stored data
-  /*
-  var defaultList = "[]";
-  readFile("data.txt", defaultList, function(err, data) {
+    // When we start the server, we must load the stored data
+    /*
+    var defaultList = "[]";
+    readFile("data.txt", defaultList, function(err, data) {
     listings = JSON.parse(data);
-  });*/
+    });*/
+
+    fs.readdir("data", function(err, files){
+        console.log(files);
+        app.listen(8889);
+    });
 }
 
-// Finally, initialize the server, then activate the server at port 8889
 initServer();
-app.listen(8889);
