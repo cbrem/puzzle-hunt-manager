@@ -1,3 +1,36 @@
-body{
-    color:green;
+html{
+    min-height:100%;
+    background-color: #FCEBB6;
+}
+
+html, body{
+    height:100%;
+    font-size: 1em;
+    font-family: Arial, sans-serif;
+    text-rendering: optimizeLegibility;
+}
+
+#main-wrapper{
+    min-height:100%;
+    margin:0 auto;
+    padding: 0 .5em;
+    width:80%;
+    min-width:320px;
+    overflow:auto;
+    
+    background-color:white;
+}
+
+#site-header{
+    padding: 1em 0;
+    text-align:center;
+}
+
+#site-header h1{
+    font-size: 2em;
+    margin: .5em 0;
+}
+
+#content-area{
+    
 }
