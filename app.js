@@ -56,6 +56,7 @@ function initServer() {
   });
 }
 
+// for JOIN request to hunts, tell client if hunt exists
 app.get("/hunts/:hunt", function (request, response) {
   var hunt = request.params.hunt;
   var exists;
@@ -64,6 +65,22 @@ app.get("/hunts/:hunt", function (request, response) {
   response.send({
     "exists": exists
   });
+});
+
+// for CREATE request, create an empty hunt object in datastore
+app.post("/:hunt", function (request, response) {
+  var hunt = request.params.hunt;
+  // create new empty hunt object with the creator's inputted hunt name
+  huntObj = {};
+  huntObj.safename = request.body.newHuntName;
+  huntObj.rawname = hunt;
+  huntObj.users = {"admin": {
+    "key": "defaultKey",
+    "progress": 0
+  }};
+  huntObj.clues = [];
+  hunts[hunt] = huntObj;
+  writeFile(filename, JSON.stringify(hunts[hunt]));
 });
 
 // Finally, initialize the server, then activate the server at port 8889
