@@ -39,11 +39,16 @@ $(document).ready(function () {
       url: "/" + urlHuntName,
       data: {"newHuntName": newHuntName},
       success: function(data) {
-
+        // navigate to the new admin webpage
+        if (!data.error) {
+          console.log("Successfuly created new hunt");
+          window.location = "./" + urlHuntName + "/admin";
+        }
+        else {
+          console.log("There was an error creating the page.");
+        }
       }
     });
-    // navigate to the new admin webpage
-    window.location = "./" + urlHuntName + "/admin";
   });
 
 });

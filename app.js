@@ -44,6 +44,9 @@ function writeFile(filename, data, callbackFn) {
   });
 }
 
+// GETs
+
+// TEST
 app.get("/foo", function(request, response){
     response.sendfile("static/index.html");
 });
@@ -59,9 +62,25 @@ app.get("/hunts/:hunt", function (request, response) {
   });
 });
 
+// for ADMIN page on a hunt
+app.get("/:hunt/admin", function (request, response) {
+  var hunt = request.params.hunt;
+  // if the hunt doesn't exist, redirect them to the homepage
+  if (!(hunt in globalHuntData)) {
+    console.log("going to ADMIN page");
+    //response.redirect('/index.html');
+    return;
+  }
+  response.send("Hey there admin!");  
+});
+
+// POSTs
+
 // for CREATE request, create an empty hunt object in datastore
 app.post("/:hunt", function (request, response) {
+  console.log("POSTING new hunt!");
   var hunt = request.params.hunt;
+  // ** may change this later to create object AFTER first save **
   // create new empty hunt object with the creator's inputted hunt name
   huntObj = {};
   huntObj.safename = request.body.newHuntName;
@@ -71,9 +90,34 @@ app.post("/:hunt", function (request, response) {
     "progress": -1 // -1 just signifies that this is irrelevant
   }};
   huntObj.clues = [];
-  hunts[hunt] = huntObj;
-  writeFile(filename, JSON.stringify(hunts[hunt]));
+  // update server hunt object
+  globalHuntData[hunt] = huntObj;
+  // create file for this hunt
+  var filepath = "./data/hunts/" + hunt + ".txt";
+  writeFile(filepath, JSON.stringify(huntObj), function(err, data) {
+    if (err) {
+      console.log("Error thrown: " + err);
+      response.send({
+        "error": true
+      })
+    }
+    else {
+      response.send({
+        "error": false
+      });
+    }
+  });
 });
+
+// PUTs
+
+
+
+// DELETEs
+
+
+
+// SETUP
 
 function launchApp(err){
     if(err !== undefined){
