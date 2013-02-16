@@ -4,12 +4,8 @@
     <title>Treasure Hunt Manager</title>
     <link href="styles/reset.css" rel="stylesheet" type="text/css">
     <link href="styles/style.css" rel="stylesheet" type="text/css">
-	<script src="scripts/jquery-1.9.0.js"></script>
-	<script>
-        $(document).ready(function(){
-            console.log("hello world");
-        });
-    </script>
+	  <script src="scripts/jquery-1.9.0.js"></script>
+	  <script src="scripts/index.js"></script>
   </head>
   <body>
     <div id="main-wrapper">
@@ -18,8 +14,11 @@
             <h2>Subtitle here</h2>
         </header>
         <div id="content-area">
-            <p>Hello, world!
-            </p>
+            <form>
+              <input type="text" id="hunt-name" />
+              <input type="button" id="join" value="Join" />
+              <input type="button" id="create" value="Join" />
+            </form>
         </div>
     </div>
 	</body>

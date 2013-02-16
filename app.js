@@ -17,7 +17,7 @@ app.use(express.bodyParser());
 app.use(express.static(path.join(__dirname, 'static')));
 
 // The global datastore for this example
-var listings;
+var hunts;
 
 // Asynchronously read file contents, then call callbackFn
 function readFile(filename, defaultData, callbackFn) {
@@ -44,17 +44,24 @@ function writeFile(filename, data, callbackFn) {
   });
 }
 
-
-
-
 function initServer() {
   // When we start the server, we must load the stored data
   var defaultList = "[]";
   readFile("data.txt", defaultList, function(err, data) {
-    listings = JSON.parse(data);
+    hunts = JSON.parse(data);
   });
 }
 
+app.get("/hunts/:hunt", function (request, response) {
+  var hunt = request.params.hunt;
+  var exists;
+  if (hunt in hunts) exists = true;
+  else exists = false;
+  response.send({
+    "exists": exists
+  });
+});
+
 // Finally, initialize the server, then activate the server at port 8889
-//initServer();
+initServer();
 app.listen(8889);
