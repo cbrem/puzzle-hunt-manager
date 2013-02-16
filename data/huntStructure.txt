@@ -1,6 +1,8 @@
-<huntname>.txt
+<urlhuntname>.txt
 --------------
-<url/name>: {
+{   
+    "safename":<urlhuntname>,
+    "rawname":".....",
     "users":{
         <name>: {
            "key": "<keycode>",

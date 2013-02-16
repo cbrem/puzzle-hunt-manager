@@ -37,7 +37,7 @@ $(document).ready(function () {
     $.ajax({
       type: "post",
       url: "/" + urlHuntName,
-      data: {"newHuntName": newHuntName}
+      data: {"newHuntName": newHuntName},
       success: function(data) {
 
       }
