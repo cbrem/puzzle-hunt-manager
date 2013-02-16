@@ -45,16 +45,19 @@ function writeFile(filename, data, callbackFn) {
 }
 
 
-
+app.get("/foo", function(request, response){
+    response.sendfile("static/index.html");
+});
 
 function initServer() {
   // When we start the server, we must load the stored data
+  /*
   var defaultList = "[]";
   readFile("data.txt", defaultList, function(err, data) {
     listings = JSON.parse(data);
-  });
+  });*/
 }
 
 // Finally, initialize the server, then activate the server at port 8889
-//initServer();
+initServer();
 app.listen(8889);
