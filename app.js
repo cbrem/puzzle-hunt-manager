@@ -119,6 +119,13 @@ app.post("/:hunt", function (request, response) {
 
 // SETUP
 
+/** launchApp 
+
+when called, will log data to console, then actually start the application
+
+params:
+err         (optional) Will print given error/warning message before starting
+**/
 function launchApp(err){
     if(err !== undefined){
         console.log("error", err);
@@ -130,23 +137,44 @@ function launchApp(err){
     app.listen(port);
 }
 
-// initialize server
+/** initServer
+
+when called, initializes server by reading data files and compiling the server's
+datastore
+
+will essentially take each of the hunt data files, take the urlsafe name and
+use it as a key in the global datastore mapped to the file's data
+
+calls launchApp when initialization is complete
+**/
 function initServer() {
+    /** _attemptLaunch
+    
+    helper function to check if the given number of loaded items should allow us
+    to launch the application by checking against a total number of items
+    
+    params:
+    numLoaded               the number of items loaded so far
+    totalToLoad             the target total of items to load
+    err                     (optional) the error/warning to pass into launchApp
+    **/
     function _attemptLaunch(numLoaded, totalToLoad, err){
         if(numLoaded >= totalToLoad){
             launchApp(err);
         }   
     }
 
+    // default to initializing the datastore as empty
     globalHuntData = {};
 
+    // get the list of files in the hunt data directory
     fs.readdir("data/hunts", function(err, files){
         if(err){
             launchApp(err);
             return;
         }
         var totalFiles = files.length;
-        // dont bother attempting loads if nothing is in the huntdata folder
+        // dont bother attempting loads if nothing is in the hunt data folder
         if(totalFiles === 0){
             console.log("no files, empty hunt data");
             launchApp();
@@ -159,7 +187,7 @@ function initServer() {
             
             // check stats of file
             fs.stat(filePath, function(err, stats){
-                // if invalid file
+                // if invalid file or not even a file, skip readFile call
                 if(err || !(stats.isFile())){
                     if(!(stats.isFile())){
                         err = "not a file";
@@ -170,7 +198,7 @@ function initServer() {
                     return;
                 }
                 
-                // if the file is valid, read and parse it
+                // if the file is valid, readFile it
                 readFile(filePath, "{}", function(err, data){
                     if(err){
                         loadedFiles += 1;
