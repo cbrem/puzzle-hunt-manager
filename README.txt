@@ -14,3 +14,10 @@ server-side:
 
 client-side:
 -make html/css files for each page (Leon)
+
+
+credits:
+
+map logo: free for non-commercial use
+http://www.iconarchive.com/show/pirates-icons-by-artua/treasure-map-icon.html
+
