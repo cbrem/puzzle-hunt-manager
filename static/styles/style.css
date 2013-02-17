@@ -22,6 +22,31 @@ a{
     color: #F07818;
 }
 
+button{
+    padding: .3em .75em;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    border-top: 1px solid #f49f5c;
+    border-bottom: 1px solid grey;
+    
+    text-align: center;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+    font-size: 1.1em;
+    
+    background-color: #F0A830;
+    color:white;
+    text-shadow: 0 1px grey;
+    box-shadow: 0 0 4px grey;
+}
+
+button:hover{
+    cursor:pointer;
+    background-color: #f3bb5d;
+    border-top: 1px solid #f2b753;
+}
+
 .page-wrapper{
     margin:0 auto;
     padding: 0;
@@ -30,6 +55,7 @@ a{
 }
 
 #site-header{
+    position: relative;
     padding: .7em;
     text-align:center;
     
@@ -37,6 +63,10 @@ a{
     color: white;
     text-shadow: 0 1px #4ca386;
     box-shadow: 0 1px 4px grey;
+}
+
+#site-header .page-wrapper{
+    position:relative;
 }
 
 #site-header figure{
@@ -50,6 +80,35 @@ a{
     display:inline-block;
     
     font-weight:bold;
+}
+
+#site-header .toolbar{
+    position:absolute; /* fake float, since the project restricts this */
+    top:0;
+    right: 0;
+    text-align:right;
+}
+
+
+#site-header.small{
+    text-align:left;
+}
+
+#site-header.small hgroup{
+    display: inline-block;
+}
+
+#site-header.small .puzzle-icon{
+    width: 30px;
+    height: 30px;
+}
+
+#site-header.small figure{
+    vertical-align: baseline;
+}
+
+#site-header.small h1{
+    margin:0;
 }
 
 #main-wrapper{
