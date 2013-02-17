@@ -1,1 +1,1 @@
-{"safename":"test","rawname":"test!","users":{},"clues":[]}
+{"safename":"test","rawname":"test","users":{"admin":{"key":"noPasswordSet","progress":-1}},"clues":[]}

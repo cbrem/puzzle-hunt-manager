@@ -54,11 +54,8 @@ app.get("/foo", function(request, response){
 // for JOIN request to hunts, tell client if hunt exists
 app.get("/hunts/:hunt", function (request, response) {
   var hunt = request.params.hunt;
-  var exists;
-  if (hunt in globalHuntData) exists = true;
-  else exists = false;
   response.send({
-    "exists": exists
+    "exists": (exists in globalHuntData)
   });
 });
 
@@ -80,6 +77,13 @@ app.get("/:hunt/admin", function (request, response) {
 app.post("/:hunt", function (request, response) {
   console.log("POSTING new hunt!");
   var hunt = request.params.hunt;
+
+  //check if hunt already exists
+  if (hunt in globalHuntData) response.send({
+    "error" : false,
+    "alreadyExists": true
+  });
+
   // ** may change this later to create object AFTER first save **
   // create new empty hunt object with the creator's inputted hunt name
   huntObj = {};
@@ -98,12 +102,14 @@ app.post("/:hunt", function (request, response) {
     if (err) {
       console.log("Error thrown: " + err);
       response.send({
-        "error": true
+        "error": true,
+        "alreadyExists": false
       })
     }
     else {
       response.send({
-        "error": false
+        "error": false,
+        "alreadyExists": false
       });
     }
   });

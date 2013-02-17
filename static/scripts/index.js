@@ -39,8 +39,10 @@ $(document).ready(function () {
       url: "/" + urlHuntName,
       data: {"newHuntName": newHuntName},
       success: function(data) {
-        // navigate to the new admin webpage
-        if (!data.error) {
+        if (data.alreadyExists) {
+          console.log("A hunt named '" + newHuntName + "'already exists!");
+        } else if (!data.error) {
+          // navigate to the new admin webpage
           console.log("Successfuly created new hunt");
           window.location = "./" + urlHuntName + "/admin";
         }
