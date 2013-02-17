@@ -128,6 +128,7 @@ button:hover{
 }
 
 #canvas-wrapper{
+    position:relative;
     text-align: center;
     width:100%;
     overflow-x: auto;
@@ -135,6 +136,7 @@ button:hover{
 }
 
 #map-canvas{
+    display:none;
     margin:0;
     padding:0;
     height: 100px;
@@ -142,6 +144,10 @@ button:hover{
     background: #FCEBB6 url("../images/roughcloth.png") repeat;
     
     border: 1px solid #815940;
+}
+
+#canvas-wrapper img{
+    padding: 35px 0;
 }
 
 footer{

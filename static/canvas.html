@@ -17,6 +17,11 @@
             var solvedClues = 3;
             var totalClues = 9;
             drawMap(solvedClues, totalClues);
+            $("#canvas-wrapper").fadeOut("fast", function(){
+                $(this).find("img").remove();
+                $("#map-canvas").show();
+                $(this).fadeIn("fast");
+            });
         });
     </script>
 </head>
@@ -33,6 +38,7 @@
         <div id="content-area">
             hello world
             <figure id="canvas-wrapper">
+                <img src="images/loader.gif"></img>
                 <canvas id="map-canvas"></canvas>
             </figure>
             test
