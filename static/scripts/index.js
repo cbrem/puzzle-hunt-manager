@@ -45,7 +45,7 @@ $(document).ready(function () {
           window.location = "./" + urlHuntName + "/admin";
         }
         else {
-          console.log("There was an error creating the page.");
+          console.log("There was an error creating the page.", data);
         }
       }
     });
