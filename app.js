@@ -16,6 +16,7 @@ app.use(express.bodyParser());
 **/
 app.use(express.static(path.join(__dirname, 'static')));
 
+var huntDataDir = path.join("data", "hunts");
 // The global datastore of hunt information
 var globalHuntData;
 
@@ -42,6 +43,30 @@ function writeFile(filename, data, callbackFn) {
     }
     if (callbackFn) callbackFn(err);
   });
+}
+
+/** updateFile
+
+asynchronously update the text file for the given data store key, 
+   then call callbackFn
+   
+params:
+huntDataKey                 the urlsafe name of the hunt to update a file for
+                            (note that this is the hunt's key in the global
+                             data store)
+callbackFn                  (optional) a callback function to call once file is
+                            written, takes an error parameter
+                            
+**/
+function updateFile(huntDataKey, callbackFn){
+    if(!(huntDataKey in globalHuntData)){
+        var err = huntDataKey + " not in datastore, unable to write to file";
+        if (callbackFn) callbackFn(err);
+    }
+    
+    var filePath = path.join(huntDataDir, huntDataKey+".txt");
+    writeFile(filePath, JSON.stringify(globalHuntData[huntDataKey]), 
+              callbackFn);
 }
 
 // GETs
@@ -97,8 +122,7 @@ app.post("/:hunt", function (request, response) {
   // update server hunt object
   globalHuntData[hunt] = huntObj;
   // create file for this hunt
-  var filepath = "./data/hunts/" + hunt + ".txt";
-  writeFile(filepath, JSON.stringify(huntObj), function(err, data) {
+  updateFile(hunt, function(err, data) {
     if (err) {
       console.log("Error thrown: " + err);
       response.send({
@@ -174,7 +198,7 @@ function initServer() {
     globalHuntData = {};
 
     // get the list of files in the hunt data directory
-    fs.readdir("data/hunts", function(err, files){
+    fs.readdir(huntDataDir, function(err, files){
         if(err){
             launchApp(err);
             return;
@@ -189,7 +213,7 @@ function initServer() {
         
         var loadedFiles = 0;
         files.forEach(function(fileName){
-            var filePath = path.join("data/hunts", fileName);
+            var filePath = path.join(huntDataDir, fileName);
             
             // check stats of file
             fs.stat(filePath, function(err, stats){
