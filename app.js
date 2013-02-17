@@ -78,14 +78,14 @@ app.get("/foo", function(request, response){
 
 // for JOIN request to hunts, tell client if hunt exists
 app.get("/hunts/:hunt", function (request, response) {
-  var hunt = request.params.hunt;
-  var exists = (hunt in globalHuntData);
-  var key;
-  if (exists) key = globalHuntData[hunt].key;
-  else key = undefined;
+  var huntName = request.params.hunt;
+  var exists = (huntName in globalHuntData);
+  var hunt;
+  if (exists) hunt = globalHuntData[huntName];
+  else hunt = undefined;
   response.send({
     "exists": exists,
-    "key": key
+    "hunt": hunt
   });
 });
 
@@ -107,6 +107,7 @@ app.get("/hunts/:hunt/admin/:key", function (request, response) {
 // for CREATE request, create an empty hunt object in datastore
 app.post("/hunts/:hunt", function (request, response) {
   console.log("POSTING new hunt!");
+  console.log(request.body.newHuntName, request.body.key);
   var hunt = request.params.hunt;
 
   //check if hunt already exists

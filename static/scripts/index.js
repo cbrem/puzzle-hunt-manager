@@ -52,12 +52,12 @@ $(document).ready(function () {
 var promptEdit = function (data, newHuntName, urlHuntName) {
     var keyGiven =
       prompt("This hunt already exists. Enter your key to edit it.");
-    if (keyGiven === data.key) {
+    if (keyGiven === data.hunt.users.admin.key) {
       //navigate to the edit page
       window.location = "./hunts/" + urlHuntName + "/admin/" + data.key;
     } else {
       console.log("Wrong key given. Expected " 
-                  + data.key + ", given " + keyGiven);
+                  + data.hunt.users.admin.key + ", given " + keyGiven);
     }
 };
 
