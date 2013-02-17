@@ -90,7 +90,7 @@ app.get("/hunts/:hunt", function (request, response) {
 });
 
 // for ADMIN page on a hunt
-app.get("/:hunt/admin/:key", function (request, response) {
+app.get("/hunts/:hunt/admin/:key", function (request, response) {
   var hunt = request.params.hunt;
   // if the hunt doesn't exist, redirect them to the homepage
   if (!(hunt in globalHuntData)) {
@@ -105,7 +105,7 @@ app.get("/:hunt/admin/:key", function (request, response) {
 // POSTs
 
 // for CREATE request, create an empty hunt object in datastore
-app.post("/:hunt", function (request, response) {
+app.post("/hunts/:hunt", function (request, response) {
   console.log("POSTING new hunt!");
   var hunt = request.params.hunt;
 
