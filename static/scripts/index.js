@@ -36,13 +36,13 @@ $(document).ready(function () {
     // now create the new webpage for the hunt, and the data object on server
     $.ajax({
       type: "post",
-      url: "/" + urlHuntName,
+      url: "/hunts/" + urlHuntName,
       data: {"newHuntName": newHuntName},
       success: function(data) {
         // navigate to the new admin webpage
         if (!data.error) {
           console.log("Successfuly created new hunt");
-          window.location = "./" + urlHuntName + "/admin";
+          window.location = "./hunts/" + urlHuntName + "/admin";
         }
         else {
           console.log("There was an error creating the page.", data);
