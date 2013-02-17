@@ -10,7 +10,7 @@ $(document).ready(function () {
       url: "/hunts/" + hunt,
       success: function (data) {
         if (data.exists)
-          window.location = "./" + hunt;
+          window.location = "./hunts/" + hunt;
         else
           alert("Hunt '" + hunt + "' does not exist.\nYou should create it!");
       }
@@ -18,39 +18,66 @@ $(document).ready(function () {
   });
 
   // CREATE button
-  $("#create").click(function () {
+  $("#create").click(function (e) {
     // this variable is WITH SPACES
     var newHuntName = $("#hunt-name").val();
     // check that there is a name
-    if (newHuntName === "") {
-      alert("No name specified for your hunt!");
+    if (newHuntName === "" || newHuntName === "Enter a hunt name.") {
+      //alert("No name specified for your hunt!");
+      console.log("no name");
       return;
-    };
+    }
     // the urlHuntName is WITHOUT SPACES
-    var urlHuntName = newHuntName.replace(" ", "");
+    var urlHuntName = newHuntName.replace(" ", "")
     // if it isn't url-safe, ask for a new name
     if (encodeURI(urlHuntName) !== urlHuntName) {
       alert("Please only use letters and spaces in your name!");
       return;
-    };
-    // now create the new webpage for the hunt, and the data object on server
+    }
+    
+    $.ajax({
+      type: "get",
+      url: "/hunts/" + urlHuntName,
+      success: function(data) {
+        if (data.exists) {
+          promptEdit(data, newHuntName, urlHuntName);
+        } else {
+          promptCreate(data, newHuntName, urlHuntName);
+        }
+      }
+    });
+  });
+});
+
+var promptEdit = function (data, newHuntName, urlHuntName) {
+    var keyGiven =
+      prompt("This hunt already exists. Enter your key to edit it.");
+    if (keyGiven === data.key) {
+      //navigate to the edit page
+      window.location = "./hunts/" + urlHuntName + "/admin/" + data.key;
+    } else {
+      console.log("Wrong key given. Expected " 
+                  + data.key + ", given " + keyGiven);
+    }
+};
+
+var promptCreate = function (data, newHuntName, urlHuntName) {
+    var keyGiven =
+      prompt("This hunt hasn't been created yet! Enter a key to make it!");
+
     $.ajax({
       type: "post",
-      url: "/" + urlHuntName,
-      data: {"newHuntName": newHuntName},
+      url: "/hunts/" + urlHuntName,
+      data: {"newHuntName": newHuntName, "key": keyGiven},
       success: function(data) {
-        if (data.alreadyExists) {
-          console.log("A hunt named '" + newHuntName + "'already exists!");
-        } else if (!data.error) {
+        if (!data.error) {
           // navigate to the new admin webpage
           console.log("Successfuly created new hunt");
-          window.location = "./" + urlHuntName + "/admin";
+          window.location = "./hunts/" + urlHuntName + "/admin/" + keyGiven;
         }
         else {
           console.log("There was an error creating the page.", data);
         }
       }
     });
-  });
-
-});
+};

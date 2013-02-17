@@ -79,21 +79,27 @@ app.get("/foo", function(request, response){
 // for JOIN request to hunts, tell client if hunt exists
 app.get("/hunts/:hunt", function (request, response) {
   var hunt = request.params.hunt;
+  var exists = (hunt in globalHuntData);
+  var key;
+  if (exists) key = globalHuntData[hunt].key;
+  else key = undefined;
   response.send({
-    "exists": (exists in globalHuntData)
+    "exists": exists,
+    "key": key
   });
 });
 
 // for ADMIN page on a hunt
-app.get("/:hunt/admin", function (request, response) {
+app.get("/:hunt/admin/:key", function (request, response) {
   var hunt = request.params.hunt;
   // if the hunt doesn't exist, redirect them to the homepage
   if (!(hunt in globalHuntData)) {
+    //TODO: is this still necessary?
     console.log("going to ADMIN page");
     //response.redirect('/index.html');
     return;
   }
-  response.send("Hey there admin!");  
+  response.sendfile("static/adminview.html");  
 });
 
 // POSTs
@@ -115,7 +121,7 @@ app.post("/:hunt", function (request, response) {
   huntObj.safename = request.body.newHuntName;
   huntObj.rawname = hunt;
   huntObj.users = {"admin": {
-    "key": "noPasswordSet", // signifies that key needs to be set
+    "key": request.body.key,
     "progress": -1 // -1 just signifies that this is irrelevant
   }};
   huntObj.clues = [];
