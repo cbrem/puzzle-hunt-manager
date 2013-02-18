@@ -69,6 +69,14 @@ function updateFile(huntDataKey, callbackFn){
               callbackFn);
 }
 
+/** send404
+
+uses the given response object to send a 404 page
+**/
+function send404(response){
+    response.status(404).sendfile(path.join("static", "404.html"));
+}
+
 // GETs
 
 // TEST
@@ -102,6 +110,25 @@ app.get("/hunts/:hunt/admin/:key", function (request, response) {
     return;
   }
   response.sendfile(path.join("static", "adminview.html"));
+});
+
+/** displays the team-specific progress html page for a specific hunt 
+    (ie: the page with the canvas map)
+    
+    NOT FINISHED
+**/
+app.get("/hunts/:hunt/user/:user/:key", function(request, response){
+    var hunt = request.params.hunt;
+    var user = request.params.user;
+    var key = request.params.key;
+    if (!(hunt in globalHuntData)){
+        send404(response);
+    }
+    else if(!(user in globalHuntData[hunt].users)){
+        send404(response);
+    }
+    // NOT FINISHED
+    
 });
 
 // POSTs

@@ -78,6 +78,17 @@ a{
     box-shadow: 0 1px 4px grey;
 }
 
+#site-header a{
+    overflow:auto;
+    color:white;
+    text-decoration:none;
+}
+
+#site-header a:hover hgroup{
+    background-color: rgba(255,255,255,.5);
+}
+
+
 #site-header .page-wrapper{
     position:relative;
 }
