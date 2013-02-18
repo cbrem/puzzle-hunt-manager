@@ -1,1 +1,0 @@
-{"safename":"hunt73","rawname":"hunt73","users":{"admin":{"progress":-1}},"clues":[]}

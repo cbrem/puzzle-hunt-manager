@@ -14,7 +14,7 @@
     <script src="/scripts/drawMap.js"></script>
     <script>
         $(document).ready(function(){
-            var solvedClues = 5;
+            var solvedClues = 3;
             var totalClues = 9;
             drawMap(solvedClues, totalClues);
             $("#canvas-wrapper").fadeOut("fast", function(){
@@ -39,13 +39,13 @@
     <div id="main-wrapper" class="page-wrapper">
         <div id="content-area">
             <header id="content-header">
-                <em><span class="team-name">A-Team's</span></em> progress on 
-                <em><span class="hunt-name">Hunt Hello</span></em>:&nbsp;
+                <em><span class="team-name">Dummy Team's</span></em> progress on 
+                <em><span class="hunt-name">Dummy Hunt Name</span></em>:&nbsp;
                 <em><span class="num-solved-clues">3</span> /
                 <span class="num-total-clues">9</span></em> clues
             </header>
             <figure id="canvas-wrapper">
-                <img src="images/loader.gif"></img>
+                <img src="/images/loader.gif"></img>
                 <canvas id="map-canvas"></canvas>
             </figure>
             <div id="clues-view">

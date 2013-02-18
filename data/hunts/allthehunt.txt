@@ -1,1 +1,0 @@
-{"safename":"allthehunt","rawname":"allthehunt","users":{"admin":{"key":"pass","progress":-1}},"clues":[]}

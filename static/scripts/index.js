@@ -50,9 +50,10 @@ $(document).ready(function () {
 });
 
 var promptEdit = function (data, newHuntName, urlHuntName) {
+    console.log(data);
     var keyGiven =
       prompt("This hunt already exists. Enter your key to edit it.");
-    if (keyGiven === data.hunt.users.admin.key) {
+    if (keyGiven === data.hunt.admin.key) {
       //navigate to the edit page
       window.location = "./hunts/" + urlHuntName + "/admin/" + data.key;
     } else {
