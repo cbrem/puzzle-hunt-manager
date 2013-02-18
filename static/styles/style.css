@@ -23,6 +23,10 @@ a{
     color: #F07818;
 }
 
+form {
+  text-align: center;
+}
+
 .textInput{
   display: block;
   margin: 10px auto;
@@ -182,11 +186,6 @@ a{
 
 #canvas-wrapper img{
     padding: 35px 0;
-}
-
-
-#join-create-hunt-form{
-    text-align: center;
 }
 
 footer{

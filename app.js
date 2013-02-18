@@ -79,38 +79,44 @@ function send404(response){
 
 // GETs
 
-// TEST
-app.get("/foo", function(request, response){
-    response.sendfile("static/index.html");
-});
-
-//for entry into hunt home pages.
-//  accessible through home "JOIN" button or directly by URL
-app.get("/hunts/:hunt", function (request, response) {
-  var huntName = request.params.hunt;
-  var exists = (huntName in globalHuntData);
-  var hunt;
-  if (exists) hunt = globalHuntData[huntName];
-  else hunt = undefined;
-  response.send({
-    "exists": exists,
-    "hunt": hunt
-  });
-});
-
-//for entry into admin page for a hunt.
-//  
-app.get("/hunts/:hunt/admin/:key", function (request, response) {
+//for info about hunt. used before/after navigation in response to
+//  JOIN or ADMINISTER buttons. Provides info about hunt,
+//  but does not load page.
+app.get("/info/:hunt", function (request, response) {
   var hunt = request.params.hunt;
-  // if the hunt doesn't exist, redirect them to the homepage
-  if (!(hunt in globalHuntData)) {
-    //TODO: is this still necessary?
-    console.log("going to ADMIN page");
-    //response.redirect('/index.html');
-    return;
+  if (hunt in globalHuntData) {
+    response.send({
+      "exists": true,
+      "hunt": globalHuntData[hunt]
+    });
+  } else {
+    response.send({"exists": false});
   }
-  response.sendfile(path.join("static", "adminview.html"));
 });
+
+//for entry into general hunt page for a hunt. provides static
+//  html page. can be reached from JOIN button or directly by URL
+app.get("/hunts/:hunt", function (request, response) {
+  var hunt = request.params.hunt;
+  if (hunt in globalHuntData)
+    response.sendfile(path.join("static", "huntview.html"));
+  else
+    send404(response);
+});
+
+//for entry into a team's/admin's page for a hunt. provides static
+//  html page. can be reached from signin button (for teams),
+//  organize button (for admins), or directly by URL
+app.get("/hunts/:hunt/:user/:key", function (request, response) {
+  var hunt = request.params.hunt;
+  var user = request.params.user;
+  var view = (user === "admin") ? "adminview.html" : "teamview.html";
+  if (hunt in globalHuntData)
+    response.sendfile(path.join("static", view));
+  else
+    send404(response);
+});
+
 
 /** displays the team-specific progress html page for a specific hunt 
     (ie: the page with the canvas map)
