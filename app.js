@@ -76,7 +76,8 @@ app.get("/foo", function(request, response){
     response.sendfile("static/index.html");
 });
 
-// for JOIN request to hunts, tell client if hunt exists
+//for entry into hunt home pages.
+//  accessible through home "JOIN" button or directly by URL
 app.get("/hunts/:hunt", function (request, response) {
   var huntName = request.params.hunt;
   var exists = (huntName in globalHuntData);
@@ -89,7 +90,8 @@ app.get("/hunts/:hunt", function (request, response) {
   });
 });
 
-// for ADMIN page on a hunt
+//for entry into admin page for a hunt.
+//  
 app.get("/hunts/:hunt/admin/:key", function (request, response) {
   var hunt = request.params.hunt;
   // if the hunt doesn't exist, redirect them to the homepage
@@ -99,7 +101,7 @@ app.get("/hunts/:hunt/admin/:key", function (request, response) {
     //response.redirect('/index.html');
     return;
   }
-  response.sendfile("static/adminview.html");  
+  response.sendfile(path.join("static", "adminview.html"));
 });
 
 // POSTs
