@@ -12,10 +12,18 @@ function drawMap(solvedClues, totalClues){
     var ctx = canvas.getContext("2d");
     var wrapWidth = $canvasWrap.width();
     var wrapHeight = $canvasWrap.height();
-    console.log(wrapWidth);
     var cWidth = canvas.width;
     var cHeight = canvas.height;
     var padding = 35;
+    
+    if(totalClues <= 0){
+        console.log("no clues available");
+        ctx.textAlign = "center";
+        ctx.font = "25px Arial";
+        ctx.fillText("no clues available yet", cWidth/2, cHeight/2);
+        return;
+    }
+    
     var nodeWidth = 50;
     var nodeHeight = 50;
     var nodeDist = Math.min(Math.max(100, Math.floor((wrapWidth-2*padding - totalClues*nodeWidth)/totalClues)), 500);
@@ -38,7 +46,7 @@ function drawMap(solvedClues, totalClues){
     ctx.save();
     ctx.lineWidth = 5;
     ctx.strokeStyle = "#5E412F";
-    for(var i=1; i < solvedClues+1; i++){
+    for(var i=1; i < Math.min(solvedClues+1, nodeLocations.length); i++){
         var loc = nodeLocations[i];
         var prevLoc = nodeLocations[i-1];
         ctx.beginPath();
