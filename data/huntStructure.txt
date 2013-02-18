@@ -3,10 +3,23 @@
 {   
     "safename":<urlhuntname>,
     "rawname":".....",
+    "starttime": <# of milliseconds since the epoch>,
+    "endtime": <# of milliseconds since the epoch>,
+    "admin":{
+        "key": <the keycode for the admin>,
+        "progress": ????
+    }
     "users":{
-        <name>: {
+        <username>: {
+           "username": the name of the user/team
            "key": "<keycode>",
-           "progress": ???
+
+           //  list of entries for every solved clue, empty if none have been solved yet
+           "progress": [ 
+               {
+                   timestamp: <# of milliseconds since the epoch>
+               }
+           ]
         }
     },
     "clues": [

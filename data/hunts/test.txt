@@ -1,1 +1,1 @@
-{"safename":"test","rawname":"test","users":{"admin":{"key":"noPasswordSet","progress":-1}},"clues":[]}
+{"_typename":"HuntData","safename":"test","rawname":"test","admin":{"key":"hello","progress":-1},"users":{"testuser":{"_typename":"UserData","username":"testuser","key":"opensesame","progress":[]}},"clues":[]}

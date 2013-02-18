@@ -16,8 +16,11 @@ app.use(express.bodyParser());
 **/
 app.use(express.static(path.join(__dirname, 'static')));
 
+// the directory where all hunt-data files are located, relative to app.js
 var huntDataDir = path.join("data", "hunts");
-// The global datastore of hunt information
+
+// The global datastore of hunt information, 
+// essentially a dictionary of HuntData objects
 var globalHuntData;
 
 // Asynchronously read file contents, then call callbackFn
@@ -71,10 +74,258 @@ function updateFile(huntDataKey, callbackFn){
 
 /** send404
 
-uses the given response object to send a 404 page
+uses the given response object to send a 404-not-found page
 **/
 function send404(response){
     response.status(404).sendfile(path.join("static", "404.html"));
+}
+
+/** sendErrorJson 
+
+uses the given response object to send an error json object
+
+params:
+response                the Express response object to send on
+errorMsg                (optional) the message to send with the data
+**/
+function sendErrorJson(response, errorMsg){
+    response.send({
+        error: true,
+        errorMsg: errorMsg
+    });
+}
+
+/** given a dictionary, a key, and a default value, returns the key's entry in 
+    the dictionary, if it exists. Otherwise return defaultVal.
+    
+    params:
+    data                the dictionary to grab a vlue from
+    key                 the key to get the value for
+    defaultVal          (optional) the default value to return if nothing is 
+                        found, defaults to undefined if not passed as parameter
+**/
+function getWithDefault(data, key, defaultVal){
+    if(!(data instanceof Object)){
+        console.log("warning: called getWithDefault on non-object", data);
+    }
+    return (key in data) ? data[key] : defaultVal;
+}
+
+// OBJECTS
+/** an object representing the data carried by a single user/team in a hunt 
+
+can either initialize a blank object by passing in an empty dictionary or
+initialize with existing data by passing in a dictionary with keys already set
+for keys defined in the init function
+**/
+function UserData(data){
+    /** UserData valid input mappings:
+
+    "username"              the username for this instance's user
+    "key"                   the userkey for this instance's user
+    "progress"              the progress list for this instance's user
+    **/
+    this._init = function(data){
+        this._typename = "UserData";
+        
+        this.username = getWithDefault(data, "username")
+        this.key = getWithDefault(data, "key");
+        this.progress = getWithDefault(data, "progress", []);
+    };
+    
+    /** <UserData>.changeUserKey
+    
+    changes the key stored for this UserData instance
+    
+    params:
+    newKey              the new key to use
+    **/
+    this.changeUserKey = function(newKey){
+        this.key = newKey;
+    };
+    
+    /** <UserData>.isCorrectKey
+    
+    checks the input key against the stored key in this UserData instance
+    
+    params:
+    inputKey             the input key to check
+    **/
+    this.isCorrectKey = function(inputKey){
+        return inputKey === this.key;
+    };
+    
+    this._init(data);
+}
+
+/** ClueData
+
+an object representing a specific clue's data in some hunt 
+
+can either initialize a blank object by passing in an empty dictionary or
+initialize with existing data by passing in a dictionary with keys already set
+for keys defined in the init function
+**/
+function ClueData(data){
+    /** ClueData valid input mappings:
+
+    "desc"              the question/human-readable description for this 
+                        instance's clue
+    "ans"               the answer for this instance's clue
+    **/
+    this._init = function(data){
+        this._typename = "ClueData";
+        this.desc = getWithDefault(data, "desc", "no description set");
+        this.ans = getWithDefault(data, "ans");
+    };
+    
+    /** <ClueData>.isCorrectAnswer
+    
+    checks the input answer against the stored answer in this ClueData instance
+    
+    params:
+    inputAns             the input answer to check
+    **/
+    this.isCorrectAnswer = function(inputAns){
+        return inputAns === this.ans;
+    };
+    
+    this._init(data);
+}
+
+
+/** HuntData
+
+the object that holds information about a given hunt
+it is up to the caller to save this to the global datastore after creation
+
+can either initialize a blank object by passing in an empty dictionary or
+initialize with existing data by passing in a dictionary with keys already set
+for keys defined in the init function
+**/
+function HuntData(data){
+    /** HuntData valid input mappings:
+
+    "safename"              the url-safe name to use as this hunt's datastore 
+                            key
+    "rawname"               the human-readable name/labek for this hunt
+    "starttime"             the start time of this hunt, stored as the number of
+                            milliseconds since the epoch
+    "endtime"               the end time of this hunt, stored as the number of
+                            milliseconds since the epoch
+    "admin"                 a dictionary with the following keys:
+                                "key"           the admin's keycode
+                                "progress"      ??? (Erik, can you fill this in?)
+    "users"                 a dictionary of usernames mapped to their respective
+                            UserData objects
+    "clues"                 a list of ClueData objects, in the order the hunt
+                            should progress through them
+    **/
+    this._init = function(data){
+        this._typename = "HuntData";
+        this.safename = getWithDefault(data, "safename");
+        this.rawname = getWithDefault(data, "rawname");
+        this.starttime = getWithDefault(data, "starttime");
+        this.endtime = getWithDefault(data, "endtime");
+        this.admin = getWithDefault(data, "admin", {
+            "key": "noPasswordSet",
+            "progress": -1 // -1 just signifies that this is irrelevant
+        });
+        this.users = getWithDefault(data, "users", {});
+        this.clues = getWithDefault(data, "clues", []);
+        
+        this._initUserData();
+        this._initClueData();
+    };
+    
+    /** <HuntData>.changeAdminKey
+    
+    changes the stored key for the admin of this hunt data
+    
+    params:
+    newKey                  the new key to change to
+    **/
+    this.changeAdminKey = function(newKey){
+        this.admin.key = newKey;
+    };
+    
+    /** <HuntData>._initUserData
+    
+        takes the stored dictionary of raw user data and replaces them with 
+        initializations of their respective UserData objects
+    **/
+    this._initUserData = function(){
+        for(var userName in this.users){
+            var userData = this.users[userName];
+            
+            // dont initialize user objects that already exist
+            if (userData instanceof UserData){
+                continue;
+            }
+            // otherwise, replace with an actual UserData object
+            else{
+                this.users[userName] = new UserData(userData);
+            }
+        }
+    };
+    
+    /** <HuntData>._initClueData
+    
+        takes the stored list of raw clue data and replaces them with 
+        initializations of their respective ClueData objects
+    **/
+    this._initClueData = function(){
+        for(var i=0; i < this.clues.length; i++){
+            var clueData = this.clues[i];
+            
+            // dont initialize clue objects that already exist
+            if (clueData instanceof ClueData){
+                continue;
+            }
+            // otherwise, replace with an actual ClueData object
+            else{
+                this.clues[i] = new ClueData(clueData);
+            }
+        }
+    };
+    
+    /** <HuntData>.isValidUser
+    
+    checks the stored user dictionary to see if the given user credentials are 
+    valid
+    
+    params:
+    username            the input username to check
+    userkey             the input userkey to check
+    **/
+    this.isValidUser = function(username, userkey){
+        return (username in this.users && 
+                this.users[username].isCorrectKey(userkey));
+    };
+ 
+    /** <HuntData>.addUser
+    
+    adds a new user with the given credentials to this HuntData instance's
+    user dictionary
+    
+    params:
+    username            the new user's name
+    key                 the new user's key
+    **/
+    this.addUser = function(username, key){
+        if(username in this.users){
+            console.log("user already registered for", this);
+            return;
+        }
+        
+        var newUser = new UserData({
+            "username": username,
+            "key": key
+        });
+        this.users[username] = newUser;
+    }
+    
+    this._init(data);
 }
 
 // GETs
@@ -120,8 +371,6 @@ app.get("/hunts/:hunt/:user/:key", function (request, response) {
 
 /** displays the team-specific progress html page for a specific hunt 
     (ie: the page with the canvas map)
-    
-    NOT FINISHED
 **/
 app.get("/hunts/:hunt/user/:user/:key", function(request, response){
     var hunt = request.params.hunt;
@@ -130,11 +379,56 @@ app.get("/hunts/:hunt/user/:user/:key", function(request, response){
     if (!(hunt in globalHuntData)){
         send404(response);
     }
-    else if(!(user in globalHuntData[hunt].users)){
+    else if(!(globalHuntData[hunt].isValidUser(user, key))){
         send404(response);
     }
-    // NOT FINISHED
-    
+    else{
+        response.sendfile(path.join("static", "teamview.html"));
+    }
+});
+
+/** request json data for a particular user/team's progress data in the given 
+    hunt
+
+success response format:
+{
+    "progress": the user's list of progress points 
+                (ie: the timestamps for already solved clues),
+    "curClue": the text description of the currently unsolved clue, 
+               undefined if all clues are already solved,
+    "totalClues": the number of clues in the entire event
+}
+
+**/
+app.get("/hunts/:hunt/user/:user/:key/getProgress", function(request, response){
+    var hunt = request.params.hunt;
+    var user = request.params.user;
+    var key = request.params.key;
+    if (!(hunt in globalHuntData)){
+        sendErrorJson(response, "invalid hunt");
+    }
+    else if(!(globalHuntData[hunt].isValidUser(user, key))){
+        sendErrorJson(response, "invalid user/key combination for hunt");
+    }
+    else{
+        var huntData = globalHuntData[hunt];
+        var userData = huntData.users[user];
+        var clueDataList = huntData.clues;
+        var progressList = userData.progress;
+        var curClue;
+        if (progressList.length < clueDataList.length){
+            curClue = clueDataList[progressList.length].desc;
+        }
+        else{
+            curClue = undefined;
+        }
+        
+        response.send({
+            progress: progressList,
+            curClue: curClue,
+            totalClues: clueDataList.length
+        });
+    }
 });
 
 // POSTs
@@ -153,14 +447,16 @@ app.post("/hunts/:hunt", function (request, response) {
 
   // ** may change this later to create object AFTER first save **
   // create new empty hunt object with the creator's inputted hunt name
-  huntObj = {};
-  huntObj.safename = request.body.newHuntName;
-  huntObj.rawname = hunt;
-  huntObj.users = {"admin": {
-    "key": request.body.key,
-    "progress": -1 // -1 just signifies that this is irrelevant
-  }};
-  huntObj.clues = [];
+  huntObj = new HuntData({
+    "safename": hunt, 
+    "rawname": request.body.newHuntName
+  });
+  huntObj.changeAdminKey(request.body.key);
+  
+  // DEBUG - add a dummy user
+  huntObj.addUser("testuser", "opensesame");
+  
+  
   // update server hunt object
   globalHuntData[hunt] = huntObj;
   // create file for this hunt
@@ -287,11 +583,13 @@ function initServer() {
                             console.log("warning: overwriting", safename, 
                                         "data with data from", filePath);
                         }
-                        globalHuntData[safename] = data;
+                        // initialize and save the HuntData object into the
+                        // global datastore from the raw parsed data
+                        globalHuntData[safename] = new HuntData(data);
                     }
                     // if no name is in the file's data, don't save the data
                     else{
-                        console.log("no name set for ", filePath);
+                        console.log("no safename set for ", filePath);
                     }
                     
                     loadedFiles += 1;

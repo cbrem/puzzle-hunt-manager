@@ -1,1 +1,1 @@
-{"safename":"thathunt","rawname":"thathunt","users":{"admin":{"key":"pass","progress":-1}},"clues":[]}
+{"_typename":"HuntData","safename":"thathunt","rawname":"that hunt","admin":{"key":"password","progress":-1},"users":{"testuser":{"_typename":"UserData","username":"testuser","key":"opensesame","progress":[]}},"clues":[]}

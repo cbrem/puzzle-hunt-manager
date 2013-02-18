@@ -83,17 +83,20 @@ var encodeName = function (name, def) {
 //prompt the user to put in the password required to view an existing
 //  team/admin page. on success, take them to that page
 var promptEdit = function (data, user, urlHuntName) {
-    var keyGiven =
+    var givenKey =
       prompt("That name already exists. Enter your key.");
-    var urlKey = encodeName(keyGiven, "");
+    var urlKey = encodeName(givenKey, "");
     if (urlKey === undefined) return;
 
-    if (urlKey === data.hunt.users[user].key) {
+    var expectedKey = (user === "admin") ? data.hunt.admin.key :
+                                           data.hunt.users[user].key;
+    console.log("data", data);
+    if (urlKey === expectedKey) {
       //navigate to the edit page
       window.location = "/hunts/" + urlHuntName + "/" + user + "/" + urlKey;
     } else {
       console.log("Wrong key given. Expected " 
-                  + data.hunt.users[user].key + ", given " + keyGiven);
+                  + expectedKey + ", given " + givenKey);
     }
 };
 
