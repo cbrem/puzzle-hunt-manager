@@ -38,7 +38,7 @@ function drawMap(solvedClues, totalClues){
     ctx.save();
     ctx.lineWidth = 5;
     ctx.strokeStyle = "#5E412F";
-    for(var i=1; i < solvedClues; i++){
+    for(var i=1; i < solvedClues+1; i++){
         var loc = nodeLocations[i];
         var prevLoc = nodeLocations[i-1];
         ctx.beginPath();
@@ -64,7 +64,7 @@ function drawMap(solvedClues, totalClues){
             ctx.fillStyle = "#F0A830";
         }
         else{
-            ctx.fillStyle = "grey";
+            ctx.fillStyle = "#b7b7b7";
         }
         ctx.fillRect(loc.left, loc.top, nodeWidth, nodeHeight);
         ctx.fillStyle="black";

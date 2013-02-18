@@ -136,6 +136,31 @@ a{
     box-shadow: 0 1px 4px grey;
 }
 
+
+#canvas-wrapper{
+    position:relative;
+    text-align: center;
+    width:100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#map-canvas{
+    display:none;
+    margin:0;
+    padding:0;
+    height: 100px;
+    border-radius: 4px;
+    background: #FCEBB6 url("../images/roughcloth.png") repeat;
+    
+    border: 1px solid #815940;
+}
+
+#canvas-wrapper img{
+    padding: 35px 0;
+}
+
+
 #join-create-hunt-form{
     text-align: center;
 }
