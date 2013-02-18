@@ -119,6 +119,12 @@ initialize with existing data by passing in a dictionary with keys already set
 for keys defined in the init function
 **/
 function UserData(data){
+    /** UserData valid input mappings:
+
+    "username"              the username for this instance's user
+    "key"                   the userkey for this instance's user
+    "progress"              the progress list for this instance's user
+    **/
     this._init = function(data){
         this._typename = "UserData";
         
@@ -127,30 +133,59 @@ function UserData(data){
         this.progress = getWithDefault(data, "progress", []);
     };
     
+    /** <UserData>.changeUserKey
+    
+    changes the key stored for this UserData instance
+    
+    params:
+    newKey              the new key to use
+    **/
     this.changeUserKey = function(newKey){
         this.key = newKey;
     };
     
-    this.isCorrectKey = function(userKey){
-        return userKey === this.key;
+    /** <UserData>.isCorrectKey
+    
+    checks the input key against the stored key in this UserData instance
+    
+    params:
+    inputKey             the input key to check
+    **/
+    this.isCorrectKey = function(inputKey){
+        return inputKey === this.key;
     };
     
     this._init(data);
 }
 
-/** an object representing a specific clue's data in some hunt 
+/** ClueData
+
+an object representing a specific clue's data in some hunt 
 
 can either initialize a blank object by passing in an empty dictionary or
 initialize with existing data by passing in a dictionary with keys already set
 for keys defined in the init function
 **/
 function ClueData(data){
+    /** ClueData valid input mappings:
+
+    "desc"              the question/human-readable description for this 
+                        instance's clue
+    "ans"               the answer for this instance's clue
+    **/
     this._init = function(data){
         this._typename = "ClueData";
         this.desc = getWithDefault(data, "desc", "no description set");
         this.ans = getWithDefault(data, "ans");
     };
     
+    /** <ClueData>.isCorrectAnswer
+    
+    checks the input answer against the stored answer in this ClueData instance
+    
+    params:
+    inputAns             the input answer to check
+    **/
     this.isCorrectAnswer = function(inputAns){
         return inputAns === this.ans;
     };
@@ -169,6 +204,23 @@ initialize with existing data by passing in a dictionary with keys already set
 for keys defined in the init function
 **/
 function HuntData(data){
+    /** HuntData valid input mappings:
+
+    "safename"              the url-safe name to use as this hunt's datastore 
+                            key
+    "rawname"               the human-readable name/labek for this hunt
+    "starttime"             the start time of this hunt, stored as the number of
+                            milliseconds since the epoch
+    "endtime"               the end time of this hunt, stored as the number of
+                            milliseconds since the epoch
+    "admin"                 a dictionary with the following keys:
+                                "key"           the admin's keycode
+                                "progress"      ??? (Erik, can you fill this in?)
+    "users"                 a dictionary of usernames mapped to their respective
+                            UserData objects
+    "clues"                 a list of ClueData objects, in the order the hunt
+                            should progress through them
+    **/
     this._init = function(data){
         this._typename = "HuntData";
         this.safename = getWithDefault(data, "safename");
@@ -186,11 +238,20 @@ function HuntData(data){
         this._initClueData();
     };
     
+    /** <HuntData>.changeAdminKey
+    
+    changes the stored key for the admin of this hunt data
+    
+    params:
+    newKey                  the new key to change to
+    **/
     this.changeAdminKey = function(newKey){
         this.admin.key = newKey;
     };
     
-    /** takes the stored dictionary of user data and replaces them with 
+    /** <HuntData>._initUserData
+    
+        takes the stored dictionary of raw user data and replaces them with 
         initializations of their respective UserData objects
     **/
     this._initUserData = function(){
@@ -208,7 +269,9 @@ function HuntData(data){
         }
     };
     
-    /** takes the stored list of clue data and replaces them with 
+    /** <HuntData>._initClueData
+    
+        takes the stored list of raw clue data and replaces them with 
         initializations of their respective ClueData objects
     **/
     this._initClueData = function(){
@@ -226,11 +289,29 @@ function HuntData(data){
         }
     };
     
+    /** <HuntData>.isValidUser
+    
+    checks the stored user dictionary to see if the given user credentials are 
+    valid
+    
+    params:
+    username            the input username to check
+    userkey             the input userkey to check
+    **/
     this.isValidUser = function(username, userkey){
         return (username in this.users && 
                 this.users[username].isCorrectKey(userkey));
     };
  
+    /** <HuntData>.addUser
+    
+    adds a new user with the given credentials to this HuntData instance's
+    user dictionary
+    
+    params:
+    username            the new user's name
+    key                 the new user's key
+    **/
     this.addUser = function(username, key){
         if(username in this.users){
             console.log("user already registered for", this);
