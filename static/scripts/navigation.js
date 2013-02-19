@@ -1,10 +1,18 @@
 $(document).ready(function () {
+  $("form").each(function(i, elem){
+    $(elem).submit(function(e){
+        e.preventDefault(); // prevent page refresh when hitting enter
+    });
+  });
 
   // JOIN button
   $("#join").click(function () {
     var huntName = $("#hunt-name").val();
     var urlHuntName = encodeName(huntName, "Enter a hunt name.");
-    if (urlHuntName === undefined) return;
+    if (urlHuntName === undefined){
+        alert("Please enter the name of the hunt you want to join.");
+        return;
+    }
 
     $.ajax({
       type: "get",
@@ -23,7 +31,10 @@ $(document).ready(function () {
   $("#administer").click(function (e) {
     var newHuntName = $("#hunt-name").val();
     var urlHuntName = encodeName(newHuntName, "Enter a hunt name.");
-    if (urlHuntName === undefined) return;
+    if (urlHuntName === undefined){
+        alert("Please enter the name of the hunt you want to administer.");
+        return;
+    }
  
     $.ajax({
       type: "get",
@@ -88,8 +99,7 @@ var promptEdit = function (data, user, urlHuntName) {
     var urlKey = encodeName(givenKey, "");
     if (urlKey === undefined) return;
 
-    var expectedKey = (user === "admin") ? data.hunt.admin.key :
-                                           data.hunt.users[user].key;
+    var expectedKey = data.hunt.users[user].key;
     console.log("data", data);
     if (urlKey === expectedKey) {
       //navigate to the edit page
@@ -122,7 +132,7 @@ var promptCreate = function (data, newHuntName, urlHuntName) {
       success: function(data) {
         if (!data.error) {
           // navigate to the new admin webpage
-          console.log("Successfuly created new hunt");
+          console.log("Successfully created new hunt");
           window.location = "/hunts/" + urlHuntName + "/admin/" + urlKey;
         }
         else {

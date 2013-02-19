@@ -1,1 +1,0 @@
-{"safename":"test79","rawname":"test79","users":{"admin":{"key":"79","progress":-1},"test79team":{"key":"79team","progress":-1}},"clues":[]}

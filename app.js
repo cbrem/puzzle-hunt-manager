@@ -124,6 +124,8 @@ function UserData(data){
     "username"              the username for this instance's user
     "key"                   the userkey for this instance's user
     "progress"              the progress list for this instance's user
+                            (ie: a list of data about a solved clue, such as 
+                             a timestamp of solve date)
     **/
     this._init = function(data){
         this._typename = "UserData";
@@ -213,9 +215,6 @@ function HuntData(data){
                             milliseconds since the epoch
     "endtime"               the end time of this hunt, stored as the number of
                             milliseconds since the epoch
-    "admin"                 a dictionary with the following keys:
-                                "key"           the admin's keycode
-                                "progress"      ??? (Erik, can you fill this in?)
     "users"                 a dictionary of usernames mapped to their respective
                             UserData objects
     "clues"                 a list of ClueData objects, in the order the hunt
@@ -227,11 +226,12 @@ function HuntData(data){
         this.rawname = getWithDefault(data, "rawname");
         this.starttime = getWithDefault(data, "starttime");
         this.endtime = getWithDefault(data, "endtime");
-        this.admin = getWithDefault(data, "admin", {
-            "key": "noPasswordSet",
-            "progress": -1 // -1 just signifies that this is irrelevant
+        this.users = getWithDefault(data, "users", {
+            "admin": new UserData({
+                        "username": "admin",
+                        "key": undefined
+                     })
         });
-        this.users = getWithDefault(data, "users", {});
         this.clues = getWithDefault(data, "clues", []);
         
         this._initUserData();
@@ -246,7 +246,9 @@ function HuntData(data){
     newKey                  the new key to change to
     **/
     this.changeAdminKey = function(newKey){
-        this.admin.key = newKey;
+        if("admin" in this.users){
+            this.users.admin.changeUserKey(newKey);
+        }
     };
     
     /** <HuntData>._initUserData
@@ -303,6 +305,10 @@ function HuntData(data){
                 this.users[username].isCorrectKey(userkey));
     };
  
+    this.hasUser = function(username){
+        return (username in this.users);
+    }
+ 
     /** <HuntData>.addUser
     
     adds a new user with the given credentials to this HuntData instance's
@@ -313,16 +319,28 @@ function HuntData(data){
     key                 the new user's key
     **/
     this.addUser = function(username, key){
-        if(username in this.users){
-            console.log("user already registered for", this);
-            return;
-        }
-        
         var newUser = new UserData({
             "username": username,
             "key": key
         });
         this.users[username] = newUser;
+    }
+    
+    this.addClue = function(desc, ans){
+        var newClue = new ClueData({
+            "desc":desc,
+            "ans":ans
+        });
+        this.clues.push(newClue);
+    }
+    
+    this.popClue = function(index){
+        var removedClue = undefined;
+        if (0 <= index && index < this.clues.length){
+            var removedClue = this.clues[index];
+            this.clues.splice(index, 1);
+        }
+        return removedClue;
     }
     
     this._init(data);
@@ -361,11 +379,22 @@ app.get("/hunts/:hunt", function (request, response) {
 app.get("/hunts/:hunt/:user/:key", function (request, response) {
   var hunt = request.params.hunt;
   var user = request.params.user;
+  var key = request.params.key;
   var view = (user === "admin") ? "adminview.html" : "teamview.html";
-  if (hunt in globalHuntData)
-    response.sendfile(path.join("static", view));
-  else
+  var huntData;
+  if (hunt in globalHuntData){
+    huntData = globalHuntData[hunt];
+  }
+  else{
     send404(response);
+  }
+  
+  if(huntData.isValidUser(user, key)){
+    response.sendfile(path.join("static", view));
+  }
+  else{
+    send404(response);
+  }
 });
 
 
@@ -454,7 +483,7 @@ app.post("/hunts/:hunt", function (request, response) {
   huntObj.changeAdminKey(request.body.key);
   
   // DEBUG - add a dummy user
-  huntObj.addUser("testuser", "opensesame");
+  huntObj.addUser("testteam", "password");
   
   
   // update server hunt object
