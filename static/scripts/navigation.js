@@ -127,7 +127,7 @@ var promptCreate = function (data, newHuntName, urlHuntName) {
 
     $.ajax({
       type: "post",
-      url: "/hunts/" + urlHuntName,
+      url: "/create/" + urlHuntName,
       data: {"newHuntName": newHuntName, "key": urlKey},
       success: function(data) {
         if (!data.error) {

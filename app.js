@@ -238,6 +238,15 @@ function HuntData(data){
         this._initClueData();
     };
     
+    this.validateAdminKey = function(inputKey){
+        if("admin" in this.users){
+            return this.users.admin.isCorrectKey(inputKey)
+        }
+        else{
+            return false;
+        }
+    }
+    
     /** <HuntData>.changeAdminKey
     
     changes the stored key for the admin of this hunt data
@@ -324,6 +333,10 @@ function HuntData(data){
             "key": key
         });
         this.users[username] = newUser;
+    }
+    
+    this.clearClues = function(){
+        this.clues = [];
     }
     
     this.addClue = function(desc, ans){
@@ -434,17 +447,22 @@ app.get("/hunts/:hunt/user/:user/:key/getProgress", function(request, response){
     var hunt = request.params.hunt;
     var user = request.params.user;
     var key = request.params.key;
+    
+    // error checking for malformed input
     if (!(hunt in globalHuntData)){
         sendErrorJson(response, "invalid hunt");
     }
     else if(!(globalHuntData[hunt].isValidUser(user, key))){
         sendErrorJson(response, "invalid user/key combination for hunt");
     }
+    // actually creating the return data
     else{
         var huntData = globalHuntData[hunt];
         var userData = huntData.users[user];
         var clueDataList = huntData.clues;
         var progressList = userData.progress;
+        
+        // get description of currently unsolved clue
         var curClue;
         if (progressList.length < clueDataList.length){
             curClue = clueDataList[progressList.length].desc;
@@ -464,7 +482,7 @@ app.get("/hunts/:hunt/user/:user/:key/getProgress", function(request, response){
 // POSTs
 
 // for CREATE request, create an empty hunt object in datastore
-app.post("/hunts/:hunt", function (request, response) {
+app.post("/create/:hunt", function (request, response) {
   console.log("POSTING new hunt!");
   console.log(request.body.newHuntName, request.body.key);
   var hunt = request.params.hunt;
@@ -490,7 +508,7 @@ app.post("/hunts/:hunt", function (request, response) {
   // update server hunt object
   globalHuntData[hunt] = huntObj;
   // create file for this hunt
-  updateFile(hunt, function(err, data) {
+  updateFile(hunt, function(err) {
     if (err) {
       console.log("Error thrown: " + err);
       response.send({
@@ -509,6 +527,59 @@ app.post("/hunts/:hunt", function (request, response) {
 
 // PUTs
 
+/** call this api function to update the stored clues list for a given hunt 
+
+PUT params:
+huntName              the url-safe/data-key name for the hunt to modify
+adminKey              the keycode for the admin of the given hunt
+clueList              a list of clue dictionaries to store as the new clues data
+                      of the given hunt, requires values for the 
+                      "desc" and "ans" fields
+**/
+app.put("/edit/clues", function(request, response){
+    var safeHuntName = request.body.huntName;
+    var adminKey = request.body.adminKey;
+    var inputClues = request.body.clueList;
+    
+    if(safeHuntName in globalHuntData &&
+       globalHuntData[safeHuntName].validateAdminKey(adminKey) &&
+       typeof(inputClues) === typeof([])){
+       
+        var huntData = globalHuntData[safeHuntName];
+        
+        // clear clues before adding in new ones
+        huntData.clearClues();
+        
+        // iterate through input clue data and only add the one with
+        // fields fo "desc" and "ans"
+        for(var i=0; i < inputClues.length; i++){
+            var clue = inputClues[i];
+            if("desc" in clue && "ans" in clue){
+                huntData.addClue(clue.desc, clue.ans);
+            }
+        }
+        
+        // set up callbacks for after file has been written
+        updateFile(safeHuntName, function(err){
+            if(err){
+                console.log("error in clue update for", safeHuntName);
+                sendErrorJson(response, "unable to update "+safeHuntName+" clues");
+            }
+            else{
+                response.send({
+                    success: true
+                });
+            }
+        });
+    }
+    else{
+        sendErrorJson(response, "invalid input data");
+    }
+});
+
+app.put("/edit/user", function(request, response){
+    // TODO: based on the input data, update the user information in a given hunt
+});
 
 
 // DELETEs
