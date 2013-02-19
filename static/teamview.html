@@ -17,11 +17,8 @@
             var solvedClues = 3;
             var totalClues = 9;
             drawMap(solvedClues, totalClues);
-            $("#canvas-wrapper").fadeOut("fast", function(){
-                $(this).find("img").remove();
-                $("#map-canvas").show();
-                $(this).fadeIn("fast");
-            });
+            $("#canvas-wrapper").find("img").remove();
+            $("#map-canvas").show();
         });
     </script>
 </head>
@@ -39,10 +36,10 @@
     <div id="main-wrapper" class="page-wrapper">
         <div id="content-area">
             <header id="content-header">
-                <em><span class="team-name">Dummy Team's</span></em> progress on 
-                <em><span class="hunt-name">Dummy Hunt Name</span></em>:&nbsp;
-                <em><span class="num-solved-clues">3</span></em> /
-                <em><span class="num-total-clues">9</span></em> clues solved
+                <span class="team-name">Dummy Team's</span> progress on 
+                <span class="hunt-name">Dummy Hunt Name</span>:&nbsp;
+                <span class="num-solved-clues">3</span> /
+                <span class="num-total-clues">9</span> clues solved
             </header>
             <figure id="canvas-wrapper">
                 <img src="/images/loader.gif"></img>

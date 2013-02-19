@@ -162,13 +162,12 @@ form {
     line-height: 1.5em;
 }
 
-#content-header em{
+#content-header h1{
+    margin: .1em 0;
     font-family: Helvetica, Arial, sans-serif;
-    letter-spacing: 1px;
-    font-size: 1.4em;
+    font-size: 1.5em;
     font-weight:bold;
 }
-
 
 #canvas-wrapper{
     position:relative;
@@ -191,6 +190,57 @@ form {
 
 #canvas-wrapper img{
     padding: 35px 0;
+}
+
+#score-board-area{
+    width: 90%;
+    margin: 0 auto;
+    max-height: 200px;
+    overflow-x:hidden;
+    overflow-y:auto;
+    position:relative;
+}
+
+
+#score-board-area header{
+    font-size: 1.1em;
+    margin-bottom: .25em;
+}
+
+#score-board{
+    width:100%;
+}
+
+#score-board th,
+#score-board td{
+    width: 30%;
+}
+
+#score-board .entry-ranking{
+    width: 3%;
+}
+
+#score-board td.entry-ranking{
+    background-color: #dff0ea;
+}
+
+th{
+    font-weight: bold;
+    background-color: #9acfbd;
+}
+
+td{
+    background-color: #f9f7f5;
+}
+
+th,td{
+    border: 1px solid #e5e5e5;
+    padding: .5em;
+    text-align:center;
+}
+
+tr:nth-child(odd) td{
+    background-color: white;
 }
 
 footer{

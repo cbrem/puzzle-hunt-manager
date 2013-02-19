@@ -387,6 +387,7 @@ app.get("/hunts/:hunt/:user/:key", function (request, response) {
   }
   else{
     send404(response);
+    return;
   }
   
   if(huntData.isValidUser(user, key)){

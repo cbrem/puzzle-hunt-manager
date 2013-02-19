@@ -1,0 +1,1 @@
+{"_typename":"HuntData","safename":"test","rawname":"test","users":{"admin":{"_typename":"UserData","username":"admin","key":"hello","progress":[]},"testteam":{"_typename":"UserData","username":"testteam","key":"password","progress":[]}},"clues":[]}
