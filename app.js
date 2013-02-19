@@ -463,17 +463,48 @@ app.get("/hunts/:hunt/user/:user/:key/getProgress", function(request, response){
 
 // POSTs
 
-// for CREATE request, create an empty hunt object in datastore
-app.post("/hunts/:hunt", function (request, response) {
-  console.log("POSTING new hunt!");
-  console.log(request.body.newHuntName, request.body.key);
+// add team from SIGN IN button
+app.post("/hunts/:hunt/:user/:key", function (request, response) {
   var hunt = request.params.hunt;
+  var user = request.params.user;
+  var key = request.params.key;
+  
+  if (user === "admin") {
+    //create new hunt, which adds admin
+    // ** may change this later to create object AFTER first save **
+    // create new empty hunt object with the creator's inputted hunt name
+    var huntObj = new HuntData({
+      "safename": hunt, 
+      "rawname": request.body.newHuntName
+    });
+    huntObj.changeAdminKey(key);
+    
+    // update server hunt object
+    globalHuntData[hunt] = huntObj;  
+  } else {
+    //add user to hunt
+    if (!(hunt in globalHuntData)) {
+      console.log("Adding user to non-existant hunt.");
+      response.send({"error": true});
+    }
+    globalHuntData[hunt].addUser(user, key);
+  }
 
-  //check if hunt already exists
-  if (hunt in globalHuntData) response.send({
-    "error" : false,
-    "alreadyExists": true
+  //update datastore
+  updateFile(hunt, function(err, data) {
+    if (err) {
+      console.log("Error thrown: " + err);
+      response.send({"error": true});
+    }
+    else {
+      response.send({"error": false});
+    }
   });
+});
+/*
+// for ADMINISTER request, create an empty hunt object in datastore
+app.post("/hunts/:hunt", function (request, response) {
+  var hunt = request.params.hunt;
 
   // ** may change this later to create object AFTER first save **
   // create new empty hunt object with the creator's inputted hunt name
@@ -486,27 +517,21 @@ app.post("/hunts/:hunt", function (request, response) {
   // DEBUG - add a dummy user
   huntObj.addUser("testteam", "password");
   
-  
   // update server hunt object
   globalHuntData[hunt] = huntObj;
+
   // create file for this hunt
   updateFile(hunt, function(err, data) {
     if (err) {
       console.log("Error thrown: " + err);
-      response.send({
-        "error": true,
-        "alreadyExists": false
-      })
+      response.send({"error": true});
     }
     else {
-      response.send({
-        "error": false,
-        "alreadyExists": false
-      });
+      response.send({"error": false});
     }
   });
 });
-
+*/
 // PUTs
 
 

@@ -43,7 +43,7 @@ $(document).ready(function () {
         if (data.exists) {
           promptEdit(data, "admin", urlHuntName);
         } else {
-          promptCreate(data, newHuntName, urlHuntName);
+          promptCreate(data, "admin", urlHuntName, newHuntName);
         }
       }
     });
@@ -65,7 +65,7 @@ $(document).ready(function () {
         if (data.exists && (urlTeamName in data.hunt.users)) {
           promptEdit(data, urlTeamName, urlHuntName);
         } else {
-          promptCreate(data, "dummy", urlHuntName);
+          promptCreate(data, urlTeamName, urlHuntName);
         }
       }
     });
@@ -112,28 +112,22 @@ var promptEdit = function (data, user, urlHuntName) {
 
 //prompt the user to create a password for admining a new hunt/ a new team
 //  for an existing hunt. then, take them to the relevant page
-var promptCreate = function (data, newHuntName, urlHuntName) {
+var promptCreate = function (data, user, urlHuntName, newHuntName) {
     var keyGiven =
       prompt("That name doesn't exist yet! Enter a key to make it!");
     var urlKey = encodeName(keyGiven, "");
     if (urlKey === undefined) return;
-
-    //TODO: since hunt creation and user creation share this function,
-    //      add option to add user to existing hunt
-    if (newHuntName === "dummy") {
-      alert("Team creation not yet implemented. Enter team data manually.")
-      return;
-    }
+    var path = "/hunts/" + urlHuntName + "/" + user + "/" + urlKey;
 
     $.ajax({
       type: "post",
-      url: "/hunts/" + urlHuntName,
-      data: {"newHuntName": newHuntName, "key": urlKey},
+      url: path,
+      data: {"newHuntName": newHuntName},
       success: function(data) {
         if (!data.error) {
           // navigate to the new admin webpage
           console.log("Successfully created new hunt");
-          window.location = "/hunts/" + urlHuntName + "/admin/" + urlKey;
+          window.location = path;
         }
         else {
           console.log("There was an error creating the page.", data);
