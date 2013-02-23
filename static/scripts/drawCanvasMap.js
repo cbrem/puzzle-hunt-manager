@@ -1,3 +1,29 @@
+// modified from: 
+// https://developer.mozilla.org/en-US/docs/Canvas_tutorial/Drawing_shapes
+function roundedRect(ctx,x,y,width,height,radius, fillStyle, strokeStyle){
+    ctx.beginPath();
+    ctx.moveTo(x,y+radius);
+    ctx.lineTo(x,y+height-radius);
+    ctx.quadraticCurveTo(x,y+height,x+radius,y+height);
+    ctx.lineTo(x+width-radius,y+height);
+    ctx.quadraticCurveTo(x+width,y+height,x+width,y+height-radius);
+    ctx.lineTo(x+width,y+radius);
+    ctx.quadraticCurveTo(x+width,y,x+width-radius,y);
+    ctx.lineTo(x+radius,y);
+    ctx.quadraticCurveTo(x,y,x,y+radius);
+    ctx.closePath();
+    ctx.save();
+    if(fillStyle !== undefined){
+        ctx.fillStyle = fillStyle;
+        ctx.fill();
+    }
+    if(strokeStyle !== undefined){
+        ctx.strokeStyle = strokeStyle;
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+
 function loadCanvasMap(solvedClues, totalClues){
     drawCanvasMap(solvedClues, totalClues);
     $("#canvas-wrapper").find("img").remove();
@@ -66,19 +92,23 @@ function drawCanvasMap(solvedClues, totalClues){
     ctx.textAlign = "center";
     ctx.font = "30px Arial";
     ctx.textBaseline = "middle";
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2;
     for(var i=0; i < nodeLocations.length; i++){
         var loc = nodeLocations[i];
         if(i < solvedClues){
             ctx.fillStyle = "#efc98a";
+            ctx.strokeStyle = "#5f3e06";
         }
         else if(i === solvedClues){
             ctx.fillStyle = "#F0A830";
+            ctx.strokeStyle = "#5f3e06";
         }
         else{
             ctx.fillStyle = "#b7b7b7";
+            ctx.strokeStyle = "#474747";
         }
-        ctx.fillRect(loc.left, loc.top, nodeWidth, nodeHeight);
+        roundedRect(ctx, loc.left, loc.top, nodeWidth, nodeHeight, nodeWidth/4,
+                    ctx.fillStyle, ctx.strokeStyle);
         ctx.fillStyle="black";
         ctx.fillText(String(i+1), loc.cx, loc.cy);
     }

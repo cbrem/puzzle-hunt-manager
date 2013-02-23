@@ -51,13 +51,17 @@ form {
 .textInput{
   display: block;
   margin: 10px auto;
-  width: 80%;
+  padding: .25em 0;
+  width: 98%;
   border-radius: 5px;
   border: 3px solid #78C0A8;
   box-shadow: 0 0 4px grey;
 
   color: black;
   text-align: center;
+  
+  resize: none;
+  font-family: Verdana, Helvetica, Arial, sans-serif;
 }
 
 .button{
@@ -78,7 +82,7 @@ form {
     
     background-color: #F0A830;
     color:white;
-    text-shadow: 0 -1px #ccc;
+    text-shadow: 0 -1px #d1880f;
     box-shadow: 0 0 4px grey;
 }
 
@@ -198,12 +202,18 @@ form {
 
 #content-header h2 {
     text-align: center;
-    font-size: 1em;
+    font-size: 1.35em;
     line-height: 1.5em;
+}
+
+#content-header em{
+    font-size: 115%;
+    font-weight: bold;
 }
 
 #canvas-wrapper{
     position:relative;
+    margin: .5em 0;
     text-align: center;
     width:100%;
     overflow-x: auto;
@@ -391,11 +401,18 @@ tr:nth-child(odd) td{
 }
 
 #clues-team-view{
-    margin: 0;
+    margin: 0 auto;
     padding: .3em;
-    width: 100%;
     line-height: 1.3em;
+    width: 80%;
 }
+
+#clues-team-view header{
+    font-size: 1.2em;
+    font-weight:bold;
+    margin-bottom: .5em;
+}
+
 
 footer{
     margin-top: 1em;

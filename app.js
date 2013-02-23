@@ -414,24 +414,6 @@ app.get("/hunts/:hunt/:user/:key", function (request, response) {
 });
 
 
-/** displays the team-specific progress html page for a specific hunt 
-    (ie: the page with the canvas map)
-**/
-app.get("/hunts/:hunt/user/:user/:key", function(request, response){
-    var hunt = request.params.hunt;
-    var user = request.params.user;
-    var key = request.params.key;
-    if (!(hunt in globalHuntData)){
-        send404(response);
-    }
-    else if(!(globalHuntData[hunt].isValidUser(user, key))){
-        send404(response);
-    }
-    else{
-        response.sendfile(path.join("static", "teamview.html"));
-    }
-});
-
 /** request json data for a particular user/team's progress data in the given 
     hunt
 
