@@ -1,6 +1,6 @@
 // dis is loading up the admin view for a hunt
 $(document).ready(function(){
-  // todo: make ajax call to app.js to get the admin data for the given hunt,
+  // make ajax call to app.js to get the admin data for the given hunt,
   // then populate the interface with the data entries
   var currentUrl = window.location.pathname;
   var urlList = currentUrl.split("/");
@@ -37,6 +37,9 @@ $(document).ready(function(){
       } else {
         console.log("Something's real messed up with getting data to load this.")
       }
+    },
+    error: function(data){
+        console.log("error", data);
     }
   });
 

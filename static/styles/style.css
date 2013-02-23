@@ -31,14 +31,20 @@ form {
   text-align: center;
 }
 
+#home-form{
+    margin: 0 auto;
+    width: 30%;
+}
+
 .textInput{
   display: block;
   margin: 10px auto;
+  width: 80%;
   border-radius: 5px;
   border: 3px solid #78C0A8;
   box-shadow: 0 0 4px grey;
 
-  color: #888888;
+  color: black;
   text-align: center;
 }
 
