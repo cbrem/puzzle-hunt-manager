@@ -65,7 +65,7 @@ $(document).ready(function(){
   	for (var i = 0; i < numClues; i++) {
   		var clue = clues[i];
   		var newClueRow = $("<tr>").attr("class", "clue-row");
-  		var clueNum = $("<td>").attr("class", "clue-num").html(i);
+  		var clueNum = $("<td>").attr("class", "clue-num").html(i+1);
   		var clueDesc = $("<td>").attr("class", "clue-desc").html(clue["desc"]);
   		var clueAns = $("<td>").attr("class", "clue-ans").html(clue["ans"]);
   		newClueRow.append(clueNum).append(clueDesc).append(clueAns);
@@ -82,17 +82,18 @@ $(document).ready(function(){
     url: "/info/" + encodeURIComponent(urlHuntName),
     success: function(data) {
       if (data.exists) {
-      	// for admin!
+
+      	// admin-specific
       	if (urlUserName === "admin") {
-	        loadAdminPage(data.hunt);
 	        loadClues(data.hunt);
 	      }
-	      // for all other users
-	      else if (urlUserName !=== undefined) {
-        	loadPageInfo(data.hunt);
+	      // hunter-specific
+	      else if (urlUserName !== undefined) {
 	      }
-	      // for all users
+	      // info for all users
+	      loadPageInfo(data.hunt);
         //fillScoreboard(data.hunt);
+
       } else {
         console.log("Something's real messed up with getting data to load this.")
       }
