@@ -11,16 +11,9 @@
     <link href="/styles/style.css" rel="stylesheet" type="text/css">
 
     <script src="/scripts/jquery-1.9.0.js"></script>
-    <script src="/scripts/drawMap.js"></script>
-    <script>
-        $(document).ready(function(){
-            var solvedClues = 3;
-            var totalClues = 9;
-            drawMap(solvedClues, totalClues);
-            $("#canvas-wrapper").find("img").remove();
-            $("#map-canvas").show();
-        });
-    </script>
+    <script src="/scripts/utils.js"></script>
+    <script src="/scripts/drawCanvasMap.js"></script>
+    <script src="/scripts/loadContents.js"></script>
 </head>
 <body>
     <header id="site-header" class="small">
@@ -45,9 +38,9 @@
                 <img src="/images/loader.gif"></img>
                 <canvas id="map-canvas"></canvas>
             </figure>
-            <div id="clues-view">
+            <div id="clues-team-view">
                 <h1>Current clue: Clue #<span class="curr-clue-num">4</span></h1>
-                <p id="curr-clue">There's more than just gum under the one of the tables.</p>
+                <p id="curr-clue">Fill me in with a description later</p>
                 <span class="button">Enter answer</span>
             </div>
         </div>

@@ -313,6 +313,13 @@ tr:nth-child(odd) td{
     background-color: white;
 }
 
+#clues-team-view{
+    margin: 0;
+    padding: .3em;
+    width: 100%;
+    line-height: 1.3em;
+}
+
 footer{
     margin-top: 1em;
     font-size: .7em;
