@@ -11,7 +11,9 @@
     <link href="/styles/style.css" rel="stylesheet" type="text/css">
 
     <script src="/scripts/jquery-1.9.0.js"></script>
+    <script src="/scripts/utils.js"></script>
     <script src="/scripts/navigation.js"></script>
+    <script src="/scripts/loadContents.js"></script>
 </head>
 <body>
     <header id="site-header" class="small">
@@ -26,24 +28,66 @@
     </header>
     <div id="main-wrapper" class="page-wrapper">
         <div id="content-area">
-          <div class="right-sidebar">
-            <form>
-              <span id="manage" class="button">Manage</span>
-              <input type="text" id="manage-pass" class="textInput" 
-                     placeholder="Enter admin password."/>
-              
-              <span id="start" class="button">Start</span>
-              <span id="continue" class="button">Continue</span>
+            <header id="content-header">
+                <h1 class="hunt-name">&nbsp;</h1>
+            </header>
+            <div class="left-sidebar">
+                
+                <div id="score-board-area">
+                    <header class="lite">Scoreboard</header>
+                    <table id="score-board">
+                        <tr class="header">
+                            <th class="entry-ranking">
+                                #
+                            </th>
+                            <th>
+                                Team name
+                            </th>
+                            <th>
+                                Solved clues
+                            </th>
+                            <th>
+                                Last check-in
+                            </th>
+                        </tr>
+                        <!--
+                        <tr class="score-board-entry">
+                            <td class="entry-ranking">
+                                1
+                            </td>
+                            <td class="entry-name">
+                                Team A
+                            </td>
+                            <td class="entry-progress">
+                                <span class="num-solved-clues">3</span> /
+                                <span class="num-total-clues">9</span>
+                            </td>
+                            <td class="entry-time">
+                                15:32:45 12/20/2014
+                            </td>
+                        </tr>
+                        -->
+                    </table>
+                </div>
+            </div>
+            <div class="right-sidebar">
+                <form>
+                    <span id="manage" class="button">Manage</span>
+                    <input type="text" id="manage-pass" class="textInput" 
+                        placeholder="Enter admin password."/>
 
-              <div id="team-box" class="dropdown">
-                <input type="text" id="team-name" class="textInput" 
-                       placeholder="Enter a team name."/>
-                <input type="text" id="team-pass" class="textInput" 
-                       placeholder="Enter a password."/>
-                <span id="team-go" class="button">Go!</span>
-              </div>
-            </form>
-          </div>
+                    <span id="start" class="button">Start</span>
+                    <span id="continue" class="button">Continue</span>
+
+                    <div id="team-box" class="dropdown">
+                        <input type="text" id="team-name" class="textInput" 
+                            placeholder="Enter a team name."/>
+                        <input type="text" id="team-pass" class="textInput" 
+                            placeholder="Enter a password."/>
+                        <span id="team-go" class="button">Go!</span>
+                    </div>
+                </form>
+            </div>
         </div>
         <footer>
             <a href="http://thenounproject.com/noun/puzzle/#icon-No6144" target="_blank">Puzzle</a> icon designed by <a href="http://thenounproject.com/tlb" target="_blank">Thomas Le Bas</a> from The Noun Project
