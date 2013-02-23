@@ -72,7 +72,7 @@ function drawCanvasMap(solvedClues, totalClues){
         if(i < solvedClues){
             ctx.fillStyle = "#efc98a";
         }
-        else if(i == solvedClues){
+        else if(i === solvedClues){
             ctx.fillStyle = "#F0A830";
         }
         else{
