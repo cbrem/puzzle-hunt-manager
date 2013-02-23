@@ -26,10 +26,15 @@
     <div id="main-wrapper" class="page-wrapper">
         <div id="content-area">
             <form id="home-form">
+              <span id="search" class="button" title="Search for a puzzle hunt.">Search</span>
+              <span id="create" class="button" title="Create a new puzzle hunt.">Create</span>
               <input type="text" id="hunt-name" class="textInput" 
                      placeholder="Enter a hunt name."/>
-              <span id="join" class="button" title="Join an existing hunt.">Join</span>
-              <span id="administer" class="button" title="Create a new hunt or administrate an existing hunt.">Administer</span>
+              <div id="create-box" class="dropdown">
+                <input type="text" id="hunt-pass" class="textInput"
+                       placeholder="Enter a password."/>
+                <span id="create-go" class="button" title="Go to your new puzzle hunt!">Go!</span>
+              </div>
             </form>
         </div>
         <footer>

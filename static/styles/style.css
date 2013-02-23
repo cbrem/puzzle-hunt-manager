@@ -148,10 +148,12 @@ form {
 }
 
 #content-area{
-    padding: 2em;
+    position: relative;
+    padding: 1em;
     background-color: white;
     border-radius: 4px;
     border: 1px solid #8e6247;
+    min-height: 350px;
     
     box-shadow: 0 1px 4px grey;
     margin-bottom: 2em;
@@ -222,6 +224,27 @@ form {
 
 #score-board td.entry-ranking{
     background-color: #dff0ea;
+}
+
+.dropdown {
+  display: none;
+  padding: 1px;
+}
+
+.right-sidebar {
+  position: absolute;
+  right: 20px;
+  width: 200px;
+  padding: 20px;
+
+  border: 5px solid #78C0A8;
+  border-radius: 5px;
+  box-shadow: 0 0 4px grey;
+  background-color: #d5f0ec;
+}
+
+.right-sidebar > .button {
+  margin-bottom: 50px;
 }
 
 th{
