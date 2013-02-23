@@ -1,14 +1,17 @@
 $(document).ready(function () {
+  var _teamDropdown = "none";//state of team dropdown menu.
+                             //possible values are 'none', 'start', 'continue'
+
   $("form").each(function(i, elem){
     $(elem).submit(function(e){
         e.preventDefault(); // prevent page refresh when hitting enter
     });
   });
 
-  // JOIN button
-  $("#join").click(function () {
+  // SEARCH button
+  $("#search").click(function () {
     var huntName = $("#hunt-name").val();
-    var urlHuntName = encodeName(huntName, "Enter a hunt name.");
+    var urlHuntName = encodeName(huntName);
     if (urlHuntName === undefined){
         alert("Please enter the name of the hunt you want to join.");
         return;
@@ -21,51 +24,114 @@ $(document).ready(function () {
         if (data.exists)
           window.location = "./hunts/" + urlHuntName;
         else
-          alert("Hunt '" +
-                huntName + "' does not exist.\nYou should create it!");
+          alert("We couldn't find a hunt named " +
+                huntName + ". Are you sure you spelled that correctly?");
       }
     });
   });
 
-  // ADMINISTER button
-  $("#administer").click(function (e) {
+  // CREATE button
+  $("#create").click(function () {
+    $("#create-box").slideToggle("slow");
+  });
+
+  // GO button on home page (only shows after CREATE is pushed)
+  $("#create-go").click(function () {
     var newHuntName = $("#hunt-name").val();
-    var urlHuntName = encodeName(newHuntName, "Enter a hunt name.");
-    if (urlHuntName === undefined){
-        alert("Please enter the name of the hunt you want to administer.");
+    var newHuntPass = $("#hunt-pass").val();
+    var urlHuntName = encodeName(newHuntName);
+    var urlHuntPass= encodeName(newHuntPass);
+    if (urlHuntName === undefined || urlHuntPass === undefined){
+        alert("Please enter a valid name/password!");
         return;
     }
+    var path = "/hunts/" + urlHuntName + "/admin/" + urlHuntPass;
  
     $.ajax({
       type: "get",
       url: "/info/" + urlHuntName,
       success: function(data) {
         if (data.exists) {
-          promptEdit(data, "admin", urlHuntName);
+          createBubble("That hunt already exists!");
         } else {
-          promptCreate(data, "admin", urlHuntName, newHuntName);
+          createTeamOrHunt(path, newHuntName);
         }
       }
     });
   });
 
-  // SIGNIN button
-  $("#signin").click(function (e) {
-    var newTeamName = $("#team-name").val();
-    var urlTeamName = encodeName(newTeamName, "Enter a team name.");
-    if (urlTeamName === undefined) return;
+  //MANAGE hunt button (for existing hunts)
+  $("#manage").click(function (e) {
+    var pass = $("#manage-pass").val();
+    var urlPass = encodeName(pass);
+    if (urlPass === undefined) return;
 
     var url = window.location.pathname;
     var urlHuntName = url.slice("/hunts/".length);
+
+    $.ajax({
+      type: "get",
+      url: "/info/" + urlHuntName,
+      success: function(data) {
+        var expectedKey = data.hunt.users["admin"].key;
+        var path = "/hunts/" + urlHuntName + "/admin/" + urlPass;
+        if(expectedKey === urlPass) {
+          //navigate to the edit page
+          window.location = path;
+        } else {
+          console.log("Wrong key given. Expected " 
+                      + expectedKey + ", given " + urlPass);
+        }
+      }
+    });
+  });
+
+  // START button
+  $("#start").click(function () {
+    $("#team-box").slideToggle("slow");
+    if (_teamDropdown === "start" || _teamDropdown === "continue") {
+      _teamDropdown = "none";
+    } else {
+      _teamDropdown = "start";
+    }
+  });
+  
+  // CONTINUE button
+  $("#continue").click(function () {
+    $("#team-box").slideToggle("slow");
+    if (_teamDropdown === "start" || _teamDropdown === "continue") {
+      _teamDropdown = "none";
+    } else {
+      _teamDropdown = "continue";
+    }
+  });
+  
+  $("#team-go").click(function (e) {
+    var teamName = $("#team-name").val();
+    var pass = $("#team-pass").val();
+    var urlTeamName = encodeName(teamName);
+    var urlPass = encodeName(pass);
+    console.log(urlTeamName, urlPass);
+    if (urlTeamName === undefined || urlPass === undefined) return;
+
+    var url = window.location.pathname;
+    var urlHuntName = url.slice("/hunts/".length);
+    var path = urlHuntName + "/" + urlTeamName + "/" + urlPass;
  
     $.ajax({
       type: "get",
       url: "/info/" + urlHuntName,
       success: function(data) {
-        if (data.exists && (urlTeamName in data.hunt.users)) {
-          promptEdit(data, urlTeamName, urlHuntName);
+        console.log(data);
+        if (urlTeamName in data.hunt.users) {
+          var expectedKey = data.hunt.users[urlTeamName].key;
+          if (urlPass === expectedKey) {
+            window.location = "/hunts/" + path;
+          } else {
+            createBubble("Sorry, that password is incorrect!");
+          }
         } else {
-          promptCreate(data, urlTeamName, urlHuntName);
+          createTeamOrHunt(path, teamName);
         }
       }
     });
@@ -76,9 +142,9 @@ $(document).ready(function () {
 //given a  name or password (possibly with spaces), returns a url-safe
 //  version. if no name/unencodable name is given, returns undefined.
 //  alerts user if bad name is given.
-var encodeName = function (name, def) {
+var encodeName = function (name) {
     // check that there is a name/it's not the default
-    if (name === null || name === "" || name === def) {
+    if (name === null || name === "") {
       //alert("Please enter your text!");
       return undefined;
     }
@@ -91,38 +157,11 @@ var encodeName = function (name, def) {
     return urlName;
 };
 
-//prompt the user to put in the password required to view an existing
-//  team/admin page. on success, take them to that page
-var promptEdit = function (data, user, urlHuntName) {
-    var givenKey =
-      prompt("That name already exists. Enter your key.");
-    var urlKey = encodeName(givenKey, "");
-    if (urlKey === undefined) return;
-
-    var expectedKey = data.hunt.users[user].key;
-    console.log("data", data);
-    if (urlKey === expectedKey) {
-      //navigate to the edit page
-      window.location = "/hunts/" + urlHuntName + "/" + user + "/" + urlKey;
-    } else {
-      console.log("Wrong key given. Expected " 
-                  + expectedKey + ", given " + givenKey);
-    }
-};
-
-//prompt the user to create a password for admining a new hunt/ a new team
-//  for an existing hunt. then, take them to the relevant page
-var promptCreate = function (data, user, urlHuntName, newHuntName) {
-    var keyGiven =
-      prompt("That name doesn't exist yet! Enter a key to make it!");
-    var urlKey = encodeName(keyGiven, "");
-    if (urlKey === undefined) return;
-    var path = "/hunts/" + urlHuntName + "/" + user + "/" + urlKey;
-
+var createTeamOrHunt = function (path, rawName) {
     $.ajax({
       type: "post",
       url: path,
-      data: {"newHuntName": newHuntName},
+      data: {"rawName": rawName},
       success: function(data) {
         if (!data.error) {
           // navigate to the new admin webpage
@@ -134,4 +173,11 @@ var promptCreate = function (data, user, urlHuntName, newHuntName) {
         }
       }
     });
+};
+
+//currently just alerts -- in the future, maybe it can display a message
+//in a set location?
+var createBubble = function (message, buttons) {
+  alert(message);
+  console.log("Created bubble with", message, buttons);
 };

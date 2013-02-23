@@ -26,12 +26,24 @@
     </header>
     <div id="main-wrapper" class="page-wrapper">
         <div id="content-area">
+          <div class="right-sidebar">
             <form>
-              <input type="text" id="team-name" class="textInput" 
-                     placeholder="Enter a team name."/>
-              <span id="signin" class="button">Sign In</span>
-              <footer>Not part of the hunt? Type in your new team's name and click Sign In to join!</footer>
+              <span id="manage" class="button">Manage</span>
+              <input type="text" id="manage-pass" class="textInput" 
+                     placeholder="Enter admin password."/>
+              
+              <span id="start" class="button">Start</span>
+              <span id="continue" class="button">Continue</span>
+
+              <div id="team-box" class="dropdown">
+                <input type="text" id="team-name" class="textInput" 
+                       placeholder="Enter a team name."/>
+                <input type="text" id="team-pass" class="textInput" 
+                       placeholder="Enter a password."/>
+                <span id="team-go" class="button">Go!</span>
+              </div>
             </form>
+          </div>
         </div>
         <footer>
             <a href="http://thenounproject.com/noun/puzzle/#icon-No6144" target="_blank">Puzzle</a> icon designed by <a href="http://thenounproject.com/tlb" target="_blank">Thomas Le Bas</a> from The Noun Project
