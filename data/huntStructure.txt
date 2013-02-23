@@ -5,11 +5,8 @@
     "rawname":".....",
     "starttime": <# of milliseconds since the epoch>,
     "endtime": <# of milliseconds since the epoch>,
-    "admin":{
-        "key": <the keycode for the admin>,
-        "progress": ????
-    }
     "users":{
+        // note: there must be an "admin" user entry here
         <username>: {
            "username": the name of the user/team
            "key": "<keycode>",

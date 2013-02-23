@@ -51,9 +51,12 @@ $(document).ready(function(){
         var numSolvedClues = userData.progress.length;
         fillEach(".num-solved-clues", numSolvedClues);
         
-        if(numSolvedClues < numClues){
+        if(numSolvedClues+1 < numClues){
             var currentClueNum = numSolvedClues+1;
             fillEach(".curr-clue-num", currentClueNum);
+            
+            var currentClueDesc = huntData.clues[currentClueNum].desc;
+            fillEach(".curr-clue-desc", currentClueDesc);
         }
         
         // if there is a canvas available on the page

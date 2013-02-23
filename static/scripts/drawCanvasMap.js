@@ -28,6 +28,7 @@ function loadCanvasMap(solvedClues, totalClues){
     drawCanvasMap(solvedClues, totalClues);
     $("#canvas-wrapper").find("img").remove();
     $("#map-canvas").show();
+    $("#canvas-wrapper").scrollLeft($("#map-canvas").width());
 }
 
 function drawCanvasMap(solvedClues, totalClues){
@@ -44,6 +45,8 @@ function drawCanvasMap(solvedClues, totalClues){
     var wrapHeight = $canvasWrap.height();
     var cWidth = canvas.width;
     var cHeight = canvas.height;
+    ctx.clearRect(0, 0, cWidth, cHeight);
+    
     var padding = 35;
     
     if(totalClues <= 0){
@@ -56,11 +59,11 @@ function drawCanvasMap(solvedClues, totalClues){
     
     var nodeWidth = 50;
     var nodeHeight = 50;
-    var nodeDist = Math.min(Math.max(100, Math.floor((wrapWidth-2*padding - totalClues*nodeWidth)/totalClues)), 500);
-    
+    var nodeDist = Math.min(Math.max(75, Math.floor((wrapWidth-2*padding - totalClues*nodeWidth)/totalClues)), 500);
+
     var contentWidth = (totalClues * nodeWidth) + Math.max(0, totalClues-1)*nodeDist;
     canvas.width = contentWidth+2*padding;
-    cWidth = contentWidth+2*padding;
+    cWidth = canvas.width;
     
     // calculate node locations
     var nodeLocations = [];
