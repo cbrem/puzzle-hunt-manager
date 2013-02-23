@@ -166,8 +166,7 @@ form {
 }
 
 #content-header{
-    padding-top: .75em;
-    padding-bottom: .75em;
+    padding: .75em .5em;
     margin-bottom: .75em;
     background-color: #eee;
 }
