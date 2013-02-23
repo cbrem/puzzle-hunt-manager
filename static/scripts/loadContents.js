@@ -15,13 +15,21 @@ $(document).ready(function(){
   assert(huntBaseIndex !== -1);
   var urlHuntName = urlList[huntBaseIndex+1];
   var urlUserName = undefined;
+  var huntData = undefined;
   
   if(urlList.length > huntBaseIndex+2){
       urlUserName = urlList[huntBaseIndex+2];
   }
+  if(urlList.length > huntBaseIndex+3){
+      urlUserKey = urlList[huntBaseIndex+3];
+  }
 
   // this loads the information from the specific hunt's data to the page
-  function loadPageInfo(huntData) {
+  function loadPageInfo() {
+  	if (huntData === undefined) {
+  		console.log("huntData is not defined!");
+  		return;
+  	}
   	// title <- raw hunt name
     fillEach(".hunt-name", huntData.rawname);
     
@@ -58,7 +66,12 @@ $(document).ready(function(){
     }
   }
 
-  function loadClues(huntData) {
+  function loadClues() {
+  	if (huntData === undefined) {
+  		console.log("huntData is not defined!");
+  		return;
+  	}
+  	console.log("loading clues!");
   	var clues = huntData["clues"];
   	var numClues = clues.length;
   	var clueTable = $("#clues");
@@ -82,16 +95,16 @@ $(document).ready(function(){
     url: "/info/" + encodeURIComponent(urlHuntName),
     success: function(data) {
       if (data.exists) {
-
+      	huntData = data.hunt;
       	// admin-specific
       	if (urlUserName === "admin") {
-	        loadClues(data.hunt);
+	        loadClues();
 	      }
 	      // hunter-specific
 	      else if (urlUserName !== undefined) {
 	      }
 	      // info for all users
-	      loadPageInfo(data.hunt);
+	      loadPageInfo();
         //fillScoreboard(data.hunt);
 
       } else {
@@ -99,5 +112,33 @@ $(document).ready(function(){
       }
     }
   });
+
+  $("#add-clue-button").click(function () {
+		// update client with added clue
+		var clueText = $("#write-clue-desc").val();
+		var ansText = $("#write-clue-ans").val();
+		var clueObj = {"desc": clueText, "ans": ansText};
+		huntData["clues"].push(clueObj);
+
+		// update server
+		$.ajax({
+			type: "put",
+			url: "/edit/clues",
+			data: {
+				"huntName": urlHuntName,
+				"adminKey": urlUserKey,
+				"clueList": huntData["clues"]
+			},
+			success: function(data) {
+				if (data.success) {
+					huntData = data.huntData;
+					loadClues();
+				}
+				else {
+					console.log("Error adding clue!");
+				}
+			}
+		});
+	});
 
 });

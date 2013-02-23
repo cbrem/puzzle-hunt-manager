@@ -578,7 +578,7 @@ app.put("/edit/clues", function(request, response){
         huntData.clearClues();
         
         // iterate through input clue data and only add the one with
-        // fields fo "desc" and "ans"
+        // fields of "desc" and "ans"
         for(var i=0; i < inputClues.length; i++){
             var clue = inputClues[i];
             if("desc" in clue && "ans" in clue){
@@ -594,7 +594,8 @@ app.put("/edit/clues", function(request, response){
             }
             else{
                 response.send({
-                    success: true
+                    success: true,
+                    huntData: huntData
                 });
             }
         });

@@ -342,3 +342,7 @@ footer{
     font-size: .7em;
     text-align: center;
 }
+
+#clue-editor {
+    margin: 20px 0px;
+}
