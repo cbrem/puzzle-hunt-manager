@@ -170,8 +170,7 @@ form {
 }
 
 #content-header{
-    padding-top: .75em;
-    padding-bottom: .75em;
+    padding: .75em .5em;
     margin-bottom: .75em;
     background-color: #eee;
 }
@@ -329,6 +328,13 @@ th,td{
 
 tr:nth-child(odd) td{
     background-color: white;
+}
+
+#clues-team-view{
+    margin: 0;
+    padding: .3em;
+    width: 100%;
+    line-height: 1.3em;
 }
 
 footer{

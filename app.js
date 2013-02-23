@@ -380,10 +380,12 @@ app.get("/info/:hunt", function (request, response) {
 //  html page. can be reached from JOIN button or directly by URL
 app.get("/hunts/:hunt", function (request, response) {
   var hunt = request.params.hunt;
-  if (hunt in globalHuntData)
+  if (hunt in globalHuntData){
     response.sendfile(path.join("static", "huntview.html"));
-  else
+  }
+  else{
     send404(response);
+  }
 });
 
 //for entry into a team's/admin's page for a hunt. provides static

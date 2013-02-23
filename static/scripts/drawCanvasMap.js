@@ -1,6 +1,10 @@
+function loadCanvasMap(solvedClues, totalClues){
+    drawCanvasMap(solvedClues, totalClues);
+    $("#canvas-wrapper").find("img").remove();
+    $("#map-canvas").show();
+}
 
-
-function drawMap(solvedClues, totalClues){
+function drawCanvasMap(solvedClues, totalClues){
     var $canvas = $("#map-canvas");
     var $canvasWrap = $("#canvas-wrapper");
     if($canvas.length === 0){
@@ -79,6 +83,4 @@ function drawMap(solvedClues, totalClues){
         ctx.fillText(String(i+1), loc.cx, loc.cy);
     }
     ctx.restore();
-    
-    console.log(nodeLocations);
 }
