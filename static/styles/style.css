@@ -158,15 +158,25 @@ form {
 }
 
 #content-header{
+    padding-top: .75em;
+    padding-bottom: .75em;
     margin-bottom: .75em;
-    line-height: 1.5em;
+    background-color: #eee;
 }
 
 #content-header h1{
     margin: .1em 0;
     font-family: Helvetica, Arial, sans-serif;
-    font-size: 1.5em;
+    font-size: 2.5em;
     font-weight:bold;
+    text-align: center;
+    line-height: 1em;
+}
+
+#content-header h2 {
+    text-align: center;
+    font-size: 1em;
+    line-height: 1.5em;
 }
 
 #canvas-wrapper{
@@ -192,7 +202,7 @@ form {
     padding: 35px 0;
 }
 
-#score-board-area{
+#clue-area{
     width: 90%;
     margin: 0 auto;
     max-height: 200px;
@@ -201,6 +211,37 @@ form {
     position:relative;
 }
 
+#clue-area header{
+    font-size: 1.1em;
+    margin-bottom: .25em;
+}
+
+#clues{
+    width:100%;
+}
+
+#clues th,
+#clues td{
+    width: 30%;
+}
+
+#clues .clue-number{
+    width: 3%;
+}
+
+#clues td.clue-number{
+    background-color: #dff0ea;
+}
+
+
+#score-board-area{
+    width: 90%;
+    margin: 0 auto;
+    max-height: 200px;
+    overflow-x:hidden;
+    overflow-y:auto;
+    position:relative;
+}
 
 #score-board-area header{
     font-size: 1.1em;

@@ -11,6 +11,8 @@
     <link href="/styles/style.css" rel="stylesheet" type="text/css">
 
     <script src="/scripts/jquery-1.9.0.js"></script>
+    <script src="/scripts/utils.js"></script>
+    <script src="/scripts/navigation.js"></script>
     <script src="/scripts/loadContents.js"></script>
 </head>
 <body>
@@ -27,12 +29,31 @@
     <div id="main-wrapper" class="page-wrapper">
         <div id="content-area">
             <header id="content-header">
-                <h1>
-                    <span class="hunt-name">Dummy Hunt Name</span>
+                <h1 id="hunt-name">
+                    Dummy Hunt Name
                 </h1>
-                <span class="num-total-clues">9</span> total clues, 
-                <span class="num-total-teams">10</span> total teams
+                <h2><span id="num-total-clues">9</span> total clues</h2>
+                <h2><span id="num-total-teams">10</span> total teams</h2>
             </header>
+            <div id="clue-editor">
+                
+            </div>
+            <div id="clue-area">
+                <header>Clues</header>
+                <table id="clues">
+                    <tr class="header">
+                        <th class="clue-number">
+                            #
+                        </th>
+                        <th>
+                            Clue
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                    </tr>
+                </table>
+            </div>
             <div id="score-board-area">
                 <header>Scoreboard</header>
                 <table id="score-board">
@@ -68,9 +89,6 @@
                     </tr>
                     -->
                 </table>
-            </div>
-            <div id="clue-editor">
-                
             </div>
         </div>
         <footer>
