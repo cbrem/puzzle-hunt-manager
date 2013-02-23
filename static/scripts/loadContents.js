@@ -6,10 +6,11 @@ function fillEach(selector, textContent){
 
 // dis is loading up the admin view for a hunt
 $(document).ready(function(){
-  // make ajax call to app.js to get the admin data for the given hunt,
+  // todo: make ajax call to app.js to get the admin data for the given hunt,
   // then populate the interface with the data entries
   var currentUrl = window.location.pathname;
   var urlList = currentUrl.split("/");
+  assert(urlList[1] === "hunts");
   var huntBaseIndex = urlList.indexOf("hunts");
   assert(huntBaseIndex !== -1);
   var urlHuntName = urlList[huntBaseIndex+1];
@@ -58,7 +59,18 @@ $(document).ready(function(){
   }
 
   function loadClues(huntData) {
-  	
+  	var clues = huntData["clues"];
+  	var numClues = clues.length;
+  	var clueTable = $("#clues");
+  	for (var i = 0; i < numClues; i++) {
+  		var clue = clues[i];
+  		var newClueRow = $("<tr>").attr("class", "clue-row");
+  		var clueNum = $("<td>").attr("class", "clue-num").html(i+1);
+  		var clueDesc = $("<td>").attr("class", "clue-desc").html(clue["desc"]);
+  		var clueAns = $("<td>").attr("class", "clue-ans").html(clue["ans"]);
+  		newClueRow.append(clueNum).append(clueDesc).append(clueAns);
+  		clueTable.append(newClueRow);
+  	};
   }
 
   function fillScoreboard(huntData) {
@@ -70,14 +82,21 @@ $(document).ready(function(){
     url: "/info/" + encodeURIComponent(urlHuntName),
     success: function(data) {
       if (data.exists) {
-        loadPageInfo(data.hunt);
+
+      	// admin-specific
+      	if (urlUserName === "admin") {
+	        loadClues(data.hunt);
+	      }
+	      // hunter-specific
+	      else if (urlUserName !== undefined) {
+	      }
+	      // info for all users
+	      loadPageInfo(data.hunt);
         //fillScoreboard(data.hunt);
+
       } else {
         console.log("Something's real messed up with getting data to load this.")
       }
-    },
-    error: function(data){
-        console.log("error", data);
     }
   });
 

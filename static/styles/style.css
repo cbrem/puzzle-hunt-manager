@@ -81,6 +81,8 @@ form {
     min-width:320px;
 }
 
+/* HEADER STYLE */
+
 #site-header{
     position: relative;
     padding: .7em;
@@ -153,6 +155,8 @@ form {
     padding-top: 2em;
 }
 
+/* CONTENT STYLE */
+
 #content-area{
     position: relative;
     padding: 1em;
@@ -209,9 +213,12 @@ form {
     padding: 35px 0;
 }
 
+/* CLUE TABLE */
+
 #clue-area{
     width: 90%;
     margin: 0 auto;
+    margin-bottom: 10px;
     max-height: 200px;
     overflow-x:hidden;
     overflow-y:auto;
@@ -219,27 +226,35 @@ form {
 }
 
 #clue-area header{
-    font-size: 1.1em;
+    font-size: 1.4em;
+    font-weight: bold;
     margin-bottom: .25em;
+    text-align: center;
 }
 
 #clues{
     width:100%;
 }
 
-#clues th,
-#clues td{
-    width: 30%;
-}
-
-#clues .clue-number{
+#clues .clue-num{
     width: 3%;
 }
 
-#clues td.clue-number{
+#clues td.clue-num{
     background-color: #dff0ea;
 }
 
+#clues .clue-desc{
+    width: 50%;
+}
+
+#clues .clue-ans{
+    width: 40%;
+}
+
+
+
+/* SCORE BOARD */
 
 #score-board-area{
     width: 95%;
@@ -251,8 +266,10 @@ form {
 }
 
 #score-board-area header{
-    font-size: 1.1em;
+    font-size: 1.4em;
+    font-weight: bold;
     margin-bottom: .25em;
+    text-align: center;
 }
 
 #score-board{
@@ -308,6 +325,7 @@ th{
 
 td{
     background-color: #f9f7f5;
+    width: 30%;
 }
 
 th,td{
