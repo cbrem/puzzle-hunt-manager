@@ -366,6 +366,7 @@ function HuntData(data){
 //  but does not load page.
 app.get("/info/:hunt", function (request, response) {
   var hunt = request.params.hunt;
+  console.log(hunt);
   if (hunt in globalHuntData) {
     response.send({
       "exists": true,
