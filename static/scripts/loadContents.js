@@ -69,15 +69,20 @@ $(document).ready(function(){
     }
   }
 
+  // loading clue table for admin page
   function loadClues() {
   	if (huntData === undefined) {
   		console.log("huntData is not defined!");
   		return;
   	}
-  	console.log("loading clues!");
+  	// delete any clues already there
+  	$(".clue-row").each(function(i, elem){
+  		$(elem).remove();
+  	})
+  	// add current clue list to html
+  	var clueTable = $("#clues");
   	var clues = huntData["clues"];
   	var numClues = clues.length;
-  	var clueTable = $("#clues");
   	for (var i = 0; i < numClues; i++) {
   		var clue = clues[i];
   		var newClueRow = $("<tr>").attr("class", "clue-row");
@@ -89,8 +94,69 @@ $(document).ready(function(){
   	};
   }
 
-  function fillScoreboard(huntData) {
-  	// todo
+  // adding clues on admin page
+  $("#add-clue-button").click(function () {
+		// update client with added clue
+		var clueText = $("#write-clue-desc").val();
+		var ansText = $("#write-clue-ans").val();
+		var clueObj = {"desc": clueText, "ans": ansText};
+		huntData["clues"].push(clueObj);
+		// update server with new clues
+		$.ajax({
+			type: "put",
+			url: "/edit/clues",
+			data: {
+				"huntName": urlHuntName,
+				"adminKey": urlUserKey,
+				"clueList": huntData["clues"]
+			},
+			success: function(data) {
+				if (data.success) {
+					// update page
+					huntData = data.huntData;
+					loadClues();
+					// clear fields
+					$("#write-clue-desc").val("");
+					$("#write-clue-ans").val("");
+				}
+				else {
+					console.log("Error adding clue!");
+				}
+			}
+		});
+	});
+
+  // fill in the scoreboard for any scoreboard
+  function fillScoreboard() {
+  	for (var user in huntData.users) {
+  		if (user === "admin") {
+  			continue
+  		}
+  		// grab user data
+  		var userObj = huntData.users[user];
+  		var username = userObj.username;
+  		var progressNum = userObj.progress.length;
+  		var userRank = 1;
+  		// find rank of user
+  		for (var otherUser in huntData.users) {
+  			if (otherUser === "admin" || otherUser === user) {
+  			  continue
+  			}
+  			var otherProgressNum = huntData.users[otherUser].progress.length;
+  			if (otherProgressNum > progressNum) {
+  				userRank++;
+  			}
+  		}
+  		// make html element
+  		var scoreBoard = $("#score-board");
+  		var newRow = $("<tr>").attr("class","score-board-entry");
+  		var rank = $("<td>").html(userRank).attr("class","entry-ranking");
+  		var teamName = $("<td>").html(username).attr("class","entry-name");
+  		var progress=$("<td>").html(progressNum).attr("class","entry-progress");
+  		var checkIn = $("<td>").html("Recently").attr("class","entry-time");
+  		newRow.append(rank).append(teamName).append(progress).append(checkIn);
+  		scoreBoard.append(newRow);
+  	}
   }
 
   $.ajax({
@@ -108,40 +174,11 @@ $(document).ready(function(){
 	      }
 	      // info for all users
 	      loadPageInfo();
-        //fillScoreboard(data.hunt);
-
+        fillScoreboard();
       } else {
         console.log("Something's real messed up with getting data to load this.")
       }
     }
   });
-
-  $("#add-clue-button").click(function () {
-		// update client with added clue
-		var clueText = $("#write-clue-desc").val();
-		var ansText = $("#write-clue-ans").val();
-		var clueObj = {"desc": clueText, "ans": ansText};
-		huntData["clues"].push(clueObj);
-
-		// update server
-		$.ajax({
-			type: "put",
-			url: "/edit/clues",
-			data: {
-				"huntName": urlHuntName,
-				"adminKey": urlUserKey,
-				"clueList": huntData["clues"]
-			},
-			success: function(data) {
-				if (data.success) {
-					huntData = data.huntData;
-					loadClues();
-				}
-				else {
-					console.log("Error adding clue!");
-				}
-			}
-		});
-	});
 
 });

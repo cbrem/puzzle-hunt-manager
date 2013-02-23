@@ -13,7 +13,7 @@ $(document).ready(function () {
     var huntName = $("#hunt-name").val();
     var urlHuntName = encodeName(huntName);
     if (urlHuntName === undefined){
-        alert("Please enter the name of the hunt you want to join.");
+        createAlert("Please enter the name of the hunt you want to join.");
         return;
     }
 
@@ -24,7 +24,7 @@ $(document).ready(function () {
         if (data.exists)
           window.location = "./hunts/" + urlHuntName;
         else
-          alert("We couldn't find a hunt named " +
+          createAlert("We couldn't find a hunt named " +
                 huntName + ". Are you sure you spelled that correctly?");
       }
     });
@@ -42,7 +42,7 @@ $(document).ready(function () {
     var urlHuntName = encodeName(newHuntName);
     var urlHuntPass= encodeName(newHuntPass);
     if (urlHuntName === undefined || urlHuntPass === undefined){
-        alert("Please enter a valid name/password!");
+        createAlert("Please enter a valid name/password!");
         return;
     }
     var path = "/hunts/" + urlHuntName + "/admin/" + urlHuntPass;
@@ -52,7 +52,7 @@ $(document).ready(function () {
       url: "/info/" + urlHuntName,
       success: function(data) {
         if (data.exists) {
-          createBubble("That hunt already exists!");
+          createAlert("That hunt already exists!");
         } else {
           createTeamOrHunt(path, newHuntName);
         }
@@ -79,8 +79,7 @@ $(document).ready(function () {
           //navigate to the edit page
           window.location = path;
         } else {
-          console.log("Wrong key given. Expected " 
-                      + expectedKey + ", given " + urlPass);
+          createAlert("Sorry, that password is incorrect!");
         }
       }
     });
@@ -128,7 +127,7 @@ $(document).ready(function () {
           if (urlPass === expectedKey) {
             window.location = "/hunts/" + path;
           } else {
-            createBubble("Sorry, that password is incorrect!");
+            createAlert("Sorry, that password is incorrect!");
           }
         } else {
           createTeamOrHunt(path, teamName);
@@ -151,7 +150,7 @@ var encodeName = function (name) {
     var urlName = name.replace(/\s/g, "");
     // if it isn't url-safe, ask for a new name
     if (encodeURI(urlName) !== urlName) {
-      alert("Please only use letters and spaces!");
+      createAlert("Please only use letters and spaces!");
       return undefined;
     }
     return urlName;
@@ -175,9 +174,37 @@ var createTeamOrHunt = function (path, rawName) {
     });
 };
 
-//currently just alerts -- in the future, maybe it can display a message
-//in a set location?
-var createBubble = function (message, buttons) {
-  alert(message);
-  console.log("Created bubble with", message, buttons);
+//custom alert box. takes a message and an object mapping button names to
+//  callbacks which should be called when those buttons are clicked.
+var createAlert = function (message, buttons) {
+  var overlay = $(".overlay");
+  var al = $(".alert");
+
+  //grey out page
+  overlay.css({"display": "block"});
+
+  //add message to alert box
+  var mess = $("<h2>").html(message);
+  al.append(mess);
+
+  //add default "Ok" button if none are given
+  if (buttons === undefined) {
+    buttons = {"Okay": undefined};
+  }
+
+  //add all given buttons
+  for (button in buttons) {
+    var newButton = $("<span>");
+    newButton.html(button);
+    newButton.addClass("button");
+
+    //add callback to a button
+    var callback = buttons[button];
+    newButton.click(function (e) {
+      if (callback !== undefined) callback(e);
+      al.html("");
+      overlay.css({"display": "none"});
+    });
+    al.append(newButton);
+  }
 };
