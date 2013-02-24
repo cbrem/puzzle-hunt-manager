@@ -43,9 +43,24 @@ form {
   text-align: center;
 }
 
-#home-form{
+#home-button-form{
     margin: 0 auto;
-    width: 30%;
+    width: 100%;
+}
+
+#home-input-form{
+    margin: 0 auto;
+    width: 40%;
+}
+
+#hunt-name, #create-box {
+    font-size: 1.5em;
+}
+
+#search, #create {
+    font-size: 1.8em;
+    width: 3.5em;
+    padding: .5em .95em;
 }
 
 .textInput{
@@ -90,6 +105,12 @@ form {
     cursor:pointer;
     background-color: #f3bb5d;
     border-top: 1px solid #f2b753;
+}
+
+#start, #continue {
+    font-size: 1.7em;
+    width: 60%;
+    padding: .6em .95em;
 }
 
 .loader-area{
@@ -330,7 +351,8 @@ form {
 #score-board-area{
     width: 95%;
     margin: 0 auto;
-    max-height: 200px;
+    margin-bottom: 2em;
+    //max-height: 200px;
     overflow-x:hidden;
     overflow-y:auto;
     position:relative;
@@ -435,7 +457,7 @@ tr:nth-child(odd) td{
 
 footer{
     margin-top: 1em;
-    margin-bottom: 1em;
+    padding-bottom: 2em;
     font-size: .9em;
     text-align: center;
 }

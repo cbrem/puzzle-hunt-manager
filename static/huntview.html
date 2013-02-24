@@ -75,20 +75,34 @@
                   <div class="alert"></div>
                 </div>
                 <form>
-                    <span id="manage" class="button">Manage</span>
-                    <input type="text" id="manage-pass" class="textInput" 
-                        placeholder="Enter admin password."/>
 
                     <span id="start" class="button">Start</span>
+
+                    <div id="start-box" class="dropdown">
+                        <input type="text" id="new-team-name" class="textInput" 
+                            placeholder="Enter a team name."/>
+                        <input type="text" id="new-team-pass" class="textInput" 
+                            placeholder="Enter a password."/>
+                        <span id="start-go" class="button">Go!</span>
+                    </div>
+
                     <span id="continue" class="button">Continue</span>
 
-                    <div id="team-box" class="dropdown">
+                    <div id="continue-box" class="dropdown">
                         <input type="text" id="team-name" class="textInput" 
                             placeholder="Enter a team name."/>
                         <input type="text" id="team-pass" class="textInput" 
                             placeholder="Enter a password."/>
-                        <span id="team-go" class="button">Go!</span>
+                        <span id="continue-go" class="button">Go!</span>
                     </div>
+
+                    <span id="manage" class="button">Manage</span>
+                    <div id="manage-box" class="dropdown">
+                        <input type="text" id="manage-pass" class="textInput" 
+                            placeholder="Enter admin password."/>
+                        <span id="manage-go" class="button">Go!</span>
+                    </div>
+
                 </form>
             </div>
         </div>

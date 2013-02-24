@@ -150,8 +150,6 @@ $(document).ready(function(){
   			}
   		}
   		// format last login date string
-  		console.log(userObj);
-  		console.log(huntData.users[user].lastlogin);
   		var loginDate = new Date(userObj.lastlogin);
   		var timeStr = loginDate.toLocaleTimeString();
   		var dateStr = loginDate.toLocaleDateString();
