@@ -35,6 +35,9 @@ $(document).ready(function(){
     
   	// _ total users <- number of users
   	var numUsers = getObjectSize(huntData.users);
+    if("admin" in huntData.users){
+        numUsers--;
+    }
     fillEach(".num-total-teams", numUsers);
     
     /* load user data, if present */

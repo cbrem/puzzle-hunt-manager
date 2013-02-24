@@ -275,6 +275,7 @@ form {
   border: 3px solid white;
 
   text-align: center;
+  word-wrap: break-word;
 }
 
 .alert > h2 {

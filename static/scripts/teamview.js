@@ -4,8 +4,8 @@ function initTeamView(huntData, urlUserName, userKey){
     var solvedClues = userData.progress.length;
     
     function _startClueViewLoader(callbackFn){
-        // don't grade this slide down, I guess, but loading looks seriously 
-        // ugly and jumpy without it
+        // don't grade this slideDown usage, I guess, but loading looks 
+        // seriously ugly and jumpy without it
         $("#clues-team-view").find(".loaded-content").slideUp("medium", function(){
             $("#clues-team-view").find(".loader-area").fadeIn("fast", callbackFn);
         });
@@ -36,6 +36,7 @@ function initTeamView(huntData, urlUserName, userKey){
     
     function processAnswerVerification(e){
         e.preventDefault();
+        e.stopPropagation();
         _startClueViewLoader(function(){
             var answer = $("#answer-clue-form .textInput").val();
             $("#answer-clue-form .textInput").val("");
@@ -76,7 +77,13 @@ function initTeamView(huntData, urlUserName, userKey){
     }
     
     $("#submit-answer-button").click(processAnswerVerification);
-    $("#answer-clue-form").find(".textInput").submit(processAnswerVerification);
+    $("#answer-clue-form").submit(processAnswerVerification);
+    $("#answer-clue-form").find(".textInput").keypress(function(e){
+        if(e.which === 13){ // enter key
+            processAnswerVerification(e);
+            return false;
+        }
+    });
     
     _updateTeamView(solvedClues+1, undefined);
     _stopClueViewLoader();

@@ -23,11 +23,13 @@ $(document).ready(function () {
       type: "get",
       url: "/info/" + urlHuntName,
       success: function (data) {
-        if (data.exists)
+        if (data.exists){
           window.location = "./hunts/" + urlHuntName;
-        else
+        }
+        else{
           createAlert("We couldn't find a hunt named " +
                 huntName + ". Are you sure you spelled that correctly?");
+        }
       }
     });
   });
@@ -138,6 +140,27 @@ $(document).ready(function () {
     });
   });
 
+  $("#home-form #hunt-name").keypress(function(e){
+    if(e.which === 13){ // enter key
+    
+        // if password box is available, do creat
+        if($("#home-form #hunt-pass").is(":visible")){
+            $("#home-form #create-go").click();
+        }
+        // otherwise do search
+        else{
+            $("#home-form #search").click();
+        }
+        return false;
+    }
+  });
+  
+  $("#home-form #hunt-pass").keypress(function(e){
+    if(e.which === 13){ // enter key
+        $("#home-form #create-go").click();
+        return false;
+    }
+  });
 });
 
 //given a  name or password (possibly with spaces), returns a url-safe
@@ -180,7 +203,7 @@ var createTeamOrHunt = function (path, rawName) {
 //  callbacks which should be called when those buttons are clicked.
 var createAlert = function (message, buttons) {
   var overlay = $(".overlay");
-  var al = $(".alert");
+  var al = $(".alert").empty();
 
   //grey out page
   overlay.css({"display": "block"});
