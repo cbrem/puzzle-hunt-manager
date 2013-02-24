@@ -8,13 +8,16 @@
     "users":{
         // note: there must be an "admin" user entry here
         <username>: {
-           "username": the name of the user/team
+           "username": the name of the user/team,
            "key": "<keycode>",
+           "lastlogin": <# of milliseconds since the epoch>,
 
            //  list of entries for every solved clue, empty if none have been solved yet
            "progress": [ 
                {
-                   timestamp: <# of milliseconds since the epoch>
+                   "timestamp": <# of milliseconds since the epoch>,
+                   "desc": description of clue answered,
+                   "ans": what the user input as an answer
                }
            ]
         }

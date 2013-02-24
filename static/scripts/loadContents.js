@@ -130,8 +130,9 @@ $(document).ready(function(){
 		});
 	});
 
-  // fill in the scoreboard for any scoreboard
+  // fill in the scoreboard for any page with the right classes set up
   function fillScoreboard() {
+  	rankedUserList = [ ];
   	for (var user in huntData.users) {
   		if (user === "admin") {
   			continue
@@ -151,15 +152,35 @@ $(document).ready(function(){
   				userRank++;
   			}
   		}
+  		// format last login date string
+  		console.log(userObj);
+  		console.log(huntData.users[user].lastlogin);
+  		var loginDate = new Date(userObj.lastlogin);
+  		var timeStr = loginDate.toLocaleTimeString();
+  		var dateStr = loginDate.toLocaleDateString();
+  		var loginStr = timeStr + " " + dateStr;
   		// make html element
-  		var scoreBoard = $("#score-board");
   		var newRow = $("<tr>").attr("class","score-board-entry");
-  		var rank = $("<td>").html(userRank).attr("class","entry-ranking");
-  		var teamName = $("<td>").html(username).attr("class","entry-name");
-  		var progress=$("<td>").html(progressNum).attr("class","entry-progress");
-  		var checkIn = $("<td>").html("Recently").attr("class","entry-time");
+  		var rank = $("<td>").attr("class","entry-ranking").html(userRank);
+  		var teamName = $("<td>").attr("class","entry-name").html(username);
+  		var progress=$("<td>").attr("class","entry-progress").html(progressNum);
+  		var checkIn = $("<td>").attr("class","entry-time").html(loginStr);
   		newRow.append(rank).append(teamName).append(progress).append(checkIn);
-  		scoreBoard.append(newRow);
+  		// add team's row to a list to be sorted by rank
+  		var rankedUserObj = {"rank": userRank, "htmlRow": newRow};
+  		rankedUserList.push(rankedUserObj);
+  	}
+  	// returns true if 'first' should be first according to object's rank
+  	var rankOrder = function(first,second) {
+  		if (first.rank > second.rank) return true;
+  		else return false;
+  	}
+  	// append rows in order of rank
+  	rankedUserList.sort(rankOrder);
+  	var scoreBoard = $("#score-board");
+  	var numUsers = rankedUserList.length;
+  	for (var i = 0; i < numUsers; i++) {
+  		scoreBoard.append(rankedUserList[i].htmlRow);
   	}
   }
 

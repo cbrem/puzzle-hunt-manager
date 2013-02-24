@@ -105,6 +105,7 @@ $(document).ready(function () {
     }
   });
   
+  // team log in
   $("#team-go").click(function (e) {
     var teamName = $("#team-name").val();
     var pass = $("#team-pass").val();
