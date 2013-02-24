@@ -123,6 +123,7 @@ function UserData(data){
 
     "username"              the username for this instance's user
     "key"                   the userkey for this instance's user
+    "lastlogin"
     "progress"              the progress list for this instance's user
                             (ie: a list of data about a solved clue, such as 
                              a timestamp of solve date)
@@ -132,6 +133,7 @@ function UserData(data){
         
         this.username = getWithDefault(data, "username")
         this.key = getWithDefault(data, "key");
+        this.lastlogin = getWithDefault(data,"lastlogin",(new Date).getTime());
         this.progress = getWithDefault(data, "progress", []);
     };
     
@@ -246,7 +248,8 @@ function HuntData(data){
         this.users = getWithDefault(data, "users", {
             "admin": new UserData({
                         "username": "admin",
-                        "key": undefined
+                        "key": undefined,
+                        "lastlogin": (new Date()).getTime()
                      })
         });
         this.clues = getWithDefault(data, "clues", []);
@@ -347,7 +350,8 @@ function HuntData(data){
     this.addUser = function(username, key){
         var newUser = new UserData({
             "username": username,
-            "key": key
+            "key": key,
+            "lastlogin": (new Date()).getTime()
         });
         this.users[username] = newUser;
     }
@@ -380,7 +384,7 @@ function HuntData(data){
 // GETs
 
 //for info about hunt. used before/after navigation in response to
-//  JOIN or ADMINISTER buttons. Provides info about hunt,
+//  SEARCH or CREATE button. Provides info about hunt,
 //  but does not load page.
 app.get("/info/:hunt", function (request, response) {
   var hunt = request.params.hunt;
@@ -395,7 +399,7 @@ app.get("/info/:hunt", function (request, response) {
 });
 
 //for entry into general hunt page for a hunt. provides static
-//  html page. can be reached from JOIN button or directly by URL
+//  html page. can be reached from SEARCH button or directly by URL
 app.get("/hunts/:hunt", function (request, response) {
   var hunt = request.params.hunt;
   if (hunt in globalHuntData){
@@ -424,6 +428,9 @@ app.get("/hunts/:hunt/:user/:key", function (request, response) {
   }
   
   if(huntData.isValidUser(user, key)){
+    // update lastlogin
+    huntData.users[user].lastlogin = (new Date).getTime();
+    // load logged-in webpage!
     response.sendfile(path.join("static", view));
   }
   else{
@@ -585,7 +592,8 @@ app.post("/verifyAnswer", function(request, response){
                     complete: complete,
                     nextClue: {
                         desc: nextClueDesc,
-                        num: userData.progress.length+1
+                        num: userData.progress.length+1,
+                        totalClues: allClues.length
                     }
                 });
             }

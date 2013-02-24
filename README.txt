@@ -7,35 +7,19 @@ See the data structure layout in data/huntstructure.txt
 
 TO DO list:
 
-server-side:
--add clue to event
--delete clue to event
--add user to event
--delete user from event?
--check password/key against database
--modify clue-adding so that, instead of completely overwriting the server's
- list of clues, the client just adds a clue that then receives the updated
- list from the server
+user:
+-raw names for hunts and teams being displayed
+-be able to click on previous clues and view your answers
+-be able to have multiple answers for a clue (semicolon separated or something)
 
-client-side:
+admin:
+-delete clues
+-way to edit clues
+-make clue description and answer input fields on admin page prettier
 
-for admin page and then the hunt page:
-loadHunt (initilize custom attributes of hunt page)
-updateHunt ()
-(both kind of like refreshDOM)
 
-admin
-ways to put in clues
-ways to delete clues
-ways to edit clues
 
-user
-way to answer question
-way to check answer
-way to update to next clue
-update scoreboard
-
-design changes:
+design changes from Liz:
 search and create buttons on homepage
 change administrate button just to create events
 admin editing functionality is from the event view-
