@@ -582,7 +582,8 @@ app.post("/verifyAnswer", function(request, response){
                     complete: complete,
                     nextClue: {
                         desc: nextClueDesc,
-                        num: userData.progress.length+1
+                        num: userData.progress.length+1,
+                        totalClues: allClues.length
                     }
                 });
             }

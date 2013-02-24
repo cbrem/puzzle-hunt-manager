@@ -81,6 +81,7 @@ function drawCanvasMap(solvedClues, totalClues){
     
     var nodeWidth = 50;
     var nodeHeight = 50;
+    var borderRadius = 12;
     var nodeDist = Math.min(Math.max(75, Math.floor((wrapWidth-2*padding - totalClues*nodeWidth)/totalClues)), 500);
 
     var contentWidth = (totalClues * nodeWidth) + Math.max(0, totalClues-1)*nodeDist;
@@ -130,6 +131,9 @@ function drawCanvasMap(solvedClues, totalClues){
             ctx.strokeStyle = "#5f3e06";
         }
         else if(i === solvedClues){
+            // draw box shadow
+            roundedRect(ctx, loc.left+2, loc.top+3, nodeWidth, nodeHeight, 
+                        borderRadius, "#aaa", "#aaa");
             ctx.fillStyle = "#F0A830";
             ctx.strokeStyle = "#5f3e06";
         }
@@ -137,7 +141,7 @@ function drawCanvasMap(solvedClues, totalClues){
             ctx.fillStyle = "#b7b7b7";
             ctx.strokeStyle = "#474747";
         }
-        roundedRect(ctx, loc.left, loc.top, nodeWidth, nodeHeight, nodeWidth/4,
+        roundedRect(ctx, loc.left, loc.top, nodeWidth, nodeHeight, borderRadius,
                     ctx.fillStyle, ctx.strokeStyle);
         ctx.fillStyle="black";
         ctx.fillText(String(i+1), loc.cx, loc.cy);
