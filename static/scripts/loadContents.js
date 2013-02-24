@@ -1,9 +1,3 @@
-function fillEach(selector, textContent){
-    $(selector).each(function(i, elem){
-        $(elem).text(textContent);
-    });
-}
-
 // dis is loading up the admin view for a hunt
 $(document).ready(function(){
   // todo: make ajax call to app.js to get the admin data for the given hunt,
@@ -15,11 +9,13 @@ $(document).ready(function(){
   assert(huntBaseIndex !== -1);
   var urlHuntName = urlList[huntBaseIndex+1];
   var urlUserName = undefined;
+  var urlUserKey = undefined;
   var huntData = undefined;
   
   if(urlList.length > huntBaseIndex+2){
       urlUserName = urlList[huntBaseIndex+2];
   }
+  
   if(urlList.length > huntBaseIndex+3){
       urlUserKey = urlList[huntBaseIndex+3];
   }
@@ -51,16 +47,17 @@ $(document).ready(function(){
         var numSolvedClues = userData.progress.length;
         fillEach(".num-solved-clues", numSolvedClues);
         
-        if(numSolvedClues+1 < numClues){
+        if(numSolvedClues+1 <= numClues){
             var currentClueNum = numSolvedClues+1;
-            fillEach(".curr-clue-num", currentClueNum);
+            fillEach(".curr-clue-label", "Clue #"+currentClueNum);
             
-            var currentClueDesc = huntData.clues[currentClueNum].desc;
+            // minus one to do this in zero-indexing
+            var currentClueDesc = huntData.clues[currentClueNum-1].desc;
             fillEach(".curr-clue-desc", currentClueDesc);
         }
         else{
-            fillEach(".curr-clue-num", "?");
-            fillEach(".curr-clue-desc", "???");
+            fillEach(".curr-clue-label", "No clues left");
+            fillEach(".curr-clue-desc", "You've completed the \""+huntData.rawname+"\" puzzle hunt!");
         }
         
         // if there is a canvas available on the page
@@ -190,17 +187,20 @@ $(document).ready(function(){
     success: function(data) {
       if (data.exists) {
       	huntData = data.hunt;
+        
+        // info for all users
+        loadPageInfo();
+        fillScoreboard();
+        
       	// admin-specific
       	if (urlUserName === "admin") {
 	        loadClues();
 	    }
         // hunter-specific
-        else if (urlUserName !== undefined) {
-            
+        else if (urlUserName !== undefined && initTeamView !== undefined) {
+            initTeamView(huntData, urlUserName, urlUserKey);
         }
-        // info for all users
-        loadPageInfo();
-        fillScoreboard();
+        
       } else {
         console.log("Something's real messed up with getting data to load this.")
       }
