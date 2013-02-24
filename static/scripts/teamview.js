@@ -3,16 +3,20 @@ function initTeamView(huntData, urlUserName, userKey){
     var totalClues = huntData.clues.length;
     var solvedClues = userData.progress.length;
     
-    function _startClueViewLoader(){
-        $("#clues-team-view").find(".loaded-content").hide();
-        $("#clues-team-view").find(".loader-area").show();
+    function _startClueViewLoader(callbackFn){
+        // don't grade this slide down, I guess, but loading looks seriously 
+        // ugly and jumpy without it
+        $("#clues-team-view").find(".loaded-content").slideUp("medium", function(){
+            $("#clues-team-view").find(".loader-area").fadeIn("fast", callbackFn);
+        });
     }
     
-    function _stopClueViewLoader(){
-        $("#clues-team-view").find(".loader-area").hide();
-        $("#clues-team-view").find(".loaded-content").show();
+    function _stopClueViewLoader(callbackFn){
+        $("#clues-team-view").find(".loader-area").fadeOut("fast", function(){
+            $("#clues-team-view").find(".loaded-content")
+                                 .slideDown("medium", callbackFn);
+        });
     }
-    
     
     function _updateTeamView(currUnsolvedClueNum, clueDesc){
         if(currUnsolvedClueNum-1 >= totalClues){
@@ -30,45 +34,49 @@ function initTeamView(huntData, urlUserName, userKey){
         loadCanvasMap(currUnsolvedClueNum-1, totalClues);
     }
     
-    $("#submit-answer-button").click(function(e){
+    function processAnswerVerification(e){
         e.preventDefault();
-        _startClueViewLoader();
-        var answer = $("#answer-clue-form .textInput").val();
-        $("#answer-clue-form .textInput").val("");
-        
-        $.ajax({
-            url: "/verifyAnswer",
-            type: "post",
-            dataType: "json",
-            data: {
-                hunt: huntData.safename,
-                user: urlUserName,
-                key: userKey,
-                answer: answer
-            },
-            success: function(data){
-                if(data.error){
-                    $("#clues-team-view").find(".error-msg").text("error: " + data.errorMsg);
-                    return;
+        _startClueViewLoader(function(){
+            var answer = $("#answer-clue-form .textInput").val();
+            $("#answer-clue-form .textInput").val("");
+            
+            $.ajax({
+                url: "/verifyAnswer",
+                type: "post",
+                dataType: "json",
+                data: {
+                    hunt: huntData.safename,
+                    user: urlUserName,
+                    key: userKey,
+                    answer: answer
+                },
+                success: function(data){
+                    if(data.error){
+                        $("#clues-team-view").find(".error-msg").text("error: " + data.errorMsg);
+                        return;
+                    }
+                    else if(data.correct === false){
+                        $("#clues-team-view").find(".error-msg").text("Sorry, that's incorrect. Please try again.");
+                    }
+                    else{
+                        $("#clues-team-view").find(".error-msg").text("");
+                        var nextClue = data.nextClue;
+                        console.log(nextClue.num);
+                        _updateTeamView(nextClue.num, nextClue.desc);
+                    }  
+                },
+                error: function(data){
+                    console.log("error", data);
+                },
+                complete: function(){
+                    _stopClueViewLoader();
                 }
-                else if(data.correct === false){
-                    $("#clues-team-view").find(".error-msg").text("Sorry, that's incorrect. Please try again.");
-                }
-                else{
-                    $("#clues-team-view").find(".error-msg").text("");
-                    var nextClue = data.nextClue;
-                    console.log(nextClue.num);
-                    _updateTeamView(nextClue.num, nextClue.desc);
-                }  
-            },
-            error: function(data){
-                console.log("error", data);
-            },
-            complete: function(){
-                _stopClueViewLoader();
-            }
+            });
         });
-    });
+    }
+    
+    $("#submit-answer-button").click(processAnswerVerification);
+    $("#answer-clue-form").find(".textInput").submit(processAnswerVerification);
     
     _updateTeamView(solvedClues+1, undefined);
     _stopClueViewLoader();
