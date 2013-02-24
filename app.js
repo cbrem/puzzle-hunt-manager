@@ -503,37 +503,7 @@ app.post("/hunts/:hunt/:user/:key", function (request, response) {
     }
   });
 });
-/*
-// for ADMINISTER request, create an empty hunt object in datastore
-app.post("/hunts/:hunt", function (request, response) {
-  var hunt = request.params.hunt;
 
-  // ** may change this later to create object AFTER first save **
-  // create new empty hunt object with the creator's inputted hunt name
-  huntObj = new HuntData({
-    "safename": hunt, 
-    "rawname": request.body.newHuntName
-  });
-  huntObj.changeAdminKey(request.body.key);
-  
-  // DEBUG - add a dummy user
-  huntObj.addUser("testteam", "password");
-  
-  // update server hunt object
-  globalHuntData[hunt] = huntObj;
-
-  // create file for this hunt
-  updateFile(hunt, function(err) {
-    if (err) {
-      console.log("Error thrown: " + err);
-      response.send({"error": true});
-    }
-    else {
-      response.send({"error": false});
-    }
-  });
-});
-*/
 // PUTs
 
 /** call this api function to update the stored clues list for a given hunt 

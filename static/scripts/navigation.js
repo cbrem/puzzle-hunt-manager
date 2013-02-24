@@ -110,7 +110,6 @@ $(document).ready(function () {
     var pass = $("#team-pass").val();
     var urlTeamName = encodeName(teamName);
     var urlPass = encodeName(pass);
-    console.log(urlTeamName, urlPass);
     if (urlTeamName === undefined || urlPass === undefined) return;
 
     var url = window.location.pathname;
