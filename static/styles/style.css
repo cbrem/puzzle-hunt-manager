@@ -428,6 +428,11 @@ tr:nth-child(odd) td{
     margin-bottom: .5em;
 }
 
+#clues-team-view p{
+    margin: 1em 0;
+    line-height: 1.5em;
+}
+
 .error-msg{
     font-size: .9em;
     color: #d2340d;
