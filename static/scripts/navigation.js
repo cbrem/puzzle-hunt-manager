@@ -199,13 +199,15 @@ var createAlert = function (message, buttons) {
     newButton.html(button);
     newButton.addClass("button");
 
-    //add callback to a button
-    var callback = buttons[button];
-    newButton.click(function (e) {
-      if (callback !== undefined) callback(e);
-      al.html("");
-      overlay.css({"display": "none"});
-    });
+    //bind callback from buttons[button] to new button
+    (function (callback) {
+      newButton.click(function (e) {
+        if (callback !== undefined) callback(e);
+        al.html("");
+        overlay.css({"display": "none"});
+      });
+    }) (buttons[button]);
+
     al.append(newButton);
   }
 };

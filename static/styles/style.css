@@ -314,11 +314,29 @@ form {
 }
 
 #clues .clue-desc{
-    width: 50%;
+    width: 40%;
 }
 
 #clues .clue-ans{
     width: 40%;
+}
+
+#clues .clue-del{
+    position: relative;
+    text-align: center;
+    width: 8%;
+}
+
+.clue-del .clue-del-button {
+  position: absolute;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url('../images/delete-icon-orange.png');
+}
+
+.clue-del .clue-del-button:hover {
+  background-image: url('../images/delete-icon-red.png');
 }
 
 #clue-editor {

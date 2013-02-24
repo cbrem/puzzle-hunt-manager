@@ -189,11 +189,13 @@ function ClueData(data){
     "desc"              the question/human-readable description for this 
                         instance's clue
     "ans"               the answer for this instance's clue
+    "createTime"        the time at which an admin client created the clue
     **/
     this._init = function(data){
         this._typename = "ClueData";
         this.desc = getWithDefault(data, "desc", "no description set");
         this.ans = getWithDefault(data, "ans");
+        this.createTime = getWithDefault(data, "createTime", "0");
     };
     
     /** <ClueData>.isCorrectAnswer
@@ -354,10 +356,11 @@ function HuntData(data){
         this.clues = [];
     }
     
-    this.addClue = function(desc, ans){
+    this.addClue = function(desc, ans, time){
         var newClue = new ClueData({
             "desc":desc,
-            "ans":ans
+            "ans":ans,
+            "createTime": time
         });
         this.clues.push(newClue);
     }
@@ -624,8 +627,8 @@ app.put("/edit/clues", function(request, response){
         // fields of "desc" and "ans"
         for(var i=0; i < inputClues.length; i++){
             var clue = inputClues[i];
-            if("desc" in clue && "ans" in clue){
-                huntData.addClue(clue.desc, clue.ans);
+            if("desc" in clue && "ans" in clue && "createTime" in clue) {
+                huntData.addClue(clue.desc, clue.ans, clue.createTime);
             }
         }
         

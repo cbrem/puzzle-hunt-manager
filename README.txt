@@ -13,6 +13,9 @@ server-side:
 -add user to event
 -delete user from event?
 -check password/key against database
+-modify clue-adding so that, instead of completely overwriting the server's
+ list of clues, the client just adds a clue that then receives the updated
+ list from the server
 
 client-side:
 

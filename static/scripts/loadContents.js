@@ -86,13 +86,28 @@ $(document).ready(function(){
   	var numClues = clues.length;
   	for (var i = 0; i < numClues; i++) {
   		var clue = clues[i];
+      console.log(clue);
   		var newClueRow = $("<tr>").attr("class", "clue-row");
-  		var clueNum = $("<td>").attr("class", "clue-num").html(i+1);
-  		var clueDesc = $("<td>").attr("class", "clue-desc").html(clue["desc"]);
-  		var clueAns = $("<td>").attr("class", "clue-ans").html(clue["ans"]);
-  		newClueRow.append(clueNum).append(clueDesc).append(clueAns);
+  		var num = $("<td>").attr("class", "clue-num").html(i+1);
+  		var desc = $("<td>").attr("class", "clue-desc").html(clue["desc"]);
+  		var ans = $("<td>").attr("class", "clue-ans").html(clue["ans"]);
+
+      var identifier = clue["createTime"]; //unique identifier for deletion
+  		var del = $("<td>").attr("class", "clue-del");
+      var delButton = $("<span>").attr("class", "clue-del-button")
+                                 .attr("id", identifier);
+      del.append(delButton);
+  		newClueRow.append(num).append(desc).append(ans).append(del);
   		clueTable.append(newClueRow);
   	};
+
+    //bind newly created buttons to clue deletion
+    $(".clue-del-button").click(function () {
+      var identifier = $(this).attr("id");
+      createAlert("Are you sure you want to delete this clue?",
+                  {"Yes": function () {deleteClue(identifier);},
+                   "No": undefined});
+    });
   }
 
   // adding clues on admin page
@@ -100,7 +115,8 @@ $(document).ready(function(){
 		// update client with added clue
 		var clueText = $("#write-clue-desc").val();
 		var ansText = $("#write-clue-ans").val();
-		var clueObj = {"desc": clueText, "ans": ansText};
+    var time = (new Date).getTime();
+		var clueObj = {"desc": clueText, "ans": ansText, "createTime": time};
 		huntData["clues"].push(clueObj);
 		// update server with new clues
 		$.ajax({
@@ -187,3 +203,9 @@ $(document).ready(function(){
   });
 
 });
+
+//delete a clue from the server. a clue is identified by an identifier, which
+//  is the time at which it was created
+function deleteClue (identifier) {
+  console.log("Deleting " + identifier);
+}
