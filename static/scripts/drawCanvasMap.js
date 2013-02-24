@@ -1,3 +1,25 @@
+//modified from: http://stackoverflow.com/questions/4576724/dotted-stroke-in-canvas/4663129#4663129
+function dashedLine(ctx, x, y, x2, y2, da) {
+    if (!da) da = [10,2];
+    ctx.save();
+    var dx = (x2-x), dy = (y2-y);
+    var len = Math.sqrt(dx*dx + dy*dy);
+    var rot = Math.atan2(dy, dx);
+    ctx.translate(x, y);
+    ctx.moveTo(0, 0);
+    ctx.rotate(rot);       
+    var dc = da.length;
+    var di = 0, draw = true;
+    x = 0;
+    while (len > x) {
+        x += da[di++ % dc];
+        if (x > len) x = len;
+        draw ? ctx.lineTo(x, 0): ctx.moveTo(x, 0);
+        draw = !draw;
+    }       
+    ctx.restore();
+}
+
 // modified from: 
 // https://developer.mozilla.org/en-US/docs/Canvas_tutorial/Drawing_shapes
 function roundedRect(ctx,x,y,width,height,radius, fillStyle, strokeStyle){
@@ -26,8 +48,8 @@ function roundedRect(ctx,x,y,width,height,radius, fillStyle, strokeStyle){
 
 function loadCanvasMap(solvedClues, totalClues){
     drawCanvasMap(solvedClues, totalClues);
-    $("#canvas-wrapper").find("img").remove();
-    $("#map-canvas").show();
+    $("#canvas-wrapper").find(".loader-area").hide();
+    $("#canvas-wrapper").find(".loaded-content").show();
     $("#canvas-wrapper").scrollLeft($("#map-canvas").width());
 }
 
@@ -77,14 +99,19 @@ function drawCanvasMap(solvedClues, totalClues){
     
     // draw connecting lines
     ctx.save();
-    ctx.lineWidth = 5;
+    ctx.lineWidth = 5;    
     ctx.strokeStyle = "#5E412F";
     for(var i=1; i < Math.min(solvedClues+1, nodeLocations.length); i++){
         var loc = nodeLocations[i];
         var prevLoc = nodeLocations[i-1];
         ctx.beginPath();
-        ctx.moveTo(prevLoc.cx, prevLoc.cy);
-        ctx.lineTo(loc.cx, loc.cy);
+        if(i === solvedClues){
+            dashedLine(ctx, prevLoc.cx, prevLoc.cy, loc.cx, loc.cy, [5,10]);
+        }
+        else{
+            ctx.moveTo(prevLoc.cx, prevLoc.cy);
+            ctx.lineTo(loc.cx, loc.cy);
+        }
         ctx.stroke();
         ctx.closePath();
     }

@@ -13,6 +13,7 @@
     <script src="/scripts/jquery-1.9.0.js"></script>
     <script src="/scripts/utils.js"></script>
     <script src="/scripts/drawCanvasMap.js"></script>
+    <script src="/scripts/teamview.js"></script>
     <script src="/scripts/loadContents.js"></script>
     <script src="/scripts/navigation.js"></script>
 </head>
@@ -39,18 +40,31 @@
                 </h2>
             </header>
             <figure id="canvas-wrapper">
-                <img src="/images/loader.gif"></img>
-                <canvas id="map-canvas"></canvas>
+                <div class="loader-area">
+                    <figure class="loader-img"></figure>
+                </div>
+                <div class="loaded-content">
+                    <canvas id="map-canvas"></canvas>
+                <div>
             </figure>
+            
+            
             <div id="clues-team-view">
-                <header>Current clue: Clue #<span class="curr-clue-num">4</span></header>
-                <p class="curr-clue-desc">Fill me in with a description later</p>
-                <form id="answer-clue-form">
-                    <input class="textInput" type="text" 
-                           placeholder="Enter your answer here.">
-                    </input>
-                    <input class="button" type="submit" value="Submit Answer"></input>
-                </form>
+                <div class="loader-area">
+                    <figure class="loader-img"></figure>
+                </div>
+                <div class="loaded-content">
+                    <header>Current clue: <span class="curr-clue-label">Clue #???</span></header>
+                    <p class="curr-clue-desc">Fill me in with a description later</p>
+                    <form id="answer-clue-form">
+                        <input class="textInput" type="text" 
+                               placeholder="Enter your answer here.">
+                        </input>
+                        <p class="error-msg"></p>
+                        <input id="submit-answer-button" class="button" 
+                               type="submit" value="Submit Answer"></input>
+                    </form>
+                </div>
             </div>
         </div>
         <footer>

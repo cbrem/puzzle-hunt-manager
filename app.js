@@ -157,6 +157,21 @@ function UserData(data){
         return inputKey === this.key;
     };
     
+    /** <UserData>.incrementProgress
+    
+    adds a new entry to the progress list of a given user, based on the 
+    given ClueData object representing the just-solved clue
+    
+    only call this once per clue
+    **/
+    this.incrementProgress = function(solvedClueData){
+        this.progress.push({
+            timestamp: (new Date()).getTime(),
+            desc: solvedClueData.desc,
+            ans: solvedClueData.ans
+        });
+    }
+    
     this._init(data);
 }
 
@@ -189,7 +204,7 @@ function ClueData(data){
     inputAns             the input answer to check
     **/
     this.isCorrectAnswer = function(inputAns){
-        return inputAns === this.ans;
+        return inputAns.trim().toLowerCase() === this.ans.trim().toLowerCase();
     };
     
     this._init(data);
@@ -502,6 +517,82 @@ app.post("/hunts/:hunt/:user/:key", function (request, response) {
       response.send({"error": false});
     }
   });
+});
+
+/**
+function to take in a guessed answer for a certain user and either send back a 
+failure message if its incorrect or update the user's progress and send back the
+description for the next clue
+
+response format:
+correct         whether or not the correct answer was given
+completed       whether or not the user has completed all clues in the hunt
+nextClue        the next clue's description and number
+                (description will be undefined if no more clues left)
+error           will be true if any errors occurred
+errorMsg        will be set if any errors occurred
+**/
+app.post("/verifyAnswer", function(request, response){
+    var hunt = request.body.hunt;
+    var user = request.body.user;
+    var userKey = request.body.key;
+    var userAnswer = request.body.answer;
+    
+    // first check that credentials are valid
+    if(!(hunt in globalHuntData && 
+         globalHuntData[hunt].isValidUser(user, userKey)))
+    {
+        sendErrorJson(response, "invalid credentials");
+        return;
+    }
+    
+    var huntData = globalHuntData[hunt];
+    var userData = huntData.users[user];
+    var allClues = huntData.clues;
+    var userProgress = userData.progress;
+    // check that there is actually a clue to answer
+    if(userProgress.length >= allClues.length){
+        sendErrorJson(response, "no clue to answer");
+        return;
+    }
+    
+    var currClueData = allClues[userProgress.length];
+    var nextClueDesc = undefined;
+    var complete = false;
+    // either get the next clue or signal that the hunt is complete
+    if(userProgress.length + 1 < allClues.length){
+        nextClueDesc = allClues[userProgress.length+1].desc;
+    }
+    else{
+        complete = true;
+    }
+                            
+    if(currClueData.isCorrectAnswer(userAnswer)){
+        // add an entry to the user's progress list
+        userData.incrementProgress(currClueData);
+        
+        // don't forget to save the file
+        updateFile(hunt, function(err){
+            if(err){
+                sendErrorJson(response, err);
+            }
+            else{
+                response.send({
+                    correct: true,
+                    complete: complete,
+                    nextClue: {
+                        desc: nextClueDesc,
+                        num: userData.progress.length+1
+                    }
+                });
+            }
+        });
+    }
+    else{
+        response.send({
+            correct: false
+        });
+    }
 });
 
 // PUTs

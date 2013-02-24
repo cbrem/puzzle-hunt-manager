@@ -92,6 +92,24 @@ form {
     border-top: 1px solid #f2b753;
 }
 
+.loader-area{
+    width: 100%;
+    height: 100%;
+    text-align:center;
+}
+
+.loader-area .loader-img{
+    background: transparent url("../images/loader.gif") no-repeat center;
+    width: 32px;
+    height:32px;
+    margin: 0 auto;
+}
+
+.loaded-content{
+    display:none;
+}
+
+
 .page-wrapper{
     margin:0 auto;
     padding: 0;
@@ -221,7 +239,6 @@ form {
 }
 
 #map-canvas{
-    display:none;
     margin:0;
     padding:0;
     height: 100px;
@@ -229,10 +246,6 @@ form {
     background: #FCEBB6 url("../images/roughcloth.png") repeat;
     
     border: 1px solid #815940;
-}
-
-#canvas-wrapper img{
-    padding: 35px 0;
 }
 
 .overlay {
@@ -415,6 +428,15 @@ tr:nth-child(odd) td{
     margin-bottom: .5em;
 }
 
+#clues-team-view p{
+    margin: 1em 0;
+    line-height: 1.5em;
+}
+
+.error-msg{
+    font-size: .9em;
+    color: #d2340d;
+}
 
 footer{
     margin-top: 1em;
