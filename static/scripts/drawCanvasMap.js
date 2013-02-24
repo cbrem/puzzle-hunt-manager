@@ -26,8 +26,8 @@ function roundedRect(ctx,x,y,width,height,radius, fillStyle, strokeStyle){
 
 function loadCanvasMap(solvedClues, totalClues){
     drawCanvasMap(solvedClues, totalClues);
-    $("#canvas-wrapper").find("img").remove();
-    $("#map-canvas").show();
+    $("#canvas-wrapper").find(".loader-area").hide();
+    $("#canvas-wrapper").find(".loaded-content").show();
     $("#canvas-wrapper").scrollLeft($("#map-canvas").width());
 }
 

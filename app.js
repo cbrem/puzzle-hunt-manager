@@ -527,12 +527,12 @@ description for the next clue
 response format:
 correct         whether or not the correct answer was given
 completed       whether or not the user has completed all clues in the hunt
-nextClue        the next clue's description, if there is one. 
-                Otherwise, undefined.
+nextClue        the next clue's description and number
+                (description will be undefined if no more clues left)
 error           will be true if any errors occurred
 errorMsg        will be set if any errors occurred
 **/
-app.post("/verify/progress", function(request, response){
+app.post("/verifyAnswer", function(request, response){
     var hunt = request.body.hunt;
     var user = request.body.user;
     var userKey = request.body.key;
@@ -580,7 +580,10 @@ app.post("/verify/progress", function(request, response){
                 response.send({
                     correct: true,
                     complete: complete,
-                    nextClue: nextClueDesc
+                    nextClue: {
+                        desc: nextClueDesc,
+                        num: userData.progress.length+1
+                    }
                 });
             }
         });

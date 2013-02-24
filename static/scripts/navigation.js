@@ -4,7 +4,9 @@ $(document).ready(function () {
 
   $("form").each(function(i, elem){
     $(elem).submit(function(e){
-        e.preventDefault(); // prevent page refresh when hitting enter
+        e.preventDefault(); // prevent page refresh when hitting enter,
+                            // override this in page-specific functions to 
+                            // re-enable
     });
   });
 

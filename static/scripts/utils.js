@@ -25,3 +25,9 @@ function getObjectSize(object) {
   }
   return size;
 }
+
+function fillEach(selector, textContent){
+    $(selector).each(function(i, elem){
+        $(elem).text(textContent);
+    });
+}
