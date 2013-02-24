@@ -58,6 +58,10 @@ $(document).ready(function(){
             var currentClueDesc = huntData.clues[currentClueNum].desc;
             fillEach(".curr-clue-desc", currentClueDesc);
         }
+        else{
+            fillEach(".curr-clue-num", "?");
+            fillEach(".curr-clue-desc", "???");
+        }
         
         // if there is a canvas available on the page
         if($("#map-canvas").length !== 0 && 
@@ -168,12 +172,13 @@ $(document).ready(function(){
       	// admin-specific
       	if (urlUserName === "admin") {
 	        loadClues();
-	      }
-	      // hunter-specific
-	      else if (urlUserName !== undefined) {
-	      }
-	      // info for all users
-	      loadPageInfo();
+	    }
+        // hunter-specific
+        else if (urlUserName !== undefined) {
+            
+        }
+        // info for all users
+        loadPageInfo();
         fillScoreboard();
       } else {
         console.log("Something's real messed up with getting data to load this.")
