@@ -179,24 +179,23 @@ $(document).ready(function () {
     });
   });
 
-  $("#home-form #hunt-name").keypress(function(e){
+  $("#hunt-name").keypress(function(e){
     if(e.which === 13){ // enter key
-    
         // if password box is available, do creat
-        if($("#home-form #hunt-pass").is(":visible")){
-            $("#home-form #create-go").click();
+        if($("#hunt-pass").is(":visible")){
+            $("#create-go").click();
         }
         // otherwise do search
         else{
-            $("#home-form #search").click();
+            $("#search").click();
         }
         return false;
     }
   });
   
-  $("#home-form #hunt-pass").keypress(function(e){
+  $("#hunt-pass").keypress(function(e){
     if(e.which === 13){ // enter key
-        $("#home-form #create-go").click();
+        $("#create-go").click();
         return false;
     }
   });

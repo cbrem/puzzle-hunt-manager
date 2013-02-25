@@ -1,33 +1,54 @@
-Access this site by going to localhost:8889
+Hw4 Project - Puzzle Hunt Manager
 
-Color scheme: http://www.colourlovers.com/palette/919313/Papua_New_Guinea
+Connor Brem (cbrem), Erik Pintar (epinter), Leon Zhang (lwzhang)
+Feb 2013
 
-See the data structure layout in data/huntstructure.txt
+###### Installation ################
 
+Install Node.js and Express.js on the server this app will be hosted on
 
-TO DO list:
+When the app is running, access this site by going to  
 
-user:
--raw names for hunts and teams being displayed
--be able to click on previous clues and view your answers
--be able to have multiple answers for a clue (semicolon separated or something)
+http://<your domain name>:8889
 
-admin:
--delete clues
--way to edit clues
--make clue description and answer input fields on admin page prettier
+in a web browser
+
+(Ie: If running the app on a local machine, go to http://localhost:8889
 
 
+######## Dependencies #############
 
-design changes from Liz:
-search and create buttons on homepage
-change administrate button just to create events
-admin editing functionality is from the event view-
-	click on administrate from the event page
+Node.js
+Express.js
 
+######## Summary ###################
 
-credits:
+ A management application to help organize puzzle hunts, like
+ those of 15-251. Provides ability for event organizers to have
+ a central location to manage team progress and clues, and also 
+ provides hunt participants with the ability to checkin with
+ answers in a central location.
 
-map logo: free for non-commercial use
-http://www.iconarchive.com/show/pirates-icons-by-artua/treasure-map-icon.html
+ From the homepage, users can either join an existing event or 
+ create a new event. As an administrator, users can add and delete 
+ clues for an event. As a participant, users can track their progress
+ and submit answers to their current clue, moving them onto the next
+ clue if answered correctly.
 
+####### Credits ###################
+
+Color scheme based on: http://www.colourlovers.com/palette/919313/Papua_New_Guinea
+
+Backgrounds: 
+http://subtlepatterns.com/rough-cloth/
+http://subtlepatterns.com/wood-pattern/
+
+Icons:
+Puzzle designed by Thomas Le Bas from The Noun Project
+Delete designed by Jamison Wieser from The Noun Project
+
+Fonts:
+http://www.google.com/webfonts/specimen/Source+Sans+Pro
+
+Images:
+Loading spinner: http://www.ajaxload.info/

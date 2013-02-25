@@ -134,6 +134,7 @@ $(document).ready(function(){
 				if (data.success) {
 					// update page
 					huntData = data.huntData;
+                    loadPageInfo();
 					loadClues();
 					// clear fields
 					$("#write-clue-desc").val("");
