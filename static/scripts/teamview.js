@@ -22,17 +22,17 @@ function initTeamView(huntData, urlUserName, userKey){
     // change
     function _updateTeamView(currUnsolvedClueNum, clueDesc, numTotalClues){
         if(currUnsolvedClueNum-1 >= numTotalClues){
-            fillEach(".curr-clue-label", "No clues left");
-            fillEach(".curr-clue-desc", 
+            $(".curr-clue-label").text("No clues left");
+            $(".curr-clue-desc").text( 
                 "You've completed the \""+huntData.rawname+"\" puzzle hunt!");
             $("#answer-clue-form").remove();
         }
         else{
-            fillEach(".curr-clue-label", "Clue #"+currUnsolvedClueNum);
-            fillEach(".curr-clue-desc", clueDesc);
+            $(".curr-clue-label").text("Clue #"+currUnsolvedClueNum);
+            $(".curr-clue-desc").text(clueDesc);
         }
         
-        fillEach(".num-solved-clues", currUnsolvedClueNum-1);
+        $(".num-solved-clues").text(currUnsolvedClueNum-1);
         loadCanvasMap(currUnsolvedClueNum-1, numTotalClues);
     }
     

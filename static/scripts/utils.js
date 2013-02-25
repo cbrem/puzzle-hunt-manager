@@ -25,10 +25,3 @@ function getObjectSize(object) {
   }
   return size;
 }
-
-// if undefined is given as a parameter, this function essentially does nothing
-function fillEach(selector, textContent){
-    $(selector).each(function(i, elem){
-        $(elem).text(textContent);
-    });
-}
