@@ -133,6 +133,7 @@ function UserData(data){
         
         this.username = getWithDefault(data, "username");
         this.key = getWithDefault(data, "key");
+        this.rawName = getWithDefault(data, "rawName");
         this.lastlogin = getWithDefault(data,"lastlogin",(new Date).getTime());
         this.progress = getWithDefault(data, "progress", []);
     };
@@ -248,6 +249,7 @@ function HuntData(data){
         this.users = getWithDefault(data, "users", {
             "admin": new UserData({
                         "username": "admin",
+                        "rawName": "admin",
                         "key": undefined,
                         "lastlogin": (new Date()).getTime()
                      })
@@ -346,11 +348,13 @@ function HuntData(data){
     params:
     username            the new user's name
     key                 the new user's key
+    rawName             version of username before spaces are removed
     **/
-    this.addUser = function(username, key){
+    this.addUser = function(username, key, rawName){
         var newUser = new UserData({
             "username": username,
             "key": key,
+            "rawName": rawName,
             "lastlogin": (new Date()).getTime()
         });
         this.users[username] = newUser;
@@ -490,19 +494,21 @@ app.get("/hunts/:hunt/user/:user/:key/getProgress", function(request, response){
 
 // POSTs
 
-// add team from SIGN IN button
+// add team from SIGN IN button (if user !== "admin").
+// if user === "admin", then create new hunt with "admin" as only.  
 app.post("/hunts/:hunt/:user/:key", function (request, response) {
   var hunt = request.params.hunt;
   var user = request.params.user;
   var key = request.params.key;
+  var rawName = request.body.rawName;
   
   if (user === "admin") {
     //create new hunt, which adds admin
     // ** may change this later to create object AFTER first save **
     // create new empty hunt object with the creator's inputted hunt name
     var huntObj = new HuntData({
-      "safename": hunt, 
-      "rawname": request.body.rawName
+      "safename": hunt,
+      "rawname": rawName
     });
     huntObj.changeAdminKey(key);
     
@@ -514,7 +520,7 @@ app.post("/hunts/:hunt/:user/:key", function (request, response) {
       console.log("Adding user to non-existant hunt.");
       response.send({"error": true});
     }
-    globalHuntData[hunt].addUser(user, key); // add rawname?
+    globalHuntData[hunt].addUser(user, key, rawName);
   }
 
   //update datastore
@@ -662,7 +668,12 @@ app.put("/edit/clues", function(request, response){
 
 // DELETEs
 
-
+app.delete("/edit/clues/:identifier", function (request, response) {
+  //TODO: search through globalHuntData for a clue with createTime equal to 
+  //"identifier".
+  //once the address of this clue is found, use HuntData.popClue(index) to
+  //remove it.
+});
 
 // SETUP
 
