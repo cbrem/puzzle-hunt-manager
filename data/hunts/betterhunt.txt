@@ -1,1 +1,0 @@
-{"_typename":"HuntData","safename":"betterhunt","rawname":"better hunt","users":{"admin":{"_typename":"UserData","username":"admin","key":"pass","rawName":"admin","lastlogin":1361825336970,"progress":[]},"themice":{"_typename":"UserData","username":"themice","key":"pass","rawName":"the mice","lastlogin":1361825355376,"progress":[]}},"clues":[]}
