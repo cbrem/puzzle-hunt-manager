@@ -44,8 +44,9 @@ $(document).ready(function(){
     if(urlUserName !== undefined && urlUserName in huntData.users){
         var userData = huntData.users[urlUserName];
         var userName = userData.username;
+        var rawName = userData.rawName;
         
-        fillEach(".team-name", userName);
+        fillEach(".team-name", rawName);
         
         var numSolvedClues = userData.progress.length;
         fillEach(".num-solved-clues", numSolvedClues);
@@ -134,6 +135,7 @@ $(document).ready(function(){
 				if (data.success) {
 					// update page
 					huntData = data.huntData;
+                    loadPageInfo();
 					loadClues();
 					// clear fields
 					$("#write-clue-desc").val("");
@@ -198,6 +200,7 @@ $(document).ready(function(){
   	}
   }
 
+  // the main GET request that loads the page and calls loader functions
   $.ajax({
     type: "get",
     url: "/info/" + encodeURIComponent(urlHuntName),
@@ -212,10 +215,10 @@ $(document).ready(function(){
       	// admin-specific
       	if (urlUserName === "admin") {
 	        loadClues();
-	    }
+	      }
         // hunter-specific
         else if (urlUserName !== undefined && initTeamView !== undefined) {
-            initTeamView(huntData, urlUserName, urlUserKey);
+            //initTeamView(huntData, urlUserName, urlUserKey);
         }
         
       } else {

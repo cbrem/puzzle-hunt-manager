@@ -3,18 +3,18 @@ function initTeamView(huntData, urlUserName, userKey){
     var totalClues = huntData.clues.length;
     var solvedClues = userData.progress.length;
     
+    // animation durations are set to 0 because of annoying restriction on 
+    // jquery animation >:(
     function _startClueViewLoader(callbackFn){
-        // don't grade this slideDown usage, I guess, but loading looks 
-        // seriously ugly and jumpy without it
-        $("#clues-team-view").find(".loaded-content").slideUp("medium", function(){
-            $("#clues-team-view").find(".loader-area").fadeIn("fast", callbackFn);
+        $("#clues-team-view").find(".loaded-content").slideUp(0, function(){
+            $("#clues-team-view").find(".loader-area").fadeIn(0, callbackFn);
         });
     }
     
     function _stopClueViewLoader(callbackFn){
-        $("#clues-team-view").find(".loader-area").fadeOut("fast", function(){
+        $("#clues-team-view").find(".loader-area").fadeOut(0, function(){
             $("#clues-team-view").find(".loaded-content")
-                                 .slideDown("medium", callbackFn);
+                                 .slideDown(0, callbackFn);
         });
     }
     
@@ -36,6 +36,7 @@ function initTeamView(huntData, urlUserName, userKey){
         loadCanvasMap(currUnsolvedClueNum-1, numTotalClues);
     }
     
+    // when called, submit the current answer to the server for verification
     function processAnswerVerification(e){
         e.preventDefault();
         e.stopPropagation();
@@ -64,6 +65,7 @@ function initTeamView(huntData, urlUserName, userKey){
                                              .text("Sorry, that's incorrect. "+
                                                    "Please try again.");
                     }
+                    //if verification is successful, load info for the next clue
                     else{
                         $("#clues-team-view").find(".error-msg").text("");
                         var nextClue = data.nextClue;

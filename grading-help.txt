@@ -1,0 +1,38 @@
+Hw4 project - Puzzle Hunt Manager
+Connor Brem (cbrem), Erik Pintar (epinter), Leon Zhang (lwzhang)
+
+Javascript
+- Besides using JavaScript throughout the app, we use objects specifically on
+  the backend to make managing the large stored data structure easier
+  - ex: HuntData, ClueData, UserData objects in app.js starting line 121
+
+Canvas
+- We used a canvas on the teamview page (teamview.html starting line 42) 
+  to display a progress map of the users current location in a puzzle hunt
+  - see the canvas-ex.png screenshot in the design directory
+
+HTML
+- Forms with validation used on every html page
+- Tables used on scoreboards (Ex: starting line 85 in adminview.html)
+
+CSS
+- CSS reset stylesheet used on every page
+- hover styles for buttons (line 104, style.css)
+- border-radius
+- custom font-face definitions (top of style.css)
+- Absolute positioning (ex: line 272, .overlay styles in style.css)
+
+DOM manipulation/jQuery
+- Using jQuery to dynamically add clues to interface table in adminview.html
+- Binding events to buttons using jQuery all throughout app
+- hiding/showing/replacing text using jQuery (ex: all throughout teamview.js)
+
+AJAX client
+- Using client to request information to load page contents
+  - ex: line 202, loadContents.js
+- Using client to submit PUT / POST requests
+  - ex: line 46, teamview.js
+  - ex: line 125, loadContents.js
+
+AJAX server
+- Pretty much the whole point of all of app.js after line 389

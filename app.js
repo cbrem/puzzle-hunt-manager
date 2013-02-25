@@ -131,9 +131,9 @@ function UserData(data){
     this._init = function(data){
         this._typename = "UserData";
         
-        this.username = getWithDefault(data, "username")
+        this.username = getWithDefault(data, "username");
         this.key = getWithDefault(data, "key");
-        this.rawName = getWithDefault(data, this.username);
+        this.rawName = getWithDefault(data, "rawName");
         this.lastlogin = getWithDefault(data,"lastlogin",(new Date).getTime());
         this.progress = getWithDefault(data, "progress", []);
     };
@@ -249,7 +249,7 @@ function HuntData(data){
         this.users = getWithDefault(data, "users", {
             "admin": new UserData({
                         "username": "admin",
-                        "rawname": "admin",
+                        "rawName": "admin",
                         "key": undefined,
                         "lastlogin": (new Date()).getTime()
                      })
@@ -513,7 +513,7 @@ app.post("/hunts/:hunt/:user/:key", function (request, response) {
     huntObj.changeAdminKey(key);
     
     // update server hunt object
-    globalHuntData[hunt] = huntObj;  
+    globalHuntData[hunt] = huntObj;
   } else {
     //add user to hunt
     if (!(hunt in globalHuntData)) {
@@ -665,10 +665,6 @@ app.put("/edit/clues", function(request, response){
     }
 });
 
-app.put("/edit/user", function(request, response){
-    // TODO: based on the input data, update the user information in a given hunt
-});
-
 
 // DELETEs
 
@@ -732,7 +728,15 @@ function initServer() {
     // get the list of files in the hunt data directory
     fs.readdir(huntDataDir, function(err, files){
         if(err){
-            launchApp(err);
+            fs.mkdir(huntDataDir, function(err){
+                console.log("made missing directory:", huntDataDir);
+                if(err){
+                    launchApp(err);
+                }
+                else{
+                    launchApp();
+                }
+            });
             return;
         }
         var totalFiles = files.length;

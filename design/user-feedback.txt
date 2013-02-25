@@ -1,0 +1,4 @@
+Design changes due to Liz feedback: 2/21/2013
+
+- "Join" and "Administer" homepage buttons changed to "Search" and "Create"
+- Administration/editing button is now a button on a specific event's page, not the homepage
