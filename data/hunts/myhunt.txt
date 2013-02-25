@@ -1,1 +1,0 @@
-{"_typename":"HuntData","safename":"myhunt","rawname":"myhunt","users":{"admin":{"_typename":"UserData","username":"admin","key":"pass","progress":[]},"thefalcons":{"_typename":"UserData","username":"thefalcons","key":"pass","progress":[]}},"clues":[]}
