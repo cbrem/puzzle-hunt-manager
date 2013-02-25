@@ -198,6 +198,7 @@ $(document).ready(function(){
   	}
   }
 
+  // the main GET request that loads the page and calls loader functions
   $.ajax({
     type: "get",
     url: "/info/" + encodeURIComponent(urlHuntName),
@@ -212,10 +213,10 @@ $(document).ready(function(){
       	// admin-specific
       	if (urlUserName === "admin") {
 	        loadClues();
-	    }
+	      }
         // hunter-specific
         else if (urlUserName !== undefined && initTeamView !== undefined) {
-            initTeamView(huntData, urlUserName, urlUserKey);
+            //initTeamView(huntData, urlUserName, urlUserKey);
         }
         
       } else {

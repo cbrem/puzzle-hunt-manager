@@ -131,7 +131,7 @@ function UserData(data){
     this._init = function(data){
         this._typename = "UserData";
         
-        this.username = getWithDefault(data, "username")
+        this.username = getWithDefault(data, "username");
         this.key = getWithDefault(data, "key");
         this.lastlogin = getWithDefault(data,"lastlogin",(new Date).getTime());
         this.progress = getWithDefault(data, "progress", []);
@@ -432,6 +432,7 @@ app.get("/hunts/:hunt/:user/:key", function (request, response) {
     huntData.users[user].lastlogin = (new Date).getTime();
     // load logged-in webpage!
     response.sendfile(path.join("static", view));
+    console.log(huntData);
   }
   else{
     send404(response);
@@ -502,19 +503,19 @@ app.post("/hunts/:hunt/:user/:key", function (request, response) {
     // create new empty hunt object with the creator's inputted hunt name
     var huntObj = new HuntData({
       "safename": hunt, 
-      "rawname": request.body.newHuntName
+      "rawname": request.body.rawName
     });
     huntObj.changeAdminKey(key);
     
     // update server hunt object
-    globalHuntData[hunt] = huntObj;  
+    globalHuntData[hunt] = huntObj;
   } else {
     //add user to hunt
     if (!(hunt in globalHuntData)) {
       console.log("Adding user to non-existant hunt.");
       response.send({"error": true});
     }
-    globalHuntData[hunt].addUser(user, key);
+    globalHuntData[hunt].addUser(user, key); // add rawname?
   }
 
   //update datastore

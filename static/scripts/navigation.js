@@ -221,21 +221,21 @@ var encodeName = function (name) {
 };
 
 var createTeamOrHunt = function (path, rawName) {
-    $.ajax({
-      type: "post",
-      url: path,
-      data: {"rawName": rawName},
-      success: function(data) {
-        if (!data.error) {
-          // navigate to the new admin webpage
-          console.log("Successfully created new hunt");
-          window.location = path;
-        }
-        else {
-          console.log("There was an error creating the page.", data);
-        }
+  $.ajax({
+    type: "post",
+    url: path,
+    data: {"rawName": rawName},
+    success: function(data) {
+      if (!data.error) {
+        // navigate to the new admin webpage
+        window.location = path;
+        console.log("Successfully created new hunt: ", rawName);
       }
-    });
+      else {
+        console.log("There was an error creating the page.", data);
+      }
+    }
+  });
 };
 
 //custom alert box. takes a message and an object mapping button names to
