@@ -217,7 +217,7 @@ $(document).ready(function(){
 	      }
         // hunter-specific
         else if (urlUserName !== undefined && initTeamView !== undefined) {
-            //initTeamView(huntData, urlUserName, urlUserKey);
+            initTeamView(huntData, urlUserName, urlUserKey);
         }
         
       } else {

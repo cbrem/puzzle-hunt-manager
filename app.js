@@ -432,7 +432,6 @@ app.get("/hunts/:hunt/:user/:key", function (request, response) {
     huntData.users[user].lastlogin = (new Date).getTime();
     // load logged-in webpage!
     response.sendfile(path.join("static", view));
-    console.log(huntData);
   }
   else{
     send404(response);
@@ -505,7 +504,6 @@ app.post("/hunts/:hunt/:user/:key", function (request, response) {
       "safename": hunt, 
       "rawname": request.body.rawName
     });
-    console.log("rawname: ", request.body.rawName);
     huntObj.changeAdminKey(key);
     
     // update server hunt object
