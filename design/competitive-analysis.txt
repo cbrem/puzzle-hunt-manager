@@ -1,0 +1,24 @@
+Munzee:
++ Portable
++ Image verification - QR codes
+- Users forced into global community, no ability to host local hunts
+- Users must have login
+- More scavenger hunt/geocaching than puzzle hunt
+
+Doodle:
++ No login required, can easily set up events on the fly
++ Private urls to share as admin wants
++ Easy distinction between user view and admin view
+- Not designed for hunts specifically
+
+Whenisgood.net
++ No login required, can easily set up events on the fly
++ Private urls to share as admin wants
++ Easy distinction between user view and admin view
+- Not designed for hunts specifically
+
+Emailing/Google Docs
++ No new login required, can use existing gmail account
++ Central location to submit answers
+- No automatic verification, requires admin verification
+- Not designed for puzzle hunts, requires slapping together a conglomeration of existing techs

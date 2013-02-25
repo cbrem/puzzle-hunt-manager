@@ -659,10 +659,6 @@ app.put("/edit/clues", function(request, response){
     }
 });
 
-app.put("/edit/user", function(request, response){
-    // TODO: based on the input data, update the user information in a given hunt
-});
-
 
 // DELETEs
 
@@ -721,7 +717,15 @@ function initServer() {
     // get the list of files in the hunt data directory
     fs.readdir(huntDataDir, function(err, files){
         if(err){
-            launchApp(err);
+            fs.mkdir(huntDataDir, function(err){
+                console.log("made missing directory:", huntDataDir);
+                if(err){
+                    launchApp(err);
+                }
+                else{
+                    launchApp();
+                }
+            });
             return;
         }
         var totalFiles = files.length;

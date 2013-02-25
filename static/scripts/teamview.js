@@ -36,6 +36,7 @@ function initTeamView(huntData, urlUserName, userKey){
         loadCanvasMap(currUnsolvedClueNum-1, numTotalClues);
     }
     
+    // when called, submit the current answer to the server for verification
     function processAnswerVerification(e){
         e.preventDefault();
         e.stopPropagation();
@@ -64,6 +65,7 @@ function initTeamView(huntData, urlUserName, userKey){
                                              .text("Sorry, that's incorrect. "+
                                                    "Please try again.");
                     }
+                    //if verification is successful, load info for the next clue
                     else{
                         $("#clues-team-view").find(".error-msg").text("");
                         var nextClue = data.nextClue;
