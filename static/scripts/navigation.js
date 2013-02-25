@@ -1,6 +1,8 @@
 $(document).ready(function () {
-  var _teamDropdown = "none";//state of team dropdown menu.
-                             //possible values are 'none', 'start', 'continue'
+  var _adminDropdown = "none"; // state of admin dropdown menu
+  var _startDropdown = "none"; //state of team dropdown menu.
+  var _continueDropdown = "none";
+                          //possible values are 'none', 'start', 'continue'
 
   $("form").each(function(i, elem){
     $(elem).submit(function(e){
@@ -64,57 +66,59 @@ $(document).ready(function () {
     });
   });
 
-  //MANAGE hunt button (for existing hunts)
-  $("#manage").click(function (e) {
-    var pass = $("#manage-pass").val();
+  // START button
+  $("#start").click(function () {
+    $("#start-box").slideToggle("slow");
+    if (_startDropdown === "start") {
+      _startDropdown = "none";
+    } else {
+      _startDropdown = "start";
+    }
+  });
+  
+  // new team creation
+  $("#start-go").click(function (e) {
+    var teamName = $("#new-team-name").val();
+    var pass = $("#new-team-pass").val();
+    var urlTeamName = encodeName(teamName);
     var urlPass = encodeName(pass);
-    if (urlPass === undefined) return;
+    console.log(urlTeamName, urlPass);
+    if (urlTeamName === undefined || urlPass === undefined) return;
 
     var url = window.location.pathname;
     var urlHuntName = url.slice("/hunts/".length);
-
+    var path = urlHuntName + "/" + urlTeamName + "/" + urlPass;
+ 
     $.ajax({
       type: "get",
       url: "/info/" + urlHuntName,
       success: function(data) {
-        var expectedKey = data.hunt.users["admin"].key;
-        var path = "/hunts/" + urlHuntName + "/admin/" + urlPass;
-        if(expectedKey === urlPass) {
-          //navigate to the edit page
-          window.location = path;
+        console.log(data);
+        if (urlTeamName in data.hunt.users) {
+          createAlert("Sorry, but this team name already exists.  Perhaps you mean to continue?");
         } else {
-          createAlert("Sorry, that password is incorrect!");
+          createTeamOrHunt(path, teamName);
         }
       }
     });
   });
 
-  // START button
-  $("#start").click(function () {
-    $("#team-box").slideToggle("slow");
-    if (_teamDropdown === "start" || _teamDropdown === "continue") {
-      _teamDropdown = "none";
-    } else {
-      _teamDropdown = "start";
-    }
-  });
-  
   // CONTINUE button
   $("#continue").click(function () {
-    $("#team-box").slideToggle("slow");
-    if (_teamDropdown === "start" || _teamDropdown === "continue") {
-      _teamDropdown = "none";
+    $("#continue-box").slideToggle("slow");
+    if (_continueDropdown === "continue") {
+      _continueDropdown = "none";
     } else {
-      _teamDropdown = "continue";
+      _continueDropdown = "continue";
     }
   });
   
-  $("#team-go").click(function (e) {
+  // team log in
+  $("#continue-go").click(function (e) {
     var teamName = $("#team-name").val();
     var pass = $("#team-pass").val();
     var urlTeamName = encodeName(teamName);
     var urlPass = encodeName(pass);
-    console.log(urlTeamName, urlPass);
     if (urlTeamName === undefined || urlPass === undefined) return;
 
     var url = window.location.pathname;
@@ -134,7 +138,42 @@ $(document).ready(function () {
             createAlert("Sorry, that password is incorrect!");
           }
         } else {
-          createTeamOrHunt(path, teamName);
+          createAlert("This team does not exist!\nPerhaps you mean to start a new team?");
+        }
+      }
+    });
+  });
+
+  // MANAGE button
+  $("#manage").click(function () {
+    $("#manage-box").slideToggle("slow");
+    if (_adminDropdown === "manage") {
+      _teamDropdown = "none";
+    } else {
+      _teamDropdown = "manage";
+    }
+  });
+
+  // admin log-in
+  $("#manage-go").click(function (e) {
+    var pass = $("#manage-pass").val();
+    var urlPass = encodeName(pass);
+    if (urlPass === undefined) return;
+
+    var url = window.location.pathname;
+    var urlHuntName = url.slice("/hunts/".length);
+
+    $.ajax({
+      type: "get",
+      url: "/info/" + urlHuntName,
+      success: function(data) {
+        var expectedKey = data.hunt.users["admin"].key;
+        var path = "/hunts/" + urlHuntName + "/admin/" + urlPass;
+        if(expectedKey === urlPass) {
+          //navigate to the edit page
+          window.location = path;
+        } else {
+          createAlert("Sorry, that password is incorrect!");
         }
       }
     });
@@ -223,13 +262,15 @@ var createAlert = function (message, buttons) {
     newButton.html(button);
     newButton.addClass("button");
 
-    //add callback to a button
-    var callback = buttons[button];
-    newButton.click(function (e) {
-      if (callback !== undefined) callback(e);
-      al.html("");
-      overlay.css({"display": "none"});
-    });
+    //bind callback from buttons[button] to new button
+    (function (callback) {
+      newButton.click(function (e) {
+        if (callback !== undefined) callback(e);
+        al.html("");
+        overlay.css({"display": "none"});
+      });
+    }) (buttons[button]);
+
     al.append(newButton);
   }
 };

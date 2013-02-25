@@ -89,13 +89,28 @@ $(document).ready(function(){
   	var numClues = clues.length;
   	for (var i = 0; i < numClues; i++) {
   		var clue = clues[i];
+      console.log(clue);
   		var newClueRow = $("<tr>").attr("class", "clue-row");
-  		var clueNum = $("<td>").attr("class", "clue-num").html(i+1);
-  		var clueDesc = $("<td>").attr("class", "clue-desc").html(clue["desc"]);
-  		var clueAns = $("<td>").attr("class", "clue-ans").html(clue["ans"]);
-  		newClueRow.append(clueNum).append(clueDesc).append(clueAns);
+  		var num = $("<td>").attr("class", "clue-num").html(i+1);
+  		var desc = $("<td>").attr("class", "clue-desc").html(clue["desc"]);
+  		var ans = $("<td>").attr("class", "clue-ans").html(clue["ans"]);
+
+      var identifier = clue["createTime"]; //unique identifier for deletion
+  		var del = $("<td>").attr("class", "clue-del");
+      var delButton = $("<span>").attr("class", "clue-del-button")
+                                 .attr("id", identifier);
+      del.append(delButton);
+  		newClueRow.append(num).append(desc).append(ans).append(del);
   		clueTable.append(newClueRow);
   	};
+
+    //bind newly created buttons to clue deletion
+    $(".clue-del-button").click(function () {
+      var identifier = $(this).attr("id");
+      createAlert("Are you sure you want to delete this clue?",
+                  {"Yes": function () {deleteClue(identifier);},
+                   "No": undefined});
+    });
   }
 
   // adding clues on admin page
@@ -103,7 +118,8 @@ $(document).ready(function(){
 		// update client with added clue
 		var clueText = $("#write-clue-desc").val();
 		var ansText = $("#write-clue-ans").val();
-		var clueObj = {"desc": clueText, "ans": ansText};
+    var time = (new Date).getTime();
+		var clueObj = {"desc": clueText, "ans": ansText, "createTime": time};
 		huntData["clues"].push(clueObj);
 		// update server with new clues
 		$.ajax({
@@ -130,8 +146,9 @@ $(document).ready(function(){
 		});
 	});
 
-  // fill in the scoreboard for any scoreboard
+  // fill in the scoreboard for any page with the right classes set up
   function fillScoreboard() {
+  	rankedUserList = [ ];
   	for (var user in huntData.users) {
   		if (user === "admin") {
   			continue
@@ -151,15 +168,33 @@ $(document).ready(function(){
   				userRank++;
   			}
   		}
+  		// format last login date string
+  		var loginDate = new Date(userObj.lastlogin);
+  		var timeStr = loginDate.toLocaleTimeString();
+  		var dateStr = loginDate.toLocaleDateString();
+  		var loginStr = timeStr + " " + dateStr;
   		// make html element
-  		var scoreBoard = $("#score-board");
   		var newRow = $("<tr>").attr("class","score-board-entry");
-  		var rank = $("<td>").html(userRank).attr("class","entry-ranking");
-  		var teamName = $("<td>").html(username).attr("class","entry-name");
-  		var progress=$("<td>").html(progressNum).attr("class","entry-progress");
-  		var checkIn = $("<td>").html("Recently").attr("class","entry-time");
+  		var rank = $("<td>").attr("class","entry-ranking").html(userRank);
+  		var teamName = $("<td>").attr("class","entry-name").html(username);
+  		var progress=$("<td>").attr("class","entry-progress").html(progressNum);
+  		var checkIn = $("<td>").attr("class","entry-time").html(loginStr);
   		newRow.append(rank).append(teamName).append(progress).append(checkIn);
-  		scoreBoard.append(newRow);
+  		// add team's row to a list to be sorted by rank
+  		var rankedUserObj = {"rank": userRank, "htmlRow": newRow};
+  		rankedUserList.push(rankedUserObj);
+  	}
+  	// returns true if 'first' should be first according to object's rank
+  	var rankOrder = function(first,second) {
+  		if (first.rank > second.rank) return true;
+  		else return false;
+  	}
+  	// append rows in order of rank
+  	rankedUserList.sort(rankOrder);
+  	var scoreBoard = $("#score-board");
+  	var numUsers = rankedUserList.length;
+  	for (var i = 0; i < numUsers; i++) {
+  		scoreBoard.append(rankedUserList[i].htmlRow);
   	}
   }
 
@@ -190,3 +225,9 @@ $(document).ready(function(){
   });
 
 });
+
+//delete a clue from the server. a clue is identified by an identifier, which
+//  is the time at which it was created
+function deleteClue (identifier) {
+  console.log("Deleting " + identifier);
+}

@@ -123,6 +123,7 @@ function UserData(data){
 
     "username"              the username for this instance's user
     "key"                   the userkey for this instance's user
+    "lastlogin"
     "progress"              the progress list for this instance's user
                             (ie: a list of data about a solved clue, such as 
                              a timestamp of solve date)
@@ -132,6 +133,7 @@ function UserData(data){
         
         this.username = getWithDefault(data, "username")
         this.key = getWithDefault(data, "key");
+        this.lastlogin = getWithDefault(data,"lastlogin",(new Date).getTime());
         this.progress = getWithDefault(data, "progress", []);
     };
     
@@ -189,11 +191,13 @@ function ClueData(data){
     "desc"              the question/human-readable description for this 
                         instance's clue
     "ans"               the answer for this instance's clue
+    "createTime"        the time at which an admin client created the clue
     **/
     this._init = function(data){
         this._typename = "ClueData";
         this.desc = getWithDefault(data, "desc", "no description set");
         this.ans = getWithDefault(data, "ans");
+        this.createTime = getWithDefault(data, "createTime", "0");
     };
     
     /** <ClueData>.isCorrectAnswer
@@ -244,7 +248,8 @@ function HuntData(data){
         this.users = getWithDefault(data, "users", {
             "admin": new UserData({
                         "username": "admin",
-                        "key": undefined
+                        "key": undefined,
+                        "lastlogin": (new Date()).getTime()
                      })
         });
         this.clues = getWithDefault(data, "clues", []);
@@ -345,7 +350,8 @@ function HuntData(data){
     this.addUser = function(username, key){
         var newUser = new UserData({
             "username": username,
-            "key": key
+            "key": key,
+            "lastlogin": (new Date()).getTime()
         });
         this.users[username] = newUser;
     }
@@ -354,10 +360,11 @@ function HuntData(data){
         this.clues = [];
     }
     
-    this.addClue = function(desc, ans){
+    this.addClue = function(desc, ans, time){
         var newClue = new ClueData({
             "desc":desc,
-            "ans":ans
+            "ans":ans,
+            "createTime": time
         });
         this.clues.push(newClue);
     }
@@ -377,7 +384,7 @@ function HuntData(data){
 // GETs
 
 //for info about hunt. used before/after navigation in response to
-//  JOIN or ADMINISTER buttons. Provides info about hunt,
+//  SEARCH or CREATE button. Provides info about hunt,
 //  but does not load page.
 app.get("/info/:hunt", function (request, response) {
   var hunt = request.params.hunt;
@@ -392,7 +399,7 @@ app.get("/info/:hunt", function (request, response) {
 });
 
 //for entry into general hunt page for a hunt. provides static
-//  html page. can be reached from JOIN button or directly by URL
+//  html page. can be reached from SEARCH button or directly by URL
 app.get("/hunts/:hunt", function (request, response) {
   var hunt = request.params.hunt;
   if (hunt in globalHuntData){
@@ -421,6 +428,9 @@ app.get("/hunts/:hunt/:user/:key", function (request, response) {
   }
   
   if(huntData.isValidUser(user, key)){
+    // update lastlogin
+    huntData.users[user].lastlogin = (new Date).getTime();
+    // load logged-in webpage!
     response.sendfile(path.join("static", view));
   }
   else{
@@ -625,8 +635,8 @@ app.put("/edit/clues", function(request, response){
         // fields of "desc" and "ans"
         for(var i=0; i < inputClues.length; i++){
             var clue = inputClues[i];
-            if("desc" in clue && "ans" in clue){
-                huntData.addClue(clue.desc, clue.ans);
+            if("desc" in clue && "ans" in clue && "createTime" in clue) {
+                huntData.addClue(clue.desc, clue.ans, clue.createTime);
             }
         }
         
