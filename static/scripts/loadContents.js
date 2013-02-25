@@ -226,8 +226,15 @@ $(document).ready(function(){
 
 });
 
-//delete a clue from the server. a clue is identified by an identifier, which
-//  is the time at which it was created
+//delete the clue with timestamp equal to "identifier" from the server
 function deleteClue (identifier) {
   console.log("Deleting " + identifier);
+  
+  $.ajax({
+    "url": "/edit/clues/"  + identifier,
+    "type": "delete",
+    "success": function () {
+      //TODO: on success, remove the clue locally -- otherwise, just leave it
+    }
+  });
 }
