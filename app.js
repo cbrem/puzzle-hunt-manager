@@ -505,6 +505,7 @@ app.post("/hunts/:hunt/:user/:key", function (request, response) {
       "safename": hunt, 
       "rawname": request.body.rawName
     });
+    console.log("rawname: ", request.body.rawName);
     huntObj.changeAdminKey(key);
     
     // update server hunt object
