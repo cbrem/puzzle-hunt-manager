@@ -27,18 +27,18 @@ $(document).ready(function(){
   		return;
   	}
   	// title <- raw hunt name
-    fillEach(".hunt-name", huntData.rawname);
+    $(".hunt-name").text(huntData.rawname);
     
   	// _ total clues <- number of clues
   	var numClues = huntData.clues.length;
-    fillEach(".num-total-clues", numClues);
+    $(".num-total-clues").text(numClues);
     
   	// _ total users <- number of users
   	var numUsers = getObjectSize(huntData.users);
     if("admin" in huntData.users){
         numUsers--;
     }
-    fillEach(".num-total-teams", numUsers);
+    $(".num-total-teams").text(numUsers);
     
     /* load user data, if present */
     if(urlUserName !== undefined && urlUserName in huntData.users){
@@ -46,22 +46,22 @@ $(document).ready(function(){
         var userName = userData.username;
         var rawName = userData.rawName;
         
-        fillEach(".team-name", rawName);
+        $(".team-name").text(rawName);
         
         var numSolvedClues = userData.progress.length;
-        fillEach(".num-solved-clues", numSolvedClues);
+        $(".num-solved-clues").text(numSolvedClues);
         
         if(numSolvedClues+1 <= numClues){
             var currentClueNum = numSolvedClues+1;
-            fillEach(".curr-clue-label", "Clue #"+currentClueNum);
+            $(".curr-clue-label").text("Clue #"+currentClueNum);
             
             // minus one to do this in zero-indexing
             var currentClueDesc = huntData.clues[currentClueNum-1].desc;
-            fillEach(".curr-clue-desc", currentClueDesc);
+            $(".curr-clue-desc").text(currentClueDesc);
         }
         else{
-            fillEach(".curr-clue-label", "No clues left");
-            fillEach(".curr-clue-desc", "You've completed the \""+huntData.rawname+"\" puzzle hunt!");
+            $(".curr-clue-label").text("No clues left");
+            $(".curr-clue-desc").text("You've completed the \""+huntData.rawname+"\" puzzle hunt!");
         }
         
         // if there is a canvas available on the page
@@ -218,7 +218,7 @@ $(document).ready(function(){
 	      }
         // hunter-specific
         else if (urlUserName !== undefined && initTeamView !== undefined) {
-            //initTeamView(huntData, urlUserName, urlUserKey);
+            initTeamView(huntData, urlUserName, urlUserKey);
         }
         
       } else {
