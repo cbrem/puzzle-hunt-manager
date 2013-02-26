@@ -311,6 +311,15 @@ $(document).ready(function(){
       "success": function (data) {
         console.log(data);
 				if (data.success) {
+					// check if the update clue button is still up
+					if (editingClueNum !== undefined) {
+						// if so, make it back to adding clues
+						$("#add-clue-button").css({"display": "inline-block"});
+						$("#update-clue-button").css({"display": "none"});
+						$("#cancel-edit-button").css({"display": "none"});
+						$("#write-clue-desc").val("");
+						$("#write-clue-ans").val("");
+					}
 					// propagate changes to local
 					huntData = data.huntData;
           loadPageInfo();
