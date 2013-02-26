@@ -45,6 +45,7 @@ http://subtlepatterns.com/wood-pattern/
 
 Icons:
 Puzzle designed by Thomas Le Bas from The Noun Project
+Edit designed by Thomas Le Bas from The Noun Project
 Delete designed by Jamison Wieser from The Noun Project
 
 Fonts:

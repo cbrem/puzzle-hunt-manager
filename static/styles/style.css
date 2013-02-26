@@ -389,6 +389,7 @@ form {
 #clue-text-fields span {
     font-size: 115%;
     font-weight: bold;
+    vertical-align: top;
 }
 
 #clue-desc {
