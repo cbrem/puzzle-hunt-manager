@@ -91,6 +91,7 @@ errorMsg                (optional) the message to send with the data
 function sendErrorJson(response, errorMsg){
     response.send({
         error: true,
+        success: false,
         errorMsg: errorMsg
     });
 }
@@ -668,11 +669,57 @@ app.put("/edit/clues", function(request, response){
 
 // DELETEs
 
-app.delete("/edit/clues/:identifier", function (request, response) {
-  //TODO: search through globalHuntData for a clue with createTime equal to 
-  //"identifier".
-  //once the address of this clue is found, use HuntData.popClue(index) to
-  //remove it.
+//delete a key with a given identifier from the server and from file.
+//if it is not present, return {success: false} back to client.
+app.delete("/edit/clues", function (request, response) {
+  var safeHuntName = request.body.huntName;
+  var adminKey = request.body.adminKey;
+  var identifier = request.body.identifier;
+
+  if((safeHuntName in globalHuntData) &&
+     globalHuntData[safeHuntName].validateAdminKey(adminKey)){
+
+    //find index of identified clue in globalHuntData[safeHuntName]
+    var index;
+    var clues = globalHuntData[safeHuntName].clues;
+    for (var i = 0; i < clues.length; i++) {
+      if (clues[i].createTime === identifier) {
+        index = i;
+      }
+    }
+    if (index === undefined) {
+      console.log("The clue that you wanted to delete was not present!");
+      response.send({"success": false});
+      return;
+    }
+    //remove from HuntData
+    globalHuntData[safeHuntName].popClue(index);
+
+    //remove progress from any users who have made it as far as this clue
+    for (user in globalHuntData[safeHuntName].users) {
+      var progress = globalHuntData[safeHuntName].users[user].progress;
+      if (progress.length > index) {
+        progress.splice(index, 1)
+      }
+    }
+
+    //attempt to push the change to file. if it works,
+    //  send it back to the client
+    updateFile(safeHuntName, function(err){
+      if(err) {
+        sendErrorJson(response, err);
+      } else {
+        response.send({
+          "success": true,
+          "huntData": globalHuntData[safeHuntName]
+        });
+      }
+    });
+
+  } else {
+    console.log("Error deleting clue with identifier:", identifier);
+    response.send({"success": false});
+  }
 });
 
 // SETUP

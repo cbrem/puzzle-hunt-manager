@@ -12,7 +12,8 @@
 
 .puzzle-icon{
     display: inline-block;
-    background: transparent url("../images/puzzle-icon-white.png") no-repeat center;
+    background: transparent url("../images/puzzle-icon-white.png") 
+                no-repeat center;
     background-size: 100% 100%;
     width:50px;
     height:50px;
@@ -283,8 +284,10 @@ form {
 }
 
 .alert {
-  position: relative;
-  top: 30%;
+  position: fixed;
+  top: 40%;
+  left: 0px;
+  right: 0px;
   margin: 0px auto;
   padding: 10px;
   width: 200px;

@@ -135,7 +135,7 @@ $(document).ready(function(){
 				if (data.success) {
 					// update page
 					huntData = data.huntData;
-                    loadPageInfo();
+          loadPageInfo();
 					loadClues();
 					// clear fields
 					$("#write-clue-desc").val("");
@@ -228,17 +228,33 @@ $(document).ready(function(){
     }
   });
 
-});
+  //delete the clue with timestamp equal to "identifier" from the server
+  // and from the local clue list
+  function deleteClue (identifier) {
+    console.log("Deleting " + identifier);
 
-//delete the clue with timestamp equal to "identifier" from the server
-function deleteClue (identifier) {
-  console.log("Deleting " + identifier);
-  
-  $.ajax({
-    "url": "/edit/clues/"  + identifier,
-    "type": "delete",
-    "success": function () {
-      //TODO: on success, remove the clue locally -- otherwise, just leave it
-    }
-  });
-}
+    //delete on the server
+    $.ajax({
+      "url": "/edit/clues",
+      "type": "delete",
+      "data": {
+				"huntName": urlHuntName,
+				"adminKey": urlUserKey,
+        "identifier": identifier
+      },
+      "success": function (data) {
+        console.log(data);
+				if (data.success) {
+					// propagate changes to local
+					huntData = data.huntData;
+          loadPageInfo();
+					loadClues();
+				}
+				else {
+					console.log("Error deleting clue!");
+       } 
+      }
+    });
+  }
+
+});
