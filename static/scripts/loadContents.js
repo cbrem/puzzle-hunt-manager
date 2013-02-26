@@ -157,7 +157,8 @@ $(document).ready(function(){
   		}
   		// grab user data
   		var userObj = huntData.users[user];
-  		var username = userObj.username;
+  		var rawusername = userObj.rawName;
+  		console.log(userObj);
   		var progressNum = userObj.progress.length;
   		var userRank = 1;
   		// find rank of user
@@ -178,7 +179,7 @@ $(document).ready(function(){
   		// make html element
   		var newRow = $("<tr>").attr("class","score-board-entry");
   		var rank = $("<td>").attr("class","entry-ranking").html(userRank);
-  		var teamName = $("<td>").attr("class","entry-name").html(username);
+  		var teamName = $("<td>").attr("class","entry-name").html(rawusername);
   		var progress=$("<td>").attr("class","entry-progress").html(progressNum);
   		var checkIn = $("<td>").attr("class","entry-time").html(loginStr);
   		newRow.append(rank).append(teamName).append(progress).append(checkIn);
