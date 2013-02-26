@@ -21,6 +21,7 @@ CSS
 - border-radius
 - custom font-face definitions (top of style.css)
 - Absolute positioning (ex: line 272, .overlay styles in style.css)
+- Inline-Block elements
 
 DOM manipulation/jQuery
 - Using jQuery to dynamically add clues to interface table in adminview.html

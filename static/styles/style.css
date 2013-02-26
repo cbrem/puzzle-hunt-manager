@@ -342,25 +342,44 @@ form {
 }
 
 #clues .clue-ans{
-    width: 40%;
+    width: 30%;
 }
 
-#clues .clue-del{
+#clues .clue-del,
+#clues .clue-edit{
     position: relative;
     text-align: center;
-    width: 8%;
+    width: 3%;
 }
 
-.clue-del .clue-del-button {
+.clue-del .clue-del-button,
+.clue-edit .clue-edit-button {
   position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
   display: inline-block;
   width: 16px;
   height: 16px;
+}
+
+.clue-del .clue-del-button {
   background-image: url('../images/delete-icon-orange.png');
 }
 
 .clue-del .clue-del-button:hover {
   background-image: url('../images/delete-icon-red.png');
+  cursor: pointer;
+}
+
+.clue-edit .clue-edit-button {
+  background-image: url('../images/edit-icon-orange.png');
+}
+
+.clue-edit .clue-edit-button:hover {
+  background-image: url('../images/edit-icon-blue.png');
+  cursor: pointer;
 }
 
 #clue-editor {
@@ -392,9 +411,16 @@ form {
     height: 3em;
 }
 
-#add-clue-button {
+#add-clue-button,
+#update-clue-button,
+#cancel-edit-button {
     padding: .6em .95em;
     font-size: 1.7em;
+}
+
+#update-clue-button,
+#cancel-edit-button {
+    display: none;
 }
 
 /* SCORE BOARD */

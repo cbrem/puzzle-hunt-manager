@@ -11,6 +11,8 @@ $(document).ready(function(){
   var urlUserName = undefined;
   var urlUserKey = undefined;
   var huntData = undefined;
+  // this tells you what clue is being edited (if any)
+  var editingClueNum = undefined;
   
   if(urlList.length > huntBaseIndex+2){
       urlUserName = urlList[huntBaseIndex+2];
@@ -101,7 +103,12 @@ $(document).ready(function(){
       var delButton = $("<span>").attr("class", "clue-del-button")
                                  .attr("id", identifier);
       del.append(delButton);
-  		newClueRow.append(num).append(desc).append(ans).append(del);
+  		var edit = $("<td>").attr("class", "clue-edit");
+  		var editButton = $("<span>").attr("class", "clue-edit-button")
+  																.attr("id", identifier);
+  		edit.append(editButton);
+  		// here we append all the elements in a row to the row element
+			newClueRow.append(num).append(desc).append(ans).append(edit).append(del);
   		clueTable.append(newClueRow);
   	};
 
@@ -112,41 +119,57 @@ $(document).ready(function(){
                   {"Yes": function () {deleteClue(identifier);},
                    "No": undefined});
     });
+
+    // fill text boxes with clue text to edit
+    $(".clue-edit-button").click(function () {
+      var identifier = $(this).attr("id");
+      //find index of identified clue in huntData[urlHuntName]
+	    var index;
+	    var clues = huntData.clues;
+	    for (var i = 0; i < clues.length; i++) {
+	      if (clues[i].createTime === identifier) {
+	        index = i;
+	      }
+	    }
+	    if (index === undefined) {
+	      console.log("The clue that you wanted to edit was not present!");
+	      return;
+	    }
+      // populate the editing clue field with the clue clicked on
+      $("#write-clue-desc").val(clues[index].desc);
+			$("#write-clue-ans").val(clues[index].ans);
+			// show/hide correct buttons
+			$("#add-clue-button").css({"display": "none"});
+			$("#update-clue-button").css({"display": "inline-block"});
+			$("#cancel-edit-button").css({"display": "inline-block"});
+			editingClueNum = index;
+    });
   }
 
   // adding clues on admin page
-  $("#add-clue-button").click(function () {
-		// update client with added clue
-		var clueText = $("#write-clue-desc").val();
-		var ansText = $("#write-clue-ans").val();
-    var time = (new Date).getTime();
-		var clueObj = {"desc": clueText, "ans": ansText, "createTime": time};
-		huntData["clues"].push(clueObj);
-		// update server with new clues
-		$.ajax({
-			type: "put",
-			url: "/edit/clues",
-			data: {
-				"huntName": urlHuntName,
-				"adminKey": urlUserKey,
-				"clueList": huntData["clues"]
-			},
-			success: function(data) {
-				if (data.success) {
-					// update page
-					huntData = data.huntData;
-          loadPageInfo();
-					loadClues();
-					// clear fields
-					$("#write-clue-desc").val("");
-					$("#write-clue-ans").val("");
-				}
-				else {
-					console.log("Error adding clue!");
-				}
-			}
-		});
+  $("#add-clue-button").click(function() {
+  	assert(editingClueNum === undefined);
+  	updateClues();
 	});
+
+  // updating a clue on admin page
+  $("#update-clue-button").click( function() {
+  	assert(editingClueNum >= 0);
+  	updateClues();
+		$("#add-clue-button").css({"display": "inline-block"});
+		$("#update-clue-button").css({"display": "none"});
+		$("#cancel-edit-button").css({"display": "none"});
+  });
+
+  // cancel editing a clue
+  $("#cancel-edit-button").click( function() {
+  	// change buttons and text field back to adding clue mode
+		$("#add-clue-button").css({"display": "inline-block"});
+		$("#update-clue-button").css({"display": "none"});
+		$("#cancel-edit-button").css({"display": "none"});
+		$("#write-clue-desc").val("");
+		$("#write-clue-ans").val("");
+  });
 
   // fill in the scoreboard for any page with the right classes set up
   function fillScoreboard() {
@@ -227,6 +250,49 @@ $(document).ready(function(){
       }
     }
   });
+
+  // ADD/UPDATE clues on client then server
+  function updateClues() {
+  	// update client with added clue
+		var clueText = $("#write-clue-desc").val();
+		var ansText = $("#write-clue-ans").val();
+    var time = (new Date).getTime();
+		var clueObj = {"desc": clueText, "ans": ansText, "createTime": time};
+		// UPDATE clue
+		if ((editingClueNum >= 0) && (editingClueNum < huntData.clues.length)) {
+			huntData.clues[editingClueNum] = clueObj;
+			// reset the editing clue num
+			editingClueNum = undefined;
+		}
+		// ADD clue
+		else {
+			huntData.clues.push(clueObj);
+		}
+		// update server with new clues
+		$.ajax({
+			type: "put",
+			url: "/edit/clues",
+			data: {
+				"huntName": urlHuntName,
+				"adminKey": urlUserKey,
+				"clueList": huntData["clues"]
+			},
+			success: function(data) {
+				if (data.success) {
+					// update page
+					huntData = data.huntData;
+          loadPageInfo();
+					loadClues();
+					// clear fields
+					$("#write-clue-desc").val("");
+					$("#write-clue-ans").val("");
+				}
+				else {
+					console.log("Error adding/editing clue!");
+				}
+			}
+		});
+  }
 
   //delete the clue with timestamp equal to "identifier" from the server
   // and from the local clue list

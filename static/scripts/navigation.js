@@ -180,8 +180,8 @@ $(document).ready(function () {
   });
 
   $("#hunt-name").keypress(function(e){
-    if(e.which === 13){ // enter key
-        // if password box is available, do creat
+    if(e.which === 13){ // enter/return key
+        // if password box is available, do create
         if($("#hunt-pass").is(":visible")){
             $("#create-go").click();
         }
