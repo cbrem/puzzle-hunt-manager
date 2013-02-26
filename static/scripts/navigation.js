@@ -1,3 +1,12 @@
+function onEnterKeypress($elem, callbackFn){
+    $elem.keypress(function(e){
+    if(e.which === 13){ // enter key
+        callbackFn(e);
+        return false;
+    }
+  });
+};
+
 $(document).ready(function () {
   var _adminDropdown = "none"; // state of admin dropdown menu
   var _startDropdown = "none"; //state of team dropdown menu.
@@ -179,26 +188,38 @@ $(document).ready(function () {
     });
   });
 
-  $("#hunt-name").keypress(function(e){
-    if(e.which === 13){ // enter/return key
-        // if password box is available, do create
-        if($("#hunt-pass").is(":visible")){
-            $("#create-go").click();
-        }
-        // otherwise do search
-        else{
-            $("#search").click();
-        }
-        return false;
+  // search for event form
+  onEnterKeypress($("#hunt-name"), function(e){
+    // if password box is available, do create
+    if($("#hunt-pass").is(":visible")){
+        $("#create-go").click();
+    }
+    // otherwise do search
+    else{
+        $("#search").click();
     }
   });
   
-  $("#hunt-pass").keypress(function(e){
-    if(e.which === 13){ // enter key
-        $("#create-go").click();
-        return false;
-    }
+  // create new event form
+  onEnterKeypress($("#hunt-pass"), function(e){
+    $("#create-go").click();
   });
+  
+  // new team form
+  onEnterKeypress($("#new-team-name, #new-team-pass"), function(e){
+    $("#start-go").click();
+  });
+  
+  // continue team form
+  onEnterKeypress($("#team-name, #team-pass"), function(e){
+    $("#continue-go").click();
+  });
+  
+  // admin manage from event view form
+  onEnterKeypress($("#manage-pass"), function(e){
+    $("#manage-go").click();
+  });
+  
 });
 
 //given a  name or password (possibly with spaces), returns a url-safe

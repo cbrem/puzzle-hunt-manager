@@ -40,6 +40,33 @@ a:hover{
     color: #f3bb5d;
 }
 
+
+table{
+    table-layout: fixed;
+}
+
+th{
+    font-weight: bold;
+    background-color: #9acfbd;
+}
+
+td{
+    background-color: #f9f7f5;
+    width: 30%;
+}
+
+th,td{
+    border: 1px solid #e5e5e5;
+    padding: .5em;
+    text-align:center;
+    word-wrap: break-word;
+}
+
+tr:nth-child(odd) td{
+    background-color: white;
+}
+
+
 form {
   text-align: center;
 }
@@ -493,26 +520,6 @@ form {
 
 .right-sidebar > .button {
   margin-bottom: 50px;
-}
-
-th{
-    font-weight: bold;
-    background-color: #9acfbd;
-}
-
-td{
-    background-color: #f9f7f5;
-    width: 30%;
-}
-
-th,td{
-    border: 1px solid #e5e5e5;
-    padding: .5em;
-    text-align:center;
-}
-
-tr:nth-child(odd) td{
-    background-color: white;
 }
 
 #clues-team-view{
