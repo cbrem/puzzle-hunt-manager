@@ -10,7 +10,7 @@ function onEnterKeypress($elem, callbackFn){
 $(document).ready(function () {
   var _adminDropdown = "none"; // state of admin dropdown menu
   var _startDropdown = "none"; //state of team dropdown menu.
-  var _continueDropdown = "none";
+  _continueDropdown = "none";
                           //possible values are 'none', 'start', 'continue'
 
   $("form").each(function(i, elem){

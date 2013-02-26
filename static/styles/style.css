@@ -485,6 +485,12 @@ form {
     width: 30%;
 }
 
+.selectable-score-board .entry-name:hover{
+  color: #78C0A8;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 #score-board .entry-ranking{
     width: 3%;
 }
