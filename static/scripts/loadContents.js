@@ -61,9 +61,18 @@ $(document).ready(function(){
             var currentClueDesc = huntData.clues[currentClueNum-1].desc;
             $(".curr-clue-desc").text(currentClueDesc);
         }
+        else if(numClues === 0){
+            $(".curr-clue-label").text("No clues yet");
+            $(".curr-clue-desc").text("The \""+
+                                      huntData.rawname+
+                                      "\" puzzle hunt has no clues yet. "+
+                                      "(Pester the person organizing this "+
+                                      "to add some!)");
+        }
         else{
             $(".curr-clue-label").text("No clues left");
-            $(".curr-clue-desc").text("You've completed the \""+huntData.rawname+"\" puzzle hunt!");
+            $(".curr-clue-desc").text("You've completed the \""+
+                                      huntData.rawname+"\" puzzle hunt!");
         }
         
         // if there is a canvas available on the page

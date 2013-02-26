@@ -56,7 +56,8 @@ $(document).ready(function () {
     var newHuntPass = $("#hunt-pass").val();
     var urlHuntName = encodeName(newHuntName);
     var urlHuntPass= encodeName(newHuntPass);
-    if (urlHuntName === undefined || urlHuntPass === undefined){
+    if (urlHuntName === undefined || urlHuntName === "" || 
+        urlHuntPass === undefined || urlHuntPass === ""){
         createAlert("Please enter a valid name/password!");
         return;
     }
@@ -231,7 +232,19 @@ var encodeName = function (name) {
       //alert("Please enter your text!");
       return undefined;
     }
-    var urlName = name.replace(/\s/g, "");
+    // if only we could use regexes... :(
+    var trimName = $.trim(name.toLowerCase());
+    var urlName = "";
+    for(var i=0; i < trimName.length; i++){
+        var chr = trimName[i];
+        if(("a" <= chr && chr <= "z") ||
+           ("0" <= chr && chr <= "9"))
+        {
+            urlName += chr;
+        }
+    }
+    
+    console.log(urlName);
     // if it isn't url-safe, ask for a new name
     if (encodeURI(urlName) !== urlName) {
       createAlert("Please only use letters and spaces!");
