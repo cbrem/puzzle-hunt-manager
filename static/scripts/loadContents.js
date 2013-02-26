@@ -61,9 +61,18 @@ $(document).ready(function(){
             var currentClueDesc = huntData.clues[currentClueNum-1].desc;
             $(".curr-clue-desc").text(currentClueDesc);
         }
+        else if(numClues === 0){
+            $(".curr-clue-label").text("No clues yet");
+            $(".curr-clue-desc").text("The \""+
+                                      huntData.rawname+
+                                      "\" puzzle hunt has no clues yet. "+
+                                      "(Pester the person organizing this "+
+                                      "to add some!)");
+        }
         else{
             $(".curr-clue-label").text("No clues left");
-            $(".curr-clue-desc").text("You've completed the \""+huntData.rawname+"\" puzzle hunt!");
+            $(".curr-clue-desc").text("You've completed the \""+
+                                      huntData.rawname+"\" puzzle hunt!");
         }
         
         // if there is a canvas available on the page
@@ -92,7 +101,6 @@ $(document).ready(function(){
   	var numClues = clues.length;
   	for (var i = 0; i < numClues; i++) {
   		var clue = clues[i];
-      console.log(clue);
   		var newClueRow = $("<tr>").attr("class", "clue-row");
   		var num = $("<td>").attr("class", "clue-num").html(i+1);
   		var desc = $("<td>").attr("class", "clue-desc").html(clue["desc"]);
@@ -101,11 +109,13 @@ $(document).ready(function(){
       var identifier = clue["createTime"]; //unique identifier for deletion
   		var del = $("<td>").attr("class", "clue-del");
       var delButton = $("<span>").attr("class", "clue-del-button")
-                                 .attr("id", identifier);
+                                 .attr("id", identifier)
+                                 .attr("title", "Click to delete clue");
       del.append(delButton);
   		var edit = $("<td>").attr("class", "clue-edit");
   		var editButton = $("<span>").attr("class", "clue-edit-button")
-  																.attr("id", identifier);
+                                    .attr("id", identifier)
+                                    .attr("title", "Click to edit clue");
   		edit.append(editButton);
   		// here we append all the elements in a row to the row element
 			newClueRow.append(num).append(desc).append(ans).append(edit).append(del);
@@ -150,10 +160,10 @@ $(document).ready(function(){
   $("#add-clue-button").click(function() {
   	assert(editingClueNum === undefined);
   	updateClues();
-	});
+  });
 
   // updating a clue on admin page
-  $("#update-clue-button").click( function() {
+  $("#update-clue-button").click(function() {
   	assert(editingClueNum >= 0);
   	updateClues();
 		$("#add-clue-button").css({"display": "inline-block"});
@@ -176,7 +186,7 @@ $(document).ready(function(){
   	rankedUserList = [ ];
   	for (var user in huntData.users) {
   		if (user === "admin") {
-  			continue
+  			continue;
   		}
   		// grab user data
   		var userObj = huntData.users[user];
@@ -254,8 +264,19 @@ $(document).ready(function(){
   // ADD/UPDATE clues on client then server
   function updateClues() {
   	// update client with added clue
-		var clueText = $("#write-clue-desc").val();
-		var ansText = $("#write-clue-ans").val();
+    var clueText = $("#write-clue-desc").val();
+	var ansText = $("#write-clue-ans").val();
+    // don't allow blank clues
+    if($.trim(clueText) === ""){
+        createAlert("Please enter a clue description!");
+        return;
+    }
+    // don't allow blank answers
+    else if($.trim(ansText) === ""){
+        createAlert("Please enter a clue answer!");
+        return;
+    }
+    
     var time = (new Date).getTime();
 		var clueObj = {"desc": clueText, "ans": ansText, "createTime": time};
 		// UPDATE clue
@@ -281,7 +302,7 @@ $(document).ready(function(){
 				if (data.success) {
 					// update page
 					huntData = data.huntData;
-          loadPageInfo();
+                    loadPageInfo();
 					loadClues();
 					// clear fields
 					$("#write-clue-desc").val("");

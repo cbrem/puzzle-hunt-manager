@@ -22,9 +22,19 @@ function initTeamView(huntData, urlUserName, userKey){
     // change
     function _updateTeamView(currUnsolvedClueNum, clueDesc, numTotalClues){
         if(currUnsolvedClueNum-1 >= numTotalClues){
-            $(".curr-clue-label").text("No clues left");
-            $(".curr-clue-desc").text( 
-                "You've completed the \""+huntData.rawname+"\" puzzle hunt!");
+            if(numTotalClues === 0){
+                $(".curr-clue-label").text("No clues yet");
+                $(".curr-clue-desc").text("The \""+
+                                          huntData.rawname+
+                                          "\" puzzle hunt has no clues yet. "+
+                                          "(Pester the person organizing this "+
+                                          "to add some!)");
+            }
+            else{
+                $(".curr-clue-label").text("No clues left");
+                $(".curr-clue-desc").text("You've completed the \""+
+                                          huntData.rawname+"\" puzzle hunt!");
+            }
             $("#answer-clue-form").remove();
         }
         else{
