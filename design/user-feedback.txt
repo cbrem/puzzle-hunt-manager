@@ -2,3 +2,59 @@ Design changes due to Liz feedback: 2/21/2013
 
 - "Join" and "Administer" homepage buttons changed to "Search" and "Create"
 - Administration/editing button is now a button on a specific event's page, not the homepage
+
+User feedback, 2/26/2013
+
+Connor TEST #1:
+- (implemented) text fields should react on enter
+- (tested, but rejected due to aesthetics) fixed header
+- (not implemented) "clues" should be named "puzzles"
+- (implemented) back button lets you travel from team view to hunt view
+- maybe sidebar with scores?
+
+Connor TEST #2:
+- (implemented) More mouse-over info/blurbs in view.
+- (implemented) more text on buttons
+- (implemented) no empty clues
+- (not implemented due to time constraints) advertise the fact that you can share a link
+- (not implemented due to time constraints) allow teams to view prevoius clues
+
+Connor TEST #3:
+- (fixed) horizontal scroll bar with clues maybe shouldn't exist?
+  * it should definitely start centered on clue you're solving
+- (implemented) scoreboard should be interactive
+  *clicking on a team name should prompt you to enter that team's password
+
+Erik Test 1:
+- (implemented) back button on team hunt page
+- (fixed) edit and then delete bug
+- (implemented) to hunt page from admin page
+- (implemented) not check for periods in clue answer
+- (implemented) have enter/return be valid in text boxes
+
+Erik Test 2:
+- (not implemented due to time constraints) multiple answers for a given clue
+- (not implemented due to time constraints) penalties for guessing a bunch
+- (not implemented due to time constraints) be able to click on clues in canvas view
+
+Leon user1:
+- (implemented) need link back to event view from admin and team views
+- (implemented) make searching for hunts case insensitive
+- (fixed) confusing wording of start and continue buttons, thought they were meant
+for the admin, not teams
+
+Leon user2:
+- try to remove placeholder text on input focus? (may just be a chrome thing)
+- (implemented) show the password input's contents, so that people don't choose actual
+passwords
+- (implemented) don't allow blank clues
+- (fixed) break long words in table to prevent overflow bug 
+- (implemented) make searching case insensitive
+- (implemented) need link back to event view from admin and team views
+- (implemented) enable submit-on-enter-keypress on the event view page
+
+Leon user3:
+- (not implemented due to time constraints) have reminder to save the event urls
+- (implemented in form of hovertitles) have labels for edit and delete columns
+- (not implemented due to time constraints) allow partial searching from homepage
+- (implemented) need better wording on start and continue buttons
