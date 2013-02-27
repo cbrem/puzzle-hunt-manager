@@ -35,6 +35,18 @@ Express.js
  and submit answers to their current clue, moving them onto the next
  clue if answered correctly.
 
+######## Demo ###################
+
+Search "CMU Hunt".
+Start a new team, or login as any of the existing teams by clicking on them.
+All passwords are "cmu".
+Play through the hunt! (we hope you enjoy it)
+(Real hunts would require going around campus and figuring things out)
+You can also try editing the hunt (login with password "cmu").
+There are adding, editing, and deleting clue features.  Try them out!
+If you are feeling inspired, create your own hunt from scratch.
+The world is your Puzzle Hunt.
+
 ####### Credits ###################
 
 Color scheme based on: http://www.colourlovers.com/palette/919313/Papua_New_Guinea
