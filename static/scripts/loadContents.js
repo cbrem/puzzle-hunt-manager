@@ -234,10 +234,11 @@ $(document).ready(function(){
 
     //add clickability to team names
     $(".selectable-score-board .entry-name").click(function () {
-      $("#continue-box").slideToggle("slow");
+      $("#continue-box").slideDown("slow");
 
       var rawName = $(this).html();
       $("#team-name").val(rawName);
+      $("#team-pass").focus();
       if (_continueDropdown === "continue") {
         _continueDropdown = "none";
       } else {
