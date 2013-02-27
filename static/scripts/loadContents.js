@@ -191,7 +191,6 @@ $(document).ready(function(){
   		// grab user data
   		var userObj = huntData.users[user];
   		var rawusername = userObj.rawName;
-  		console.log(userObj);
   		var progressNum = userObj.progress.length;
   		var userRank = 1;
   		// find rank of user
@@ -330,7 +329,6 @@ $(document).ready(function(){
         "identifier": identifier
       },
       "success": function (data) {
-        console.log(data);
 				if (data.success) {
 					// propagate changes to local
 					huntData = data.huntData;

@@ -85,7 +85,7 @@ function initTeamView(huntData, urlUserName, userKey){
                     }  
                 },
                 error: function(data){
-                    console.log("error", data);
+                    console.log("error");
                 },
                 complete: function(){
                     _stopClueViewLoader();

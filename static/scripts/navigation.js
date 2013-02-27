@@ -92,18 +92,16 @@ $(document).ready(function () {
     var pass = $("#new-team-pass").val();
     var urlTeamName = encodeName(teamName);
     var urlPass = encodeName(pass);
-    console.log(urlTeamName, urlPass);
     if (urlTeamName === undefined || urlPass === undefined) return;
 
     var url = window.location.pathname;
-    var urlHuntName = url.slice("/hunts/".length);
-    var path = urlHuntName + "/" + urlTeamName + "/" + urlPass;
+    var urlHuntName = url.slice("/hunts/".length).replace("/", "");
+    var path = "/hunts/" + urlHuntName + "/" + urlTeamName + "/" + urlPass;
  
     $.ajax({
       type: "get",
       url: "/info/" + urlHuntName,
       success: function(data) {
-        console.log(data);
         if (urlTeamName in data.hunt.users) {
           createAlert("Sorry, but this team name already exists.  Perhaps you mean to continue?");
         } else {
@@ -132,18 +130,17 @@ $(document).ready(function () {
     if (urlTeamName === undefined || urlPass === undefined) return;
 
     var url = window.location.pathname;
-    var urlHuntName = url.slice("/hunts/".length);
-    var path = urlHuntName + "/" + urlTeamName + "/" + urlPass;
+    var urlHuntName = url.slice("/hunts/".length).replace("/", "");
+    var path = "/hunts/" + urlHuntName + "/" + urlTeamName + "/" + urlPass;
  
     $.ajax({
       type: "get",
       url: "/info/" + urlHuntName,
       success: function(data) {
-        console.log(data);
         if (urlTeamName in data.hunt.users) {
           var expectedKey = data.hunt.users[urlTeamName].key;
           if (urlPass === expectedKey) {
-            window.location = "/hunts/" + path;
+            window.location = path;
           } else {
             createAlert("Sorry, that password is incorrect!");
           }
@@ -171,7 +168,7 @@ $(document).ready(function () {
     if (urlPass === undefined) return;
 
     var url = window.location.pathname;
-    var urlHuntName = url.slice("/hunts/".length);
+    var urlHuntName = url.slice("/hunts/".length).replace("/", "");
 
     $.ajax({
       type: "get",

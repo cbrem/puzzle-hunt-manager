@@ -179,12 +179,12 @@ form {
 }
 
 #site-header a{
-    overflow:auto;
     color:white;
-    text-decoration:none;
 }
 
-#site-header a:hover hgroup{
+#site-header .toolbar a:hover,
+#site-header a:hover hgroup
+{
     background-color: rgba(255,255,255,.5);
 }
 
@@ -213,9 +213,15 @@ form {
     text-align:right;
 }
 
+#site-header .toolbar a{
+    display: inline-block;
+    margin-top: .25em;
+    padding: .25em;
+}
 
 #site-header.small{
     text-align:left;
+    height: 2.5em;
 }
 
 #site-header.small hgroup{
