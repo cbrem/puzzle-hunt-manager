@@ -138,6 +138,12 @@ form {
     font-size: 1.7em;
     width: 60%;
     padding: .6em .95em;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+h5 {
+    font-size: .5em;
 }
 
 .loader-area{
@@ -489,6 +495,12 @@ form {
 #score-board th,
 #score-board td{
     width: 30%;
+}
+
+.selectable-score-board .entry-name:hover{
+  color: #78C0A8;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 #score-board .entry-ranking{

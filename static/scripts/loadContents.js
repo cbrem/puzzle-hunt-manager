@@ -183,6 +183,7 @@ $(document).ready(function(){
 
   // fill in the scoreboard for any page with the right classes set up
   function fillScoreboard() {
+  	var scoreBoard = $("#score-board");
   	rankedUserList = [ ];
   	for (var user in huntData.users) {
   		if (user === "admin") {
@@ -226,11 +227,23 @@ $(document).ready(function(){
   	}
   	// append rows in order of rank
   	rankedUserList.sort(rankOrder);
-  	var scoreBoard = $("#score-board");
   	var numUsers = rankedUserList.length;
   	for (var i = 0; i < numUsers; i++) {
   		scoreBoard.append(rankedUserList[i].htmlRow);
   	}
+
+    //add clickability to team names
+    $(".selectable-score-board .entry-name").click(function () {
+      $("#continue-box").slideToggle("slow");
+
+      var rawName = $(this).html();
+      $("#team-name").val(rawName);
+      if (_continueDropdown === "continue") {
+        _continueDropdown = "none";
+      } else {
+        _continueDropdown = "continue";
+      }      
+    });
   }
 
   // the main GET request that loads the page and calls loader functions
@@ -330,6 +343,15 @@ $(document).ready(function(){
       },
       "success": function (data) {
 				if (data.success) {
+					// check if the update clue button is still up
+					if (editingClueNum !== undefined) {
+						// if so, make it back to adding clues
+						$("#add-clue-button").css({"display": "inline-block"});
+						$("#update-clue-button").css({"display": "none"});
+						$("#cancel-edit-button").css({"display": "none"});
+						$("#write-clue-desc").val("");
+						$("#write-clue-ans").val("");
+					}
 					// propagate changes to local
 					huntData = data.huntData;
           loadPageInfo();
