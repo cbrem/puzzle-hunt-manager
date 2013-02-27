@@ -277,7 +277,7 @@ $(document).ready(function(){
   function updateClues() {
   	// update client with added clue
     var clueText = $("#write-clue-desc").val();
-	var ansText = $("#write-clue-ans").val();
+	  var ansText = $("#write-clue-ans").val();
     // don't allow blank clues
     if($.trim(clueText) === ""){
         createAlert("Please enter a clue description!");
@@ -330,7 +330,6 @@ $(document).ready(function(){
   //delete the clue with timestamp equal to "identifier" from the server
   // and from the local clue list
   function deleteClue (identifier) {
-    console.log("Deleting " + identifier);
 
     //delete on the server
     $.ajax({
@@ -351,6 +350,7 @@ $(document).ready(function(){
 						$("#cancel-edit-button").css({"display": "none"});
 						$("#write-clue-desc").val("");
 						$("#write-clue-ans").val("");
+						editingClueNum = undefined;
 					}
 					// propagate changes to local
 					huntData = data.huntData;

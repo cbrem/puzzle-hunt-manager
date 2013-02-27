@@ -738,7 +738,7 @@ function launchApp(err){
     
     var port = 8889;
     console.log("starting app on port", port);
-    console.log("globalHuntData:", JSON.stringify(globalHuntData));
+    //console.log("globalHuntData:", JSON.stringify(globalHuntData));
     app.listen(port);
 }
 

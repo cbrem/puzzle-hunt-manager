@@ -241,7 +241,6 @@ var encodeName = function (name) {
         }
     }
     
-    console.log(urlName);
     // if it isn't url-safe, ask for a new name
     if (encodeURI(urlName) !== urlName) {
       createAlert("Please only use letters and spaces!");

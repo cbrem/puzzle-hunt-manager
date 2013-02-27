@@ -79,7 +79,6 @@ function initTeamView(huntData, urlUserName, userKey){
                     else{
                         $("#clues-team-view").find(".error-msg").text("");
                         var nextClue = data.nextClue;
-                        console.log(nextClue.num);
                         _updateTeamView(nextClue.num, nextClue.desc, 
                                         nextClue.totalClues);
                     }  
